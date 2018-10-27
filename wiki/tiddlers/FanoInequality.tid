@@ -1,0 +1,52 @@
+caption: Fano's inequality
+created: 20150519184248002
+modified: 20181027042830366
+tags: Entropy
+title: FanoInequality
+
+Relates probability of $$X \ne Y$$ to entropy, e.g. signal noise, hamming distance
+
+!! Theorem
+For r.v. $$X$$ and $$Y$$ on support $$\mathcal{A}$$,
+
+$$
+\begin{aligned}
+\Pr(X \ne Y) &\ge \frac{H(X|Y) - H(X \ne Y)}{\log (|\mathcal{A}|-1)}\\
+&\ge \frac{H(X|Y) - \log 2}{\log (|\mathcal{A}|-1)} &\text{(weaken result)}
+\end{aligned}
+$$
+
+!!! Generalisation 
+Let $$F$$ be a class of $$k$$ densities such that for any $$i \ne j$$
+$$
+\begin{aligned}
+\|f_i - f_j\|_{L_1} &\ge \alpha \\
+D_{KL}(f_i\|f_j) &\le \beta
+\end{aligned}
+$$
+Then, the worst expected $$L_1$$ error under $$f$$ between estimated density $$\hat{f}_n$$ and $$f\in F$$ is
+$$
+\sup_{f \in F} E\|\hat{f}_n - f\|_{L_1} \ge \frac{\alpha}{2}\left(1- \frac{n\beta + \log 2}{\log (k-1)}\right)
+$$
+where $$\hat{f}_n$$ is any density estimator based on $$n$$ samples.
+
+[[source|https://projecteuclid.org/download/pdf_1/euclid.aos/1176350488]] - Estimating a density under order restrictions: nonasymptotic minimax risk
+
+!! Related
+
+Let $$X\sim P$$ and $$Y \sim Q$$ be independent variables on $$\mathcal{A}$$, then
+$$
+\begin{aligned}
+\Pr(X=Y) \ge \exp(-H(P)-D(P\|Q))\\
+\Pr(X=Y) \ge \exp(-H(Q)-D(Q\|P))
+\end{aligned}
+$$
+If both $$X$$ and $$Y$$ are iid,
+$$
+\Pr(X=Y)\ge \exp(-H(P))
+$$
+If $$X$$ or $$Y$$ is uniformly distributed,
+$$
+\Pr(X=Y) \ge \frac{1}{|\mathcal{A}|}
+$$
+Thus by choosing uniformly, we can guarantee that with at least $$1/|\mathcal{A}|$$ that $$X=Y$$ no matter what the other distribution is. 
