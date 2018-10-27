@@ -4,6 +4,7 @@
           "tiddlywiki/tiddlyweb",
           "tiddlywiki/codemirror",
           "tiddlywiki/highlight"
+	  "tiddlywiki/katex"
 	],
 	"themes": [
 		"tiddlywiki/vanilla",
