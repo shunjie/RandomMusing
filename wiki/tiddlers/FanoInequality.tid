@@ -1,8 +1,10 @@
 caption: Fano's inequality
 created: 20150519184248002
 modified: 20181027042830366
+type: text/vnd.tiddlywiki
 tags: Entropy
 title: FanoInequality
+
 
 Relates probability of $$X \ne Y$$ to entropy, e.g. signal noise, hamming distance
 
