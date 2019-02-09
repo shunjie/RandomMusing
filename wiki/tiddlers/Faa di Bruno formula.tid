@@ -1,0 +1,30 @@
+created: 20190112080409210
+modified: 20190113032030476
+tags: GeneralMathematics calculus
+title: Faa di Bruno formula
+
+Faa di Bruno formula is an identity for the chain rule for higher derivatives. It is simplest to express in terms of [[Bell ploynomials]].
+
+For sufficiently number differentiable functions $$f$$ and $$g$$,
+
+$$
+\frac{d^n}{dx^n} f(g(x)) = \sum_{i=1}^{n}f^{(i)}(g(x)) B_{n,i}\Big(g^{(1)}(x),g^{(2)}(x),\ldots,g^{(n-i+1)}(x)\Big)
+$$
+
+!! Example
+
+[[credit|https://math.stackexchange.com/questions/2681320/elegant-form-of-left-sum-n-0-infty-a-n-xn-rightd/2681680#2681680]] to a user on stackexchange.
+
+Given $$(a_n)_n$$ is some bounded sequence of reals. We want to express it as
+$$
+\bigg(\sum_{n=0}^\infty a_i x^n\bigg)^d = \sum_{n=0}^{\infty} b_n x^n  
+$$
+for some sequence of reals $$(b_n)_n$$
+
+Using Faa di Bruno's formula with [[Bell polynomials]], it can be expressed if we let $$f(x) = x^d$$ and $$g(x) = \sum_{n=1}^\infty a_i x^n$$ and
+$$
+b_n = \frac{1}{n!}\sum_{i=0}^d \frac{d!}{(d-i)}a_0^{d-j}B_{n,i}(a_1,2a_2,\ldots,n!a_n)
+$$
+where $$B_{n,i}$$ is the partial [[Bell polynomials]].
+
+An intuitive [[article|http://calvino.polito.it/~nicola/convegnofaa/abstracts/mennucci-slidesdue_eng.pdf]] on the subject.

@@ -1,0 +1,146 @@
+created: 20190105214945388
+modified: 20190209023502906
+tags: Inequalities
+title: Jensen inequality
+
+Jensen's inequality is used in analysis. In layman terms it says, given convex function $$f$$ and some numbers $$x$$.
+
+$$
+f(\text{weighted average of } x) \le \text{weighted average of }f(x)
+$$
+
+Conversely, if $$f$$ is concave, then inequality's sign is reversed.
+
+!!! Requirement
+Jensen's inequality requires the following
+
+* $$f$$ is ''convex on some compact domain'' $$X$$. Thus, $$f$$ does not need to be smooth or continous, as long as its convex on $$X$$. 
+* $$g$$ is ''non-negative Lebesgue integrable function on'' $$X$$, i.e. $$\int_X g < \infty$$. This means for $$g$$ must be finite/exists on $$X$$.
+* $$\int_X d\mu = 1$$ where $$\mu$$ is a ''probability measure on'' $$X$$. Often, this probability is measure is intepreted as weights for a function.
+
+We write Jensen's inequality in integral form as 
+$$
+f\bigg(\int_X gd\mu\bigg)\le \int_X (f\circ g) \ d\mu
+$$
+with equality when $$g$$ is affine (linear) or $$x=y$$ for all $$x,y \in X$$ (constant).
+
+The same is true for discrete functions. For $$n$$-dimensional case, recall that the sum of convex functions is still convex.
+
+A [[proof|https://math.stackexchange.com/questions/171599/jensens-inequality-for-integrals]] given for on stackexchange.
+
+! Various form
+
+Let $$f:X\to \mathbb R$$ be a convex on some domain $$X \subseteq \mathbb R$$.
+
+!! Finite form
+Let $$W = \sum_{i=1}^n w_i \in \mathbb R$$ where $$w_i \ge 0$$ for $$1\le i \le n$$ and $$X \in \mathbb R^n$$ be a set of $$n$$ numbers .
+
+$$
+f\Bigg(\frac{1}{W}\sum_{i=1}^n w_ix_i\Bigg) \le \frac{1}{W}\sum_{i=1}^n w_if(x_i)
+$$
+
+
+!! Measure theoretic form
+Let $$(X,A,\mu)$$ be probability space, $$\mu(X)=1$$, $$g$$ is $$\mu$$-integrable,
+$$
+f\bigg(\int_X g du\bigg) \le \int_Xf\circ g\ du
+$$
+
+!!! Probabilistic form
+$$
+f(EX) \le Ef(X)
+$$
+
+!!! Integral estimate
+If we want to estimate $$f(\int_a^b g(x)dx)$$, we can rescale the integral and apply jensen's inequality.
+Let $$X = [a,b]$$ and $$g:[a,b] \to \mathbb R$$ is non-negative Lebesgue integrable, 
+$$
+f\bigg(\frac{1}{b-a}\int_a^b g(x) dx\bigg) \le \frac{1}{b-a}\int_a^b f(g(x))dx.
+$$
+It is simple to write when $$b-a=1$$,
+$$
+f\bigg(\int_a^b g(x) dx\bigg) \le \int_a^b f(g(x))dx.
+$$
+
+
+
+! [[Jensen inequality gap]]
+Clearly, from Jensen's we know 
+$$0 \le f(EX) - Ef(X)$$. But there are cases where one may seek to upperbound the RHS of Jensen's inequality, e.g. $$Ef(X) \le \ ??$$. 
+
+A classic inequality is $$Ef(X) - f(EX) \le \frac{1}{4}(b-a)(f'(b) - f'(a))$$.
+
+First order Jensen inequality gap exists.
+
+! No unity
+Jensen requires a probability measure. This section is about the case when the above is not met. e.g. when the weights do not sum to 1, weights are unknown. 
+
+Given $$g : X \to \mathbb R$$ be an integrable function and $$w : X \to \mathbb R$$ be integrable function where, $$w(x) \ge 0\quad \forall x\in X$$.  We have
+
+$$
+\begin{aligned}
+f\Bigg(\frac{1}{W}\int_X w(x)g(x)dx\Bigg) &\le \frac{1}{W}\int _X w(x)f(g(x))dx
+\end{aligned}
+$$
+where $$W=\int_X w(x) dx$$ is the normalizing constant.
+
+As stated before, this shows that when the weighted average of $$g$$ applied to $$f$$ is less than the weighted average of $$f$$ applied to $$g$$.
+
+If $$w(x) \ge 1$$ for all $$x$$, e.g. expected success of $$g$$, then
+$$
+\begin{aligned}
+f\Bigg(\frac{1}{W}\int_X z(x)dx\Bigg) &\le \frac{1}{W}\int _X w(x)f(g(x))dx \le \frac{1}{W}\int _X f(z(x))dx.
+\end{aligned}
+$$
+
+
+Let $$z(x) = w(x)g(x)$$ and assume that only $$z$$ is known while $$w$$ and $$g$$ are unknown. We can still apply Jensen's inequality by shifting/scaling $$f$$ such that $$f(0) \le 0$$.
+
+When convex function $$f(0)\le 0$$, by convexity, we have
+$$f(tx) \le tf(x)$$ when  $$t\in[0,1]$$
+and conversely, $$f(tx) \ge tf(x)$$ if $$t\in[1,\infty)$$, assuming $$tx\in X$$.
+
+Assume that we know $$a$$ and $$b$$ such that $$0\le a \le w \le b \le 1$$ and thus $$W \le 1$$.
+We can scale $$W$$ by $$\lambda$$ where $$\lambda a \ge 1$$ so that $$\lambda w(x) \ge 1$$ for all $$x$$.
+
+Therefore
+$$
+\begin{aligned}
+f\Bigg(\frac{1}{W}\int_X z(x)dx\Bigg) &\le \frac{1}{W}\int _X w(x)f(g(x))dx \le \frac{1}{\lambda W}\int _X f(\lambda z(x))dx.
+\end{aligned}
+$$
+
+Lets assume that $$w$$ is some sort of weights such that $$\int_x w(x)dx = 1$$, then
+$$
+\begin{aligned}
+f\Bigg(\int_X z(x)dx\Bigg) &\le \int _X w(x)f(g(x))dx \le \frac{1}{\lambda}\int _X f(\lambda z(x))dx.
+\end{aligned}
+$$
+
+For $$\lambda =1$$ implies $$w(x)=1$$ for some $$x\in X$$. Thus $$f(g(x)) \le g(f(x))$$ only when $$x$$ is a single point.
+
+! Application
+
+!! Simple bounds $$\log$$ and $$e$$
+
+Since we know $$\log$$ is concave, $$e$$ is convex on $$\mathbb R$$ and  $$x=\log(\exp(x))=\exp(\log(x))$$. We use them for bounding purpose.
+$$
+\sum_{i=1}^{n} w_i x_i = \sum_{i=1}^{n} w_i \log \exp(x_i) \le \log\sum_{i=1}^n w_i \exp(x_i)
+$$
+or
+$$
+e^{E\log(X)}\le E X  \le \log E(e^X)
+$$
+or
+$$
+E\log(X)\le \log E X  \le \log \log E(e^X)
+$$
+
+!!! $$f(x) = \log(x)$$
+
+The AM-GM inequality is a special case of Jensen inequality with $$f(x) = \log(x)$$.
+
+!!! $$f(x) = \sin(x)$$
+Let $$f(x) = \sin(x)$$ and thus $$f$$ is strictly concave on $$[0,\pi]$$. We can show that for any triangle with points ABC, $$\sin(A) + \sin(B) + \sin(C) \le 3\sqrt{3}/2$$ 
+
+

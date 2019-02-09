@@ -1,0 +1,34 @@
+created: 20190105043654376
+modified: 20190105054950803
+tags: MachineLearning
+title: Overfit and Underfit
+
+For any model we build, we want it to approximate the underlying unknown target reasonablely well.
+
+For the sake of argument, we introduce the [[bias-variance decomposition|Bias Variance Decomposition]] of the expected loss for target $$\theta$$ which is approximated by $$\hat \theta$$.
+
+$$
+error(\theta, \hat \theta) = (\underbrace{E\hat \theta - E\theta}_{bias})^2 + \underbrace{E(\hat \theta - E \hat \theta)^2}_{estimator\ variance} + \underbrace{E(\theta-E\theta)^2}_{true\ variance}
+$$
+
+It is often said a good model is when both bias and variance are low. However, as the above shown, if we reduce the bias, we increase the variance. This is known as the bias-variance tradeoff.
+
+! Overfit and underfiting
+We usually claim $$\hat \theta$$ ''overfits'' when the variance is high while bias is low. 
+
+Conversely, we may say $$\hat \theta$$ ''underfits'' when  bias is high and variance is low.
+
+It is possible to have both high variance and bias, e.g. a classifier with both linear and nonlinear component. This may occurs more frequently on high dimensonal data where some features maybe linear while the other are nonlinear.
+
+
+<<<
+comment: Let $$\ell_{\text{train}}$$ be the training error and $$\ell_{\text{dev}}$$ be the development error. Given a class of models $$\mathcal H$$. 
+Can we argue a model $$h \in \mathcal H$$ that minimize
+$$
+\min_h \ell_{\text{train}}(h)+ \ell_{\text{dev}}(h) + (\ell_{\text{train}}(h) - \ell_{\text{dev}}(h))^2
+$$
+as a good model ?
+
+Ans: No, a good model has to generalized well for the test or all future data too. Also, does it say anything about the training data itself ?
+<<<
+

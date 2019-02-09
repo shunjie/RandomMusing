@@ -1,0 +1,67 @@
+created: 20150216164753331
+modified: 20190209030221466
+tags: GeneralMathematics
+title: Veita Formula
+
+For any general polynomial
+$$
+P(x) = a_0 + a_1x+a_2x^2 + \cdots + a_n x^n
+$$
+with $$a_n \ne 0$$ and complex roots $$x_i$$ has the following forms
+$$
+\begin{aligned}
+\sum_i x_i &= -\frac{a_{n -1}}{a_n}\\
+\sum_{i} \sum_{i<j} x_ix_j &= \frac{a_{n-2}}{a_n}\\
+\vdots\\
+\prod_i x_i &= (-1)^n\frac{a_0}{a_n}
+\end{aligned}
+$$
+or in general
+$$
+\sum_{1\leq i_1 < i_2 \cdots <i_k \leq n}  \prod_{j=1}^{k} x_{i_j} = (-1)^k\frac{a_{n-k}}{a_n}
+$$
+
+For example
+$$P(x) = ax + bx^2 + cx^3+ d$$ where $$P(x) = 0$$ with roots $$x_1,x_2,x_3$$. Then
+$$
+\begin{aligned}
+x_1+x_2+x_3 &= -b/a \\
+x_1x_2 + x_1x_3 + x_2x_3 &=c/a \\
+x_1x_2x_3 &= -d/a
+\end{aligned}
+$$
+
+Note that these equations can be used to find min or max of $$P(x)$$.
+
+From wiki page on [[Veita Formulas|http://en.wikipedia.org/wiki/Vieta%27s_formulas]].
+
+!! Application to quadratic formula
+
+We have $$P(x)=ax^2 + bx + c=0$$, by vieta's forumula,
+$$
+\begin{aligned}
+x_1+x_2=-\frac{b}{a} &&x_1x_2=\frac{c}{a} 
+\end{aligned}
+$$
+First show that
+$$
+\begin{aligned}
+(x_1-x_2)^2
+&=x_1^2-2x_1x_2+x_2^2\\
+&=x_1^2+2x_1x_2+x_2^2-4x_1x_2\\
+&=(x_1+x_2)^2-4x_1x_2\\
+&=\frac{b^2--4ac}{a^2}
+\end{aligned}
+$$
+So 
+$$
+(x_1-x_2)=\pm\frac{\sqrt{b^2-4ac}}{a}
+$$
+For the roots of $$P(x)=0$$, we want to find  $$x=x_1$$ or $$x=x_2$$, then
+$$
+\begin{aligned}
+x&=\frac{x_1+x_2\pm(x_1-x_2)}{2}\\
+&=\frac{-b\pm\sqrt{b^2--4ac}}{2a}
+\end{aligned}
+$$
+And we have the quadratic formula.

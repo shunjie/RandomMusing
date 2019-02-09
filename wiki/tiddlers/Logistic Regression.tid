@@ -1,0 +1,75 @@
+created: 20181226201305063
+modified: 20190103011245116
+tags: [[Linear Regression]]
+title: Logistic Regression
+
+! Binary Learning
+
+!! Model 
+Given data label $$y \in \{0,1\}^k$$ and data $$X \in \mathbb R^{k \times m}$$ where $$m,k$$ is sample and  feature size. We want a probabilistic output 
+$$
+\hat y = p(y|\theta) = \theta^y(1-\theta)^{1-y} 
+$$ which is the bernoulli distribution and $$\theta$$ has to be derived from $$X$$. 
+
+
+The simple learning model 
+$$
+z = wx + b \in \mathbb R
+$$
+to returns a number on the real line we want a probility i.e. $$\hat{y} \in [0,1] $$. 
+By transforming the output $$z$$ with function
+$$
+\sigma : z \to [0,1]
+$$
+where $$\sigma$$ is the logistic loss here, 
+$$
+\sigma(z) = \frac{1}{1+e^{-z}} = \frac{e^z}{1+e^z}
+$$
+returns a number between $$0$$ and $$1$$. Therefore, putting it all together
+$$
+\hat y = \sigma(w^\top x+b).  
+$$
+We have to solve for weight vector $$w \in \mathbb R^{k}$$ and bias $$b \in \mathbb R$$.
+
+!! Loss function
+
+The loss function to minimize for logistic regression is the negative log likelihood of bernoulli distribution,
+$$
+\ell(y,\hat y) = -(y \log \hat y + (1-y)\log (1-\hat y)).
+$$
+It is easy to see that when $$y=1$$, the loss is $$\log \hat y$$, i.e. $$\ell \to 0$$ as $$\hat y \to 1$$  and conversely for $$y=0$$.
+
+The sum of loss (cost) function is simply 
+$$
+J(w,b)= \frac{1}{m} \sum_{i=1}^{m}\ell(y,\hat y) = -\frac{1}{m}\sum_{i=1}^m \Big( y \log \hat y + (1-y)\log (1-\hat y) \Big)
+$$
+
+<<<
+The common choice is the squared loss
+$$
+\ell(y,\hat y) = \frac{1}{2}(y-\hat y)^2
+$$
+do not work well for logistic regression due to the problem becoming a non-convex problem with multiple local minima.
+<<<
+
+! Multinominal
+
+Given output $$y \in \{1,2,\ldots,k\}=\Omega$$ and
+their respective probabilities $$\theta = \{\theta_1,\ldots,\theta_k\}$$. We have the following
+
+$$
+p(y|\theta) = \theta_1^{\mathbb I\{y=1\}}\cdots\theta_n^{\mathbb I\{y=k\}}
+$$
+
+We can show that multinomial is from the exponential family.
+
+!! loss
+The output $$\hat y\in \Omega$$ is computed from a vector $$\hat \theta$$ of probabilities for each $$\omega \in \Omega$$ given $$x$$ which we can also write as $$ \hat y ={\arg\max}_i P(Y = i|x;\hat \theta)$$. 
+
+Given $$m$$ samples,
+$$
+\begin{aligned}
+J(w,b) &= \frac{1}{m} \sum_{i=1}^{m}\ell(y,\hat y) \\
+&= -\frac{1}{m}\sum_{i=1}^m \sum_{j=1}^{k} \mathbb{I}\{y=j\} \log \hat \theta_j
+\end{aligned}
+$$

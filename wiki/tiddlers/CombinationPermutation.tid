@@ -1,0 +1,30 @@
+caption: Combinations and Permutation
+created: 20181212033453661
+modified: 20181212171305039
+tags: GeneralMathematics
+title: CombinationPermutation
+
+! Combinations
+Reminder 
+$$
+{n \choose k} = {n \choose n-k}
+$$
+
+!! Number of ways to 
+
+!!! ''arrange $$n_1,n_2,\ldots,n_d$$ colored balls.''
+
+Let $$N = \sum_{i} n_i$$ and $$n_0=0$$.
+$$
+\prod_{i=1}^{d} \binom{N-n_{i-1}}{n_i}
+$$
+
+!!! ''arrange $$n$$ balls to  $$k$$ slots''
+$$
+\binom{n + k - 1}{k}
+$$
+
+!!! ''arrange $$n$$ balls to  $$k$$ slots with at least $$m$$ in each slot'' 
+$$
+\binom{n -m + k - 1}{k}
+$$

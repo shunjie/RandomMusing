@@ -1,0 +1,161 @@
+created: 20150910162745776
+modified: 20181221022655986
+tags: DecisionTheory
+title: HypothesisTesting
+
+; Simple hypothesis testing example
+
+Consider testing a coin, the null hypothesis is $$H_0$$ such that the coin is fair against the alternate hypothesis $$H_1$$ that the coin is not fair. 
+
+Given a test statistic $$\hat{\theta}$$ and critical region $$C$$, after $$n$$ number of toss, while assuming $$H_0$$ as true, a test will 
+
+*reject $$H_0$$ if $$\hat{\theta}$$ is in $$C$$
+*accept $$H_0$$ if $$\hat{\theta}$$ is not in $$C$$
+
+This means while assuming $$H_0$$ as the truth if the observed statistic $$\hat{\theta}$$ is "close enough" to $$H_0$$ then we accept $$H_0$$ as the truth. Otherwise, if $$\hat{\theta}$$ is "''not close enough''" to $$H_0$$, we accept $$H_1$$ as the truth. 
+
+!! Type 1 and Type 2 errors
+
+A simple hypothesis test decides $$X$$ belongs $$P$$ or $$Q$$ by computing some statistic $$\hat{\theta}$$ and check if $$\hat{\theta}$$ within a critical zone with $$n$$ samples. 
+
+Denote $$P$$ as the null hypthosis $$H_0$$ and  $$Q$$ as the alternative $$H_1$$. A critical zone $$Z$$ around $$P$$ is defined. So we have 
+
+; type 1 error (false positive)
+: When $$X\sim H_0 (P)$$ and $$\hat \theta \notin Z$$, $$H_1$$ declared.
+: $$Pr(\hat \theta \notin Z) = P(Z^C) = 1 - P(Z)$$
+
+;type 2 error (false negative)
+: When $$X \sim H_1(Q)$$ and $$\hat \theta \in C$$, $$H_0$$ declared.
+: $$Pr(\hat \theta \in Z) =Q(Z)$$
+
+Usually, we define type 1 error  $$\alpha \ge 0$$ to be $$0.05$$.
+
+!! Likelihood
+
+Let $$\mathbf{x} = \{x_1,\ldots,x_n\} \in \mathsf{X}^n$$ be a sequence of samples and $$\hat{P}_n(x) = \frac{1}{n}\sum^n_{i=1} I{\{X_i=x\}} =  N(x|\mathbf{x})/n$$ where $$N(x|\mathbf{x})$$ is the number of occurences of $$x\in \mathsf{X}$$ given $$\mathbf{x}$$.
+
+!!! Likelihood function
+
+The likelihood function for parameter $$\theta$$ given sequence $$\vec{x}$$ is defined as
+$$
+L(\theta|\mathbf{x})=f(\cup_i x_i | \theta) = P^n_\theta(x_1,\ldots,x_n)
+$$
+If $$\mathbf{x}$$ is iid, then 
+$$
+\begin{aligned}
+L(\theta|\mathbf{x}) &=\prod_i f( x_i | \theta)\\
+&= \prod_i P_\theta(x_i)
+\end{aligned}
+$$
+Taking logarithm of the likelihood function,
+$$
+\begin{aligned}
+\log L(\theta|\mathbf{x}) 
+&= \log \prod_{i=1}^n P_\theta(x_i)\\
+&= \log \prod_{x\in \mathsf{X}} P_\theta(x_i)^{n\hat{P}_n(x)}\\
+&= \sum_{x \in \mathsf{X}} n\hat{P}(x) \log P_\theta(x)\\
+&= \sum_{x \in \mathsf{X}} n\hat{P}_n(x) \log \left(P_\theta(x)\frac{\hat{P}_n(x)}{\hat{P}_n(x)}\right)\\
+&= \sum_{x \in \mathsf{X}} n\hat{P}_n(x) \log \hat{P}_n(x) -\sum_{x \in \mathsf{X}} n\hat{P}_n(x) \log \frac{\hat{P}_n(x)}{P_\theta(x)}\\
+&= -n\left[ D(\hat{P}_n\|P_\theta)+H(\hat{P}_n)\right]
+\end{aligned}
+$$
+Therefore,
+$$
+P_\theta(x_1,\ldots,x_n) = \exp\left(-n\left[ D(\hat{P}_n\|P_\theta)+H(\hat{P}_n)\right]\right)
+$$
+
+!!! Likelihood ratio
+The likelihood ratio between two parameterized families,
+$$
+\Lambda(x) = \frac{L(\theta_0|\mathbf{x})}{L(\theta_1|\mathbf{x})} = \frac{L(\theta_0|\mathbf{x})}{\sup\{L(\theta|\mathbf{x}) : \theta \in \{\theta_0,\theta_1\}\}}
+$$
+
+!!! Log Likelihood ratio
+$$
+\begin{aligned}
+\log \frac{L(\theta_1|\mathbf{x})}{L(\theta_0|\mathbf{x})} &= \log \frac{P_1(x_1,\ldots,x_n)}{P_0(x_1,\ldots,x_n)}\\
+&=\log P_1(x_1,\ldots,x_n) - \log P_0(x_1,\ldots,x_n)\\
+&=  n\left[ D(\hat{P}_n\|P_0)+H(\hat{P}_n)-D(\hat{P}_n\|P_1)-H(\hat{P}_n)\right]\\
+&= n\left[D(\hat{P}_n\|P_0) - D(\hat{P}_n\|P_1)\right]
+\end{aligned}
+$$
+!! Neyman-Pearson lemma
+
+Let $$X_1,\ldots,X_n$$ be drawn iid according to probability mass function $$Q$$. Consider the decision problem corresponding to hypotheses $$Q=P_1$$ or $$Q=P_2$$. For $$T \ge 0$$, define a region
+$$
+A_n(T) = \bigg\{ x^n = \frac{P_1(x_1,\ldots,x_n)}{P_2(x_1,\ldots,x_n)} > T \bigg\}.
+$$
+and $$\alpha=P_1^n(A^c_n(T))$$ and $$\beta=P_2^n(A_n(T))$$. This hypothesis test is the most //powerful// test at significance level $$\alpha$$ for threshold $$T$$.
+
+The $$\alpha$$ is also known as the //p-value//. It is important to remember that $$\Pr(X^n| H) \neq \Pr(H| X^n).$$
+The ''probability of data given hypothesis is not equal to the probability of hypothesis given the data''.
+
+As noted before, the likelihood ratio test 
+$$
+\frac{P_1(x_1,\ldots,x_n)}{P_2(x_1,\ldots,x_n)} > T
+$$
+is the same as
+$$
+D(\hat{P}_n\|P_2) - D(\hat{P}_n\|P_1) > \frac{1}{n}\log T.
+$$
+
+!! Example: Bernoulli distribution
+Test between $$H_0: \theta=\theta_0$$ and $$H_1: \theta = \theta_1$$.
+
+The pmf is
+$$
+f(X| \theta) = \theta^X(1-\theta)^{1-X}
+$$
+so when given $$n$$ independent samples,
+$$
+\begin{aligned}
+f(\vec{X} | \theta) 
+&=\prod_i \theta^{X_i} (1-\theta)^{1-X_i}\\
+&= \theta^{\sum_i X_i} (1-\theta)^{n-\sum_i {X_i}}\\
+&= (1-\theta)^n \left(\frac{\theta}{1-\theta}\right)^{\sum_i X_i}
+\end{aligned}
+$$
+And the likelihood ratio
+$$
+\frac{L(\theta_1|\vec{x})}{L(\theta_0|\vec{x})} = \left(\frac{1-\theta_1}{1-\theta_0}\right)^n \left(\frac{\theta_1(1-\theta_0)}{\theta_0(1-\theta_1)}\right)^{\sum_i{x_i}}
+$$
+
+Assume $$\theta_0 \le \theta_1$$.  Then for some $$k_\alpha$$, the test reject $$ H_0$$ when $$\sum_i X_i \ge k_\alpha$$, we choose $$k_\alpha $$ such that 
+$$
+\begin{aligned} 
+\Pr\Big(\sum_i X_i \ge {k_\alpha}| H_0\Big) \le \alpha
+\end{aligned}
+$$
+Let $$\theta_0=1/2$$ and $$n=100$$, then for $$\alpha=0.05$$,
+$$
+\begin{aligned}
+\sum_{k=k_\alpha}^n {n \choose {k}} \theta_0^k (1-\theta_0)^{n-k} &= \sum_{k=k_\alpha}^n {n \choose {k}} \frac{1}{2^n}\\
+&\le 0.05
+\end{aligned}
+$$
+where $$k_\alpha = 59 $$  will satisfy the equation above.
+
+The test implies if the coin is fair, with probability $$.95$$, there are at most $$58$$ heads/tails after $$100$$ tosses. Thus, the test accept the coin is fair if there are less than $$58$$ heads/tails  
+
+!! Relation between hypothesis testing and Total Variation
+
+([[source|http://math.stackexchange.com/questions/72721/what-is-the-relationship-of-mathcall-1-total-variation-distance-to-hypoth?rq=1]])
+
+A ''lower bound'' exists for ''type 1'' and ''type 2'' errors in relation to [[total variation|TotalVariation]].
+
+Consider a simple hypothesis test between distribution $$P$$ and $$Q$$ where we reject $$P$$ when event $$A$$ (stopping condition/critical region) occurs. Let type 1 and type 2 error be $$e_1$$ and $$e_2$$.
+
+$$
+D_{TV}(P,Q) \ge 1- (e_1 + e_2)
+$$
+//informal proof//
+$$
+\begin{aligned}
+e_1 + e_2
+&= P(A) + Q(A^c) \\
+&= P(A) + 1 - Q(A)\\ 
+&\ge 1 - [Q(A) - P(A)]\\
+&= 1 - \sup_A [Q(A) - P(A)]\\
+&= 1 - D_{TV}(P,Q)
+\end{aligned}
+$$

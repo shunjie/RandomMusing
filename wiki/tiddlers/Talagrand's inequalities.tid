@@ -1,0 +1,29 @@
+created: 20181229202036528
+modified: 20181229224613766
+tags: Inequalities Concentration
+title: Talagrand's inequalities
+
+!! Uniform deviations 
+
+Let $$\Delta$$ be
+$$
+||P_n - P||_{\mathcal F} := \sup_{f \in \mathcal F} |P_n(f) - P(f)|= \sup_{f \in \mathcal F} \Big| \sum_{i=1}^{n} f(X_i)-E[f(X_i)]\Big| 
+$$
+be the uniform deviation.
+
+By uniform, it refers the concentration for all given $$f \in \mathcal F$$, e.g. $$\mathcal F$$ may include mean, variance and any others statistics or metrics.
+
+!!! variance constraints.
+Let 
+
+* $$X_1,\ldots,X_n $$ be independent random variables from distribution $$P$$ on $$\mathcal X$$. 
+* $$\mathcal F$$ be a class of functions $$f:X\to \mathbb R$$. 
+* $$b = \sup_{f\in \mathcal F} ||f||_\infty$$
+* $$v = \sup_{f\in \mathcal F}\sum_{i=1}^n \text{Var}( f(X_i))$$
+
+There exists an absolute constant $$C \ge 1$$, such that for any $$t > 0$$,
+$$
+P\Big(\Delta \ge E[\Delta] + C(\sqrt{vt} + bt) \Big) \le e^{-t}.
+
+
+$$

@@ -1,0 +1,42 @@
+caption: Cramer-Chernoff inequality
+created: 20150513165324044
+modified: 20190209024448371
+tags: Concentration
+title: CramerChernoffInequality
+
+From [[Markov|MarkovInequality]] and $$\lambda \geq 0$$, we have 
+$$
+\Pr(Z\ge t) \leq \frac{Ee^{\lambda Z}}{e^{\lambda t}}
+$$
+Since it holds for all $$\lambda \geq 0$$, choose $$\lambda$$ to minimize the upper bound. Thus the follow holds
+$$
+\Pr(Z\ge t) \leq \inf_{\lambda \ge 0}\frac{Ee^{\lambda Z}}{e^{\lambda t}}
+$$
+Define log of MGF and by convexity and jensen inequality,
+$$
+\phi_Z(\lambda) =\log E e^{\lambda Z} \ge \lambda EZ
+$$
+and 
+$$
+\phi_Z^*(t) = \sup_{\lambda \ge 0} (\lambda t - \phi_Z(\lambda)),
+$$
+Then the Chernoff's inequality 
+$$
+\begin{aligned}
+\log \Pr(Z\ge t) &\le \log \frac{Ee^{\lambda Z}}{e^{\lambda t}}\\
+&= \log Ee^{\lambda Z} - \lambda t \\
+&= \phi_Z(\lambda) - \lambda t
+\end{aligned}
+$$
+by choosing minimizer $$\lambda$$ the inequality is
+$$
+\begin{aligned}
+\Pr(Z \ge t) &\le \exp( \inf_{\lambda \ge 0} (\phi_Z(\lambda) - \lambda t)) \\
+&= \exp(-\sup_{\lambda \ge 0} (\lambda t - \phi_Z(\lambda)) \\
+&=\exp (- \phi{^*_Z}(t))
+\end{aligned}
+$$
+For iid sums of random variable $$X$$,
+$$
+P(\hat{X}_n\geq t) \le \left(\frac{Ee^{tX}}{e^{t\lambda }}\right)^n
+$$

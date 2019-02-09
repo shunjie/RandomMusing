@@ -1,0 +1,32 @@
+created: 20181226201427975
+modified: 20181226202124086
+tags: [[Linear Regression]]
+title: Least Squares
+
+Given $$k$$ variables and $$n$$ samples and outputs.
+We have ($$n \times k$$) data matrix $$X$$ and ($$n \times 1)$$ output vector $$Y$$, we want to find ($$k\times 1$$) weight vector $$w$$. 
+
+We want to find $$w$$ such that
+$$
+Xw=Y
+$$
+
+For least squares estimator, we solve 
+$$
+\begin{aligned}
+Xw &= Y \\
+X^\top Xw &= X^\top Y\\
+(X^\top X)^{-1}(X^\top X)w &= (X^\top X)^{-1}X^\top Y\\
+w &= (X^\top X)^{-1}X^\top Y
+\end{aligned}
+$$
+What we really want is to solve $$(X^\top X)^{-1}$$. If $$X^\top X$$ is invertible (non-singular), then there is a unique solution. 
+
+<<<
+//Comment//: $$X^\top X$$ squares the $$X$$, hence the name least squares. Geometrically speaking, least squares finds a linear transformation (projection) $$w$$ from $$X$$ to $$Y$$.
+<<<
+
+However, if its not invertible, then we can use generalized inverse $$X^g$$ where $$XX^gX=X$$. Then
+$$
+w = (X^{\top}X)^gX^\top Y
+$$

@@ -1,0 +1,65 @@
+created: 20181221225842017
+modified: 20190115193618546
+tags: RelativeEntropy [[Thoughts on Information Theory]]
+title: ConditionalRelativeEntropy
+
+!! Definition
+
+The conditional relative entropy for $$X \in \mathcal X$$ and $$y \in \mathcal Y$$ is defined as
+$$
+\begin{aligned}
+D(P_{X|Y}\mid\mid Q_{X|Y}) 
+&= \sum_{y} p(y) D(P_{X|y} \mid\mid Q_{X|y})\\
+&= \sum_{y} p(y) \sum_{x} p(x|y) \log \frac{p(x|y)}{q(x|y)} \\
+&= \sum_{y} \sum_{x} p(x,y) \log \frac{p(x|y)}{q(x|y)}\\
+&= E_{X,Y}\bigg[\log\frac{P(X|Y)}{Q(X|Y)}\bigg]
+\end{aligned}
+$$
+
+!! Reducing dimensions increase relative entropy
+ Let $$Q$$ be a distribution on $$A$$. Consider set $$B\subseteq A$$ and distribution $$P$$ on $$B$$ where $$p(x) = q(x)/q(B)$$ for all $$x \in B$$ and $$0$$ otherwise. Then,
+$$
+\begin{aligned}
+D(P\mid\mid Q) 
+&= \int_A p(x) \log \frac{p(x)}{q(x)}\\
+&= \int_B p(x) \log \frac{1}{q(B)}\\
+&=  -\log q(B) \ge 0.
+\end{aligned}
+$$
+with equality only if $$B=A$$.
+
+!! Partitioning dimensions reduce relative entropy
+
+For distribution $$P$$ and $$Q$$ on $$\mathcal X$$ and partition $$\mathcal{A}=(A_1,\ldots,A_k)$$ on the sample space. Then,   
+$$
+		\begin{aligned}
+			D({P_A}\mid\mid {Q_A}) + 
+			D({P_{X|A}}\mid\mid {Q_{X|A}}) &= D({P_X}\mid\mid {Q_X})
+		\end{aligned}
+$$	
+//proof//
+
+In the case of partition, we have $$p(A|x)=1$$ for some $$A \in \mathcal A$$, thus $$p(x|A)=p(x)/p(A)$$ if $$x\in A$$ and 0 otherwise.
+$$
+			\begin{aligned}
+			D({P_X}\mid\mid {Q_X})-D({P_A}\mid\mid {Q_A}) 
+			&= \sum_{x} p(x)\log\frac{p(x)}{q(x)} - \sum_{A\in \mathcal A} p(A)\log \frac{p(A)}{q(A)} \\
+			&= \sum_{A\in \mathcal A} p(A) \sum_{x \in \mathcal X} p(x|A)\log\frac{p(x|A)}{q(x|A)} \\
+			&=D({P_{X|A}}\mid\mid {Q_{X|A}}) 
+			\end{aligned}
+$$
+
+Recall that conditional probability is defined as 
+$$
+P(X|Y)=\frac{P(X\cap Y)}{P(Y)}=\frac{P(Y|X)P(X)}{P(Y)}.
+$$
+The condition $$P(A|x) = 1$$ is assuming a surjective relationship which maps $$X$$ onto $$A$$, i.e. for all $$a \in A$$, there exists at least one $$x \in X$$ such that $$f(x)=a$$. 
+
+<<<
+''comment'':
+Conversely, if we only observe $$a\in A$$, then we have a multi-valued (one to many) relationship. Note that //one-to-many// is not a 'true' function. 
+<<<
+
+Broadly speaking, if we observed $$X$$, then $$A$$ must happened and the converse is not true. So we cannot really say much if given some observation $$a\in A$$.
+
+; TODO - What if the partition are not disjoint ?

@@ -1,0 +1,24 @@
+caption: Lambert W function
+created: 20150909162509995
+modified: 20190209025624921
+tags: GeneralMathematics
+title: LambertW
+
+[[Lambert W function|https://en.wikipedia.org/wiki/Lambert_W_function#Generalizations]] is also known as //omega function// or //product logarithm// is the inverse function of the form $$f(x) =xe^x$$, thus
+$$
+x = f^{-1}(xe^x) = W(xe^x)
+$$
+
+!! Taylor expansion
+$$
+W_0(x) = \sum_{n=1}^\infty \frac{(-n)^{n-1}}{n!} x^n = x-x^2 + \frac{3}{2}x^3 - \frac{8}{3}x^4 + ....
+$$
+For large values of $$x$$,
+$$
+\begin{aligned}
+W_0(x) &= \log x - \log\log x + \sum_{\ell=0}^\infty \sum_{m=1}^\infty \frac{(-1)^\ell s(\ell+m,\ell+1)}{m!}  \log x^{-\ell-m} \log\log x^m\\
+&= \log x + \log\log x + o(1).
+\end{aligned}
+$$
+where $$s$$ is //sterling number of the first kind//.
+

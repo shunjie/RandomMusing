@@ -1,0 +1,28 @@
+created: 20160906224356787
+modified: 20190209031349270
+tags: Probability
+title: Conditional Probability
+
+Conditional Probability is actually one of the most fundemental axiom in probability and many concepts are build on top of it. 
+
+In many real life application, this quantity often appear and is very useful and sometimes enlightening. Consider a situation where the probability of drowning is $$P(drowning)=0.01$$, note that are no indication of location
+
+Lets start with the simplest definition
+
+; Kolmogorov definition
+: Given events $$A$$ and $$B$$ with $$P(B)>0$$, the conditional probability of $$A$$ given $$B$$ is defined as
+$$
+P(A|B) = \frac{P(A \cap B)}{P(B)}
+$$
+
+!!! Chebyshev type inequality
+If $$X$$ is real-valued with finite mean and variance $$\sigma^2$$,  then for any set $$A$$ with $$\Pr(A) = p  > 0$$,
+$$
+(E[X] - E[X | A] )^2 \le \frac{\sigma^2(1-p)}{p},
+$$
+with equality if and only if either $$\Pr(A)=1$$, or the support of $$X$$ is at most 2.
+
+And a simple inequality given the same assumptions, 
+$$
+Var(X\mid A) = E(X^2\mid A) - (E(X\mid A))^2 \le E(X^2\mid A)
+$$

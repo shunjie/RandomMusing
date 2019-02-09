@@ -1,0 +1,123 @@
+created: 20150106160836369
+modified: 20190104042217592
+tags: InformationTheory
+title: Entropy
+type: 
+
+[[Entropy|http://en.wikipedia.org/wiki/Entropy_(information_theory)#Extending_discrete_entropy_to_the_continuous_case]] is defined as
+
+$$
+H(X) =-\sum_{i=1}^n p(x_i) \log p(x_i)
+$$
+
+and $$H(X)$$ is always greater than 0.
+
+Entropy in continuous distribution is known as [[differential entropy|http://en.wikipedia.org/wiki/Differential_entropy]] is defined as 
+
+$$
+H(X) = -\int_x f(x) \log f(x) dx
+$$
+
+Unlike $$H(X)$$ in the discrete case, differential entropy is not invariant under change of variables and can be negative on continuous distributions. e.g. Gaussian distributions with very small $\sigma^2$.
+
+If we discretize $$X$$ with parition of size $$\delta>0$$ into $$X_\delta$$,
+$$
+H(X_\delta) \approx H(X) - \log \delta
+$$
+
+Gaussian $$N(\mu,\sigma^2)$$ : $$H(X)=\frac{1}{2}\log(2e\pi\sigma^2)$$
+
+Exponential $$exp(\lambda)$$ : $$H(X)=\log(e/\lambda)$$
+
+!!! More info
+*[[ICML 2008 Slides|http://www.icmla-conference.org/icmla08/slides1.pdf]]
+
+---
+!! [[Fano's inequality|FanoInequality]]
+For any estimator $$\hat{X}$$ that $$X\to Y\to\hat{X}$$ (e.g. $$Y$$ is a filter or noise applied to $$X$$), then with $$P_e=\Pr(\hat{X}\ne X)$$, we have
+$$
+H(P_e)+P_e\log |X| \geq H(P_e)+P_eH(X) \geq H(X|\hat{X}) \ge H(X|Y)
+$$
+
+---
+!! Upper bound Entropy by KL divergence
+For discrete random variables $$X$$ and $$Y$$ on $$\mathsf{X}$$,
+$$
+\left| H(X)-H(Y) \right| \leq \sqrt{2\cdot D_{KL}(X\|Y)} \log |\mathsf{X}|
+$$
+
+---
+!! Empirical Entropy is Biased
+Let $$N_j=\sum_i^n \mathbb{I}\{X_i=j\}$$.
+$$
+\begin{aligned}
+H-\hat{H}
+&=-\sum_j p_j \log p_j + \sum_j \frac{N_j}{n}\log \frac{N_j}{n} \\
+&=-\sum_j p_j \log p_j + \sum_j \frac{N_j}{n}\log \frac{p_jN_j}{p_jn} \\ 
+&=-\sum_j p_j \log p_j + \sum_j \frac{N_j}{n} \big( \log \frac{N_j}{p_jn}+\log p_j \big)\\ 
+&=\sum_j (\frac{N_j}{n}-p_j) \log p_j + \sum_j \frac{N_j}{n}  \log \frac{N_j}{p_jn} \\ 
+\end{aligned}
+$$
+
+Taking expectation over $$N$$, and let $$X \sim P$$ we have
+$$
+E[H-\hat{H}] = E[\sum_j \frac{N_j}{n}  \log \frac{N_j}{p_jn}] =E[D(\hat{P}_n\|P)] \ge 0
+$$
+since KL-Divergence is always positive with finite alphabets and with equality only when $$Var(X)=0$$.
+
+The empirical entropy is in fact ''negatively-biased'' everywhere !
+It is well-known that
+
+$$
+H(\hat P) \le H(P)
+$$
+which is interesting because if we interpret $$H$$ as the amount of disorder, that means whenever we estimate with samples, we will have less disorder. Conversely, interprete $$H$$ as measure of information, it says we cannot learn more than source by sampling.
+
+---
+!! An entropy inequality
+
+(From [[post|http://mathoverflow.net/questions/138275/an-entropy-inequality]] on MO.)
+
+<<<
+Let $$X,Y\in\{1,2,\ldots,n\}$$ and $$K=\sum_i^n \sqrt{X(i)Y(i)}$$ so that $$Z:=\frac{1}{k}\sqrt{XY}$$ is also a probability measure on $$\{1,2,\ldots,n\}$$. Then 
+$$
+H(X)+H(Y) \geq 2K^2H(Z)
+$$
+<<<
+
+---
+
+!! Variance
+
+Let $$H$$ be Shannon entropy. For any probability density $$P$$ on the real line,
+
+$$
+H(P)\leq\log\sqrt{2\pi e Var(P)}
+$$
+with equality only in the case of normal distribution
+
+Let $$T(X)$$ be estimator of X and noting the best estimator for $$X$$ is its mean. Then the expected MSE is
+$$
+\begin{aligned}
+E(X-T(X))^2 &\geq \min_{T(X)} E(X-T(X))^2 \\
+&= E(X-EX)^2\\
+&= Var(X) \\
+&\geq \frac{1}{2\pi e}e^{2H(X)}
+\end{aligned}
+$$
+with equality only if $$X$$ is guassian and $$T(X) = EX$$. Thus guassian has the maximum entropy given variance.
+
+For empirical mean $$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$,
+$$
+\begin{aligned}
+E(\bar{X}-T(X))^2 &\geq E(\bar{X}-E(X))^2\\
+&=\frac{Var(X)}{n}\\
+&\geq \frac{1}{2n\pi e}e^{2H(X)}
+\end{aligned}
+$$
+
+---
+!! Estimating Entropy
+There is no unbiased estimator ([[Estimation of Entropy and Mutual Information|http://www.stat.berkeley.edu/~binyu/summer08/L2P2.pdf]]) for entropy. A nice [[guide|https://memming.wordpress.com/2014/02/09/a-guide-to-discrete-entropy-estimators/]] to entropy estimation.
+
+---

@@ -1,0 +1,18 @@
+caption: Fubini's theorem
+created: 20150602183252731
+modified: 20181003194146160
+tags: GeneralMathematics
+title: FubiniTheorem
+
+Uses to switch of integral/summation.
+
+; Theorem
+If $$x$$ and $$y$$ are $$\sigma$$-finite measure spaces with measurable function $$f$$,
+
+$$
+\int_X\left( \int_Y f(x,y)dy \right)dx=\int_Y\left( \int_X f(x,y)dx \right)dy=\int_{X\times Y} f(x,y)d(x,y)
+$$
+
+; Requirements
+* $$X$$ and $$Y$$ are $$\sigma$$-finite measure spaces
+* $$f$$ is a measurable function such that any one of the three integrals above are finite.

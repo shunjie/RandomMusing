@@ -1,0 +1,44 @@
+created: 20190112054354295
+modified: 20190112074643557
+tags: [[Basic Mathematics]]
+title: Length of curve
+
+! 2D space
+
+Any interval $$x \in [a,b]$$ of the curve $$C$$ can be approximated with
+$$
+s_{approx} = \frac{|C(b)-C(a)|}{|b-a|}.
+$$
+Therefore, taking rate of change of segment $$s$$ to the limit $$ds$$, the length of the curve is
+$$
+arclength(C) = \int_a^b ds.
+$$
+By the pythagoras theorem, we have follow forms
+
+# $$(x,y)$$$$
+ds = \sqrt{dx^2+dy^2} = \sqrt{1+\bigg(\frac{dx}{dy}\bigg)^2}dy = \sqrt{1+\bigg(\frac{dy}{dx}\bigg)^2}dx
+$$
+
+# Parametric $$(x=f(t), y=g(t))$$$$
+ds = \sqrt{\bigg(\frac{dx}{dt}\bigg)^2+\bigg(\frac{dy}{dt}\bigg)^2}dt = \sqrt{1+\bigg(\frac{dy}{dt}\Big/\frac{dx}{dt}\bigg)^2}dt
+$$
+
+# Polar ($$x=r\sin(\theta),y=r\cos(\theta))$$$$
+ds = \sqrt{r^2+\bigg(\frac{dr}{d\theta}\bigg)^2} d\theta
+$$
+
+! $$n$$-D space
+
+This can be easily extend to $$n$$-dimensions by similar argument.
+
+For euclidean vector space, we can approxmiated the length of any segment given by vectors $$u, v$$ on the curve with the $$L_2$$ norm
+$$
+s = \|u-v\|_2=\sqrt{(u_1-v_1)^2+ \cdots +(u_n-v_n)^2}
+$$
+By taking $$s$$ to the limit $$ds$$, we take the integral of the tangents of the curve from $$a$$ to $$b$$ to get the arclength.
+
+Using parametric form, a vector curve $$C=\{V(t), t\in[a,b]\} $$  where $$V =[f_1,\ldots,f_n]$$ is the vector of functions each representing one of $$n$$ dimensions describing the vector plane. Let $$V'=[f'_1,\ldots,f'_n]$$ be the vector of derivatives of the functions in $$V$$. Then the length of $$C$$ is
+
+$$
+arclength(C)  = \int_{a}^{b} \|V'(t)\|_2dt
+$$

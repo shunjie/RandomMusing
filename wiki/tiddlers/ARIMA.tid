@@ -1,0 +1,111 @@
+created: 20190128203639759
+modified: 20190129030313353
+tags: [[Time Series]]
+title: ARIMA
+
+The time series ARIMA model is actually made from 3 models ''AR(p)-I(r)-MA(q)'' where the weights of the AR and MA component are learned/computed given the data.
+
+The choice of $$p$$ and $$q$$ can also be learned but uncecessary due to the linear dependence on the weights. Given a large enough $$p$$ and $$q$$, their weights would give us a good idea of what are the good choices of $$p$$ and $$q$$.
+
+
+<<< ''comment'': However, do note that as general as ARIMA model is, it is still a linear predictor. And usually, ARIMA parameter estimation uses Maximum Likelihood estimation under the ''assumption  of (prior) guassian distribution'' which means in actuality, it is a least squares method. 
+<<<
+
+! Differencing $$I(r)$$
+
+In time series context, the difference describes the changes/difference between observations.
+
+The $$r$$ parameter refers to the $$r$$-order similar to [[finite differencing|https://en.wikipedia.org/wiki/Finite_difference]] often found in numerical methods. The $$r$$ ordered difference is denoted as
+
+$$
+\Delta^r_{y_t} = \Delta^{r-1}_{y_t} - \Delta^{r-1}_{y_{t-1}} 
+$$
+
+!!! Examples
+''0-order difference'': $$\Delta^0_{y_t} = y_t$$
+
+''1-order difference'': $$\Delta^1_{y_t} = y_t - y_{t-1}$$
+
+''2-order difference'': $$\Delta^1_{y_t} = (y_t - y_{t-1}) - (y_{t-1} - y_{t-2})= y_t - 2y_{t-1} + y_{t-2}$$
+
+''n-order difference'': 
+$$
+\Delta^n_{y_t} = \sum_{k=0}^n \binom{n}{k}(-1)^k y_{t-k}
+$$
+
+''Reducing order from $$r$$ to $$r-1$$''
+$$
+\begin{aligned}
+\Delta^{r-1}_{y_t} 
+&= \Delta^r_{y_t} + \Delta^{r-1}_{y_{t-1}}   \\
+&= \Delta^r_{y_t} + \Delta^r_{y_{t-1}} + \Delta^{r-1}_{y_{t-2}}\\
+&= \cdots\\
+&= \sum_{k=1}^{t} \Delta^{r}_{y_k}
+\end{aligned}
+$$
+where the first difference $$\Delta_{y_1}^{r}=0$$ for $$r>0$$ and $$\Delta_{y_1}^{0}=y_1$$.
+
+
+!! Common uses
+
+Similar to idea of derivatives which describes the rate of change of a function, differencing performs a data transformation to describe its rate of change. 
+
+After applying the transformation, one hopes to find a stationary from the non-stationary (random walk) data to better inteprete the model. E.g. The initial function or $$y_t$$ values could look like a random walk but its rate of change might be bounded. 
+
+
+<center>
+[img[https://www.investopedia.com/thmb/79VCVD6jGNEVM1lBLm0-Jxxc3Lk=/398x0/filters:no_upscale():max_bytes(150000):strip_icc()/AT-Stationary3-5bfd88c24cedfd0026005c44]]
+Differencing captures the data's rate of change.
+</center>
+
+! Autoregressive  $$\text{AR}(p,w)$$
+
+Autoregressive means forcasting with ''a linear combination of past values''. The parameters are
+
+* $$p \in \N$$, number of past values to consider.
+* $$w \in \R^p$$, a vector of weights for each past values.
+
+Together, give a vector $$y_{t}^{[p]}=(y_{t-1},\ldots,y_{t-p})^\top$$, then the model assumes $$y_t$$ is
+$$
+y_t = \epsilon_t + w^\top y_{t}^{[p]} + C 
+$$
+where $$C$$ is some constant and $$\epsilon_t$$ is the error term.
+
+Naturally, we can see as we increase $$p$$, the forecast is will get less peaks and valleys (ups and downs) because the difference between each value will share a common set of values.
+
+! Moving average  $$\text{MA}(q,\phi)$$
+
+Moving average means forcasting with ''a linear combination of past error terms''. The parameters are
+
+* $$p \in \N$$, number of past values to consider.
+* $$w \in \R^q$$, a vector of weights for each past values.
+
+Together, give a vector $$\epsilon_{t}^{[q]}=(\epsilon_{t-1},\ldots,\epsilon_{t-q})^\top$$, then the model assumes $$y_t$$ is
+$$
+y_t = \epsilon_t +w^\top \epsilon_{t}^{[q]} + C
+$$
+where $$C$$ is some constant and $$\epsilon_t$$ is the error term which will only be revealved after observing $$y_t$$.
+
+!! AR to MA
+Any stationary $$AR(p) \implies MA(\infty)$$, wlog with $$AR(1)$$,
+
+$$
+\begin{aligned}
+y_t 
+&= wy_{t-1} + \epsilon_t\\
+&= w^2y_{t-2} + w\epsilon_t + \epsilon_t\\
+&= \epsilon_t + w\epsilon_{t-1} + w^2\epsilon_{t-2} + \cdots\\
+&= \sum_{i=0}^{\infty}w^i\epsilon_{t-i} = MA(\infty)
+\end{aligned}
+$$
+
+Under some constraint of MA's parameters, the converse $$MA(q) \implies AR(\infty)$$ holds. As example, $$MA(1)$$,
+$$
+\begin{aligned}
+\epsilon_t 
+&=  y_{t} - w\epsilon_{t-1} \\
+&= y_{t} -  wy_{t-1} + w^2\epsilon_{t-2}  + \cdots  \\
+&=\sum_{i=0}^\infty (-w)^i y_{t-i}
+\end{aligned}
+$$
+which is $$AR(t-1)$$ where each $$y_i$$ is weight by $$-w^{t-i}$$ for $$0 \le i \le t$$. In this case, we say the $$MA$$ is invertible.

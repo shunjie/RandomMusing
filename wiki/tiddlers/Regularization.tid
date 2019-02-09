@@ -1,0 +1,49 @@
+created: 20190109050524864
+modified: 20190209030521764
+tags: Statistics MachineLearning
+title: Regularization
+
+A regularized loss function with $$n$$ samples is
+$$
+\min_w J(w) = \sum_{i=1}^n \ell(\hat y_i,y) + R(w,\lambda)
+$$
+where $$R$$ is the the regularizer with some $$\lambda$$ paremeter
+
+! $$L_1$$ 
+
+$$
+R(w,\lambda) = \lambda \sum_i|w_i| = \lambda ||w||_1
+$$
+
+A side effect of sparse regularization is weight flipping. For example, if two weights are strongly correlated, in $$L_2$$ regularization, they will have equal weights but in $$L_1$$, it will assign the weights to one of them but not both.
+
+<<< 
+In neural networks, this side effect may cause problems as the computation effort for the gradient descent performed may increase on two correlated input.
+<<<
+
+! $$L_2$$
+
+$$L_2$$ regularization produce weighting based on the square loss, so we inccur large penalties for any large weights $$w_i^2$$. Thus it does not induce any sparsity, ie it will assign similar weights to correlated feature inputs.
+
+$$
+R(w,\lambda) = \lambda \sum_i w_i^2 = \lambda ||w||_2 =  \lambda(w^\top w) 
+$$
+
+Also known as //weight decay// in gradient descent
+as the update step becomes
+$$
+w \to \underbrace{(1-\alpha\lambda)}_{\text{decay}}w - \alpha \frac{dL}{dw}
+$$
+which makes the new $$w$$ smaller than what it should have been.
+
+! Entropy $$H$$
+
+Entropy regularizer is defined as 
+$$
+R(w,\lambda) = -\lambda H(w) = \frac{\lambda}{Z} \sum_{i=1}^n w_i \log w_i
+$$
+where $$Z=||w||_1$$ and we let $$0\log0=0$$.
+
+The entropy is a measure of information/uncertainty that maximize when the weights are uniform. As a regularizer, minimizing the negative entropy encourage the weights to be more uniform. Penalties are incurred for both large and small $$w$$. Compared to $$L_2$$ where we reduce large weights specifically, $$H$$ reduce both large and small weights. In other words, with $$H$$, we are telling the algorithm don't rely on large weight and don't give up on small weights.
+
+

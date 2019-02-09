@@ -1,0 +1,107 @@
+caption: Online Optimization
+created: 20150611174749646
+modified: 20190111214528147
+tags: SequentialLearning Optimization
+title: OnlineOptimization
+
+Sequential decision-making in the presence of uncertainty.
+
+! General form
+Consider a game between player $$A$$ and opponent $$B$$ (often nature). Player $$A$$ has a set of actions $$\mathsf{X}$$ and $$B$$ has a set of loss functions $$\mathsf{L} = \{\ell:\mathsf{X}\to \mathbb{R}\}$$. 
+
+The game is played for time $$t=1,\ldots,T$$  where at each time $$t$$,
+
+# $$A$$ selects an action $$x_t \in \mathsf{X}$$
+# $$B$$ selects a loss function $$\ell_t \in \mathsf{L}$$
+# $$A$$ suffers a loss $$\ell_t(x_t)$$
+
+The objective is to minimize the ''//worst case regret//''.
+
+!! Regret - against optimal action in hindsight
+
+The regret against an opponent in hindsight
+$$
+R_T = \sup_{\ell_1,\ldots,\ell_T} \left( \sum_{t=1}^T \ell_t(x_t) - \inf_{x\in \mathsf{X}} \sum_{t=1}^T \ell_t(x) \right),
+$$
+calculates the total loss incurred by the player against the //optimal single action// $$x^*\in \mathsf{X}$$ with the knowledge of $$\ell_1,\ldots,\ell_T$$. Note that with this regret, player $$A$$ has full knowledge of $$\mathsf{L}$$.
+
+!! Strategy Randomization
+Let $$A$$ pick $$X_t$$ from distribution $$P_{t-1}$$. Then the regret
+$$
+R_T = \sup_{\ell_1,\ldots,\ell_T} \sup_{P_{X^*}} \mathbb{E} \left( \sum_{t=1}^T \ell_t(X_t) -  \sum_{t=1}^T \ell_t(X^*) \right)
+$$
+is the expected loss of the player against an optimal single //random// action in hindsight 
+
+Choose a initial measure $$P_0$$ on $$\mathsf{X}$$ and learning rate $$\eta \ge 0$$.
+Let $$L_t(x) =\sum_{i=1}^t \ell_i(x)$$ be the accumulated loss of action $$x$$ up to time $$t$$ with the initial loss $$L_0(x)=0$$ for all $$x\in \mathsf{X}$$. For time $$t=1,\ldots,T$$
+
+# Sample $$X_t$$ from probability measure $$P_{t-1}$$ with density$$
+p_{t-1}(x)=\frac{dP_{t-1}(x)}{dP_0}=\frac{p_0(x)e^{-\eta L_{t-1}(x)}}{Z_{t-1}}$$ where $$
+Z_{t-1}= \int_{\mathsf{X}} p_0(x)e^{-\eta L_{t-1}(x)}dx
+$$ 
+# Opponent $$B$$ chooses $$\ell_t$$ from $$\mathsf{L}$$
+# Player $$A$$ suffers loss $$\ell_t(X_t)$$ 
+
+Alternatively, assigning initial distribution can be seen as equivalent to assigning initial loss of each $$x \in \mathsf{X}$$,
+$$
+dP_0(x)=\frac{L_{0}(x)}{ \int_{\mathsf{X}} L_0(z)dz}
+$$
+If $$P_0$$ is uniform and $$L_0(x)=0$$ for all $$x$$, then the sampling density is reduced to 
+$$
+dP_{t-1}(x)=\frac{e^{-\eta L_{t-1}(x)}}{\int_{\mathsf{X}}e^{-\eta L_{t-1}(z)}dz}. 
+$$
+
+This intuitive strategy assign weight exponentially based on the accumulated loss of each action.
+
+; Theorem
+For any random variable $$X^*\in \mathsf{X}$$ from distribution $$P_{X^*}$$, we have
+
+$$
+\mathop{\mathbb E}\left\{ \sum^T_{t=1} \ell_t(X_t) - \sum^T_{t=1} \ell_t(X^*)\right\} = \frac{1}{\eta} \left( D(P_{X^*} \| P_0) - D(P_{X^*} \| P_T) + \sum^T_{t=1} D(P_{t-1}\| P_t)\right). 
+$$
+
+
+//Proof//
+
+Let $$P_0$$ be any distribution on $$\mathsf{X}$$. Let $$z_t(x)=p_0(x)e^{-\eta L_t(x)}$$ and $$Z_t=\int_\mathsf{X} z_t(x) dx$$. Also, recall that $$X_t$$ is drawn from $$P_{t-1}$$
+$$
+\begin{aligned}
+D(P_{t-1}\| P_t)
+&=\int_\mathsf{X} p_{t-1}(x)\log \frac{p_{t-1}(x)}{p_t(x)}dx \\
+&=\int_\mathsf{X} p_{t-1}(x)\log \frac{z_{t-1}(x)/Z_{t-1}}{z_t(x)/Z_{t}}dx \\
+&=\eta\int_\mathsf{X} p_{t-1}(x) \left(L_{t}(x)-L_{t-1}(x)\right)dx + \log\frac{Z_t}{Z_{t-1}}\\
+&= \eta \mathbb{E}\ell_t(X_t)+\log\frac{Z_t}{Z_{t-1}}
+\end{aligned}
+$$
+
+Note that the above can be rewritten by noting $$z_t(x)=z_{t-1}(x)\exp(-\eta\ell_t(x))$$
+$$
+\begin{aligned}
+D(P_{t-1}\| P_t) 
+&= \eta \mathbb{E}\ell_t(X_t)+\log\frac{Z_t}{Z_{t-1}}\\
+&= \log e^{\eta\mathbb{E}\ell_t(X_t)} +\log\frac{\int_\mathsf{X} z_t(x) dx}{\int_\mathsf{X} z_{t-1}(x) dx}\\
+&= \log e^{\eta\mathbb{E}\ell_t(X_t)} +\log\frac{\int_\mathsf{X} z_{t-1}(x)e^{-\eta\ell_t(x)} dx}{\int_\mathsf{X} z_{t-1}(x) dx}\\
+&=\log \mathbb{E}e^{-\eta(\ell(X_t)-\mathbb{E}\ell_t(X_t))}
+\end{aligned}
+$$
+which is useful for obtaining upper bounds. E.g, with Hoeffding's lemma, we get $$D(P_{t-1}\|P_t)\le \frac{\eta}{8}$$.
+
+Recall that $$Z_0=1$$, then
+$$
+\mathbb{E}\sum_{t=1}^T \ell_t(X_t)=\frac{1}{\eta} \sum_{t=1}^T D(P_{t-1}\| P_t)-\frac{1}{\eta}\log Z_T
+$$
+By the definition of $$P_t$$, we have $$L_t(x)=-\frac{1}{\eta}\log Z_t\frac{p_t(x)}{p_0(x)}$$. Let $$U$$ be any fixed random variable from $$P_U$$ on $$\mathsf{X}$$, then
+$$
+\begin{aligned}
+-\mathbb{E}\sum^T_{t=1} \ell_t(U)
+&= -\mathop{\mathbb E} L_T(U) \\ 		
+&= \frac{1}{\eta}\int_\mathsf{X}\log \frac{p_T(x)}{p_0(x)}  dP_U(x) + \frac{\log Z_T}{\eta}\\
+&= \frac{1}{\eta}\left(\int_\mathsf{X}\log \frac{p_U(x)}{p_0(x)}  dP_U(x) - \int_\mathsf{X}\log \frac{p_U(x)}{p_T(x)}  dP_U(x)\right) + \frac{\log Z_T}{\eta}\\
+&=\frac{1}{\eta}\left( D(P_U\|P_0) - D(P_U\|P_T) +\log Z_T\right)
+\end{aligned}
+$$
+Combining both, we have
+$$
+\sum_{t=1}^T \mathbb{E}\ell_t(X_t) -\mathbb{E}\ell_t(U) = \frac{1}{\eta}\left( D(P_U\|P_0) - D(P_U\|P_T)+\sum_{t=1}^T D(P_{t-1}\| P_t)\right)
+$$
+and we are done.

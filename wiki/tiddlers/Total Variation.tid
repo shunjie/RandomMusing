@@ -1,0 +1,43 @@
+created: 20150717213828165
+modified: 20190111212944326
+tags: GeneralMathematics
+title: Total Variation
+
+; definition
+$$
+D_{TV}(P,Q) = \sup_{A \in \mathcal{F}}|P(A) - Q(A)|
+$$
+Also, it can be defined as
+$$
+D_{TV}(P,Q) = \frac 1 2 \|P-Q\|_1 = \frac 1 2 \sum_x \left| P(x) - Q(x) \right|\;
+$$
+or for arbitrary sample space,
+$$
+D_{TV}(P,Q) = \frac{1}{2} \|f_P-f_Q\|_{L_1(\mu)} = \frac 1 2 \int_\Omega \left| f_P - f_Q \right|d\mu\;.
+$$
+
+!! Relation to relative entropy
+Related to [[KL divergence|RelativeEntropy]] via [[Pinsker Inequality|PinskerInequality]] where
+$$
+D_{TV}(P,Q)\le\sqrt {\frac{1}{2}D(P\| Q)}
+$$
+
+!! Hypothesis Testing
+
+A simple lower bound relating type 1 and type 2 error ($$\epsilon_1 ,\epsilon_2$$) and total variation exists. Suppose we have probability measure $$P$$ and $$Q$$, and we reject $$P$$ when event $$A$$ occurs in this binary hypothesis testing
+$$
+\epsilon_1 + \epsilon_2 \ge 1 - D_{TV}(P,Q)
+\ge 1- \sqrt {\frac{1}{2}D(P\| Q)}.
+$$
+because
+$$
+\begin{aligned}
+\epsilon_1 + \epsilon_2 &= P(A) + Q(A^c)\\
+&=P(A) + (1-Q(A))\\
+&=1 +P(A) - Q(A)\\
+&\ge 1 + \inf_A(P(A) -Q(A))\\
+&= 1 - \sup_A(Q(A) - P(A))\\
+&= 1 - D_{TV}(P,Q)\\
+&\ge 1- \sqrt {\frac{1}{2}D(P\| Q)}
+\end{aligned}
+$$

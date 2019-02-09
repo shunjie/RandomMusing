@@ -1,0 +1,26 @@
+created: 20181210193204623
+modified: 20190209030325216
+tags: Inequalities
+title: Holders Ineqaulity
+
+; Definition
+
+$$
+||xy||_1 \le ||x||_p ||y||_q, \qquad \frac{1}{p} + \frac{1}{q} = 1 
+$$
+with equality iif $$|x|_p$$ and $$|y|_q$$ are linearly independent. E.g. in normed vector space where $$x=(x_1,\ldots,x_n)$$ same as $$y$$, we have equality iff there exists $$a,b\ge 0$$ for where 
+$$
+\frac{|x_i|^p}{|y_i|^q} = \frac{a}{b} \qquad \forall i \in [1,n]  
+$$
+
+If $$p=q=2$$, we have [[Cauchy Schwartz|CauchySchwartz]] inequality.
+
+!! Comment
+if we have equality, 
+$$
+||xy||_1 = \frac{a}{b}\sum y^q = \frac{b}{a}\sum x^q
+$$ 
+and if $$q=p=2$$, then 
+$$
+\frac{||x||_2}{||y||_2} =\frac{|x_i|}{|y_i|} = \frac{a}{b} \qquad \forall i\in[1,n]
+$$

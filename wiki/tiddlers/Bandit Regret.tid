@@ -1,0 +1,107 @@
+created: 20181123211631931
+modified: 20190111214711871
+tags: SequentialLearning
+title: Bandit Regret
+
+Regret is the measure of performace of a learner against the best possible player, oracle or hindsight. It is the loss the learner acumulates over the course of the game of choosing sub-optimal actions instead of the optimal action.
+
+!!! Simple example
+Lets consider the original bandit problem where a learner has to find out which one of the $$k$$ slot machines provides the best payout. Each slot machine has expected payout denoted by $$\mu_i$$ for $$1\le i \le k$$.
+At each turn $$t$$, the learner can chooses one of the $$k$$-machines and recieved a reward $$X_t$$ from it.
+
+Thus this regret can be written as
+$$
+R_n =  E[n\mu^* - S_n]  
+$$
+where $$S_n  = \sum_{t=1}^{n} X_t$$ and $$\mu^*={\arg\max}_{i\in\{1,\ldots,k\}} \mu_i$$. 
+
+The above regret can be explained in words as "//Regret at round $$n$$ is the ''expected'' sum of the $$n$$ rewards against what we could have collected if we choose the highest payout slot machine $$n$$ times.//"
+
+Since we are considering expected rewards, this means we are considering how well our algorithm ''performs on average'' i.e. repeated plays.  It is possibe in some rounds, the collected rewards is higher than if we repeatedly chooses the highest payout machine but that is an effect of sampling. The goal is not about having the highest payout but to find a policy/algorithm to find the machine with the highest payout
+
+!!! Comments
+
+The simple forms of regret such as above only considers the performance on average over expected plays. They do not penalise the learner if the output is infrequent. For example, if there are two machine, one machine gives $$$1$$ each time, while the other gives $$$100$$ with probability $$(1+\epsilon)/100$$ else $$0$$. The second machine gives a higher payout but in reality, its may not be the best machine to play.
+
+These are some things to note when applying a bandit algorithm.
+
+* Do we have infinite or near-infinite resources to spare ?
+* Are the underlying distributions stationary (non-changing) ?
+* Are the reward ranges are known ?
+
+Some of these are addressed in later papers. However, these often increase difficulty in the analysis of the algorithm. This means bandits algorithms are not excatly straightforward to apply in real-life application.
+
+
+
+!! Performance measurement
+
+Clearly, we wish the regret is as small as possible but given a number do not help us understand the performance of the algorithm or the difficulty of the problem. Thus, it is very common to use [[Asymptotic Notation|Complexity]] to describe the effectiveness of the learner.
+
+No matter what algorithm we designed, we expect to suffer regret due the nature of uncertainty.
+
+A learner is described as ''not learning'' or if the problem is ''hopeless'' for the learner, the regret is in the order of $$O(T)$$ or in english terms, we say the ''regret grows linearly''. 
+
+
+<<<
+//Q: What does it mean by grows linearly?//
+
+A regret of $$O(T)$$ indicates the average regret $$O(T)$$ does not decrease overtime. Consider this regret, for some constant $$M$$,
+$$R_T \le MT$$,
+then the average regret per $$T$$ is simply $$M$$ and that means the average regret does not vanish as $$T\to \infty$$.
+<<<
+
+! Basic Regret Decomposition
+
+The regret can be decomposed into the expected number of samples from each action and its gap. 
+
+We denote the gap between action $$k$$ and the optimal action as 
+$$
+\Delta_k=E|X_k -X^*| = |\mu_k - \mu^*|.
+$$
+and the number of times action $$k$$ is chosen at round $$n$$ as
+$$
+T_k(n) = \sum_{t=1}^{n} \mathbb{I}\{A_t=k\}
+$$
+where $$A_t$$ is the chosen action at time $$t$$.
+$$
+R_n = \sum_{n=1}^T |X_t-\mu^*|\cdot E[T_t(n)]
+$$ 
+<$reveal type="nomatch" state="$:/state/SampleReveal2" text="show">
+
+<$button set="$:/state/reveal2" setTo="show">Proof</$button>
+
+</$reveal>
+<$reveal type="match" state="$:/state/reveal2" text="show">
+
+<$button set="$:/state/reveal2" setTo="hide">Hide</$button>
+
+! This is the revealed content
+And this is some text
+
+</$reveal>
+
+! Regret of various problems
+
+* $$T$$ Time horizon
+* $$K$$ Number of actions
+
+|Robbins & Lai (Classic)|$$O(\sqrt{TK})$$|
+|Full Information|$$O(\sqrt{TK})$$|
+|Partial Monitoring|$$O(T^{2/3})$$|
+|Hopeless Games|$$O(T)$$|
+
+
+! Other forms of Regret
+
+!! Internal Regret 
+[[Foster & Rakhlin]]
+
+!! Exploration Regret
+
+
+In exploration, only the optimality of the chosen action $$A_t$$ is considered. Thus, the regret is the difference between $$A_t$$ against the optimal action $$A^*$$. 
+$$
+R_t = E[X_{A_t} - X_{A^*}]
+$$
+
+

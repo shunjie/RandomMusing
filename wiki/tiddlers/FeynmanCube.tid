@@ -1,0 +1,48 @@
+caption: Estimate Cube Root
+created: 20181108201151537
+modified: 20181128164715532
+tags: ProblemSolving
+title: FeynmanCube
+
+Feynman was asked to compute $$\sqrt[3]{1729.03}$$. He gave the answer 12.002... with mental calculation
+
+
+<<<
+The number was 1729.03. I happened to know that a cubic foot contains 1728 cubic inches, so the answer is a tiny bit more than 12. The excess, 1.03 is only one part in nearly 2000, and I had learned in calculus that for small fractions, the cube root's excess is one-third of the number's excess. So all I had to do is find the fraction 1/1728, and multiply by 4 (divide by 3 and multiply by 12). So I was able to pull out a whole lot of digits that way.
+<<<
+
+This strategy is not restricted to cubes. It works for any roots, all depending on the numbers memorised.
+
+! How he did it ?
+Firstly, he knew the cube $$12^3=1728$$ is good estimate, so
+$$
+\begin{aligned}
+\sqrt[3]{1729.03} &= \sqrt[3]{1728 + 1.03} = 12\sqrt[3]{1+\frac{1.03}{1728}} \approx 12 + 4/1728 \approx 12 + 4/2000
+\end{aligned}
+$$
+Perhaps, he knew the error would be on the order of $$10^{-6}$$.
+The error term is $$d = 1.03/1728$$.
+He knew $$1.03/1728$$ is about 1/2000.
+
+! The strategy
+
+Two requisites to use this mentally are
+
+* some knowledge of squares/cubes etc of numbers 
+* evaluating fractions
+
+The steps to find estimate $$ \sqrt[k]{n}$$ are  
+
+# Recall some $$m^k$$ that is close $$n$$. $$
+m^k \approx n
+$$
+
+# Let $$\Delta = n-m^k $$ be the difference between $$n$$ and $$m^k$$. Clearly, $$\Delta$$ can be negative. $$
+\sqrt[k]{n} = \sqrt[k]{m^k+\Delta} = \sqrt[k]{m^k\bigg(1 +\frac{\Delta}{m^k}\bigg)}  = m\sqrt[k]{1 +\frac{\Delta}{m^k}}.
+$$ 
+
+# Evaluate the error term $$\epsilon=\Delta/m^k$$. Do [[taylor expansion|TaylorSeries]] of the function $$f(\epsilon)=(1+\epsilon)^{1/k}$$ at $$a=0$$. $$
+\sqrt[k]{n} \approx m + \frac{m}{k}\Delta
+$$
+
+Knowing that error is in the order of $$O(\epsilon^2)$$ will allow us to compute up to how many decimal place our estimate is good for. 

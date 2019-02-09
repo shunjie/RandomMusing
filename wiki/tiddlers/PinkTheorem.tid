@@ -1,0 +1,17 @@
+caption: Pink Theorem - Area of polygon using lattices
+created: 20180213200213172
+modified: 20190111210958899
+tags: GeneralMathematics
+title: PinkTheorem
+
+A lattice points are integer coordinates like (1,2), (-1,4) and etc.
+Let $$P$$ be a [[lattice polygon|LatticePolygon]] and $$B(P)$$ be the number of boundary lattices and $$I(P)$$ be interior lattices of the polygon. Let $$A(P)$$ be the area of $$P$$, then
+$$
+A(P) = I(P) + \frac{1}{2}B(P) -1.
+$$
+
+note that equilNateral triangles are not possible to draw in lattice polygon.
+
+[[wiki link|https://en.wikipedia.org/wiki/Pick%27s_theorem]]
+
+See also [[ShoelaceFormula]]

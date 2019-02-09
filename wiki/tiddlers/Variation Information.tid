@@ -1,0 +1,30 @@
+created: 20160316192435506
+modified: 20181201055432683
+tags: InformationTheory
+title: Variation Information
+
+The variation of information is a measure of the distance between two clusterings (partitions of elements). 
+
+The smaller the variation of information, the more similar the partition.
+
+;Definition
+Suppose set $$A$$ is partitioned into disjoint set $$X=\{X_1,\ldots,X_n\}$$ and $$Y=\{Y_1,\ldots,Y_m\}$$. i.e. $$\cup_i X_i = A$$. 
+
+Let $$k=\sum_i X_i=\sum_i Y_i=|A|$$ be the number of symbols in $$A$$. Also $$p_i = |X_i|/k$$, $$q_i = |Y_i|/k$$ and $$r_{ij} = |X_i \cap Y_j|/k$$ which meant $$r_{ij}$$ is the number of common elements from $$X_i$$ and $$Y_j$$ divided $$k$$.
+
+Then variation of information is defined as
+$$
+VI(X,Y) := -\sum_{i,j}r_{ij}[\log(r_{ij}/p_i) + \log(r_{ij}/q_j)]
+$$
+
+
+; Identity
+Obeys Triangle inequality
+$$
+\begin{aligned}
+VI(X,Y) &= H(X|Y) + H(Y|X) 
+\end{aligned}
+$$
+
+;Intuition 
+The variation of information is a metric. $$VI(X,Y)$$ measures how much knowing the cluster assignment for an item in clustering $$X$$ reduces the uncertainty about the item’s cluster in clustering $$Y$$.

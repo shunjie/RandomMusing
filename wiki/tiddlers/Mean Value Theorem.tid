@@ -1,0 +1,34 @@
+created: 20150502210556739
+modified: 20190107074141385
+tags: GeneralMathematics
+title: Mean Value Theorem
+
+If $$f$$ is defined as continous and differentiable on interval $$[a,b]$$, then there exists at least one $$c\in[a,b]$$ such that
+$$
+f'(c) = \frac{f(b)-f(a)}{b-a}
+$$
+
+This implies, the linearization (gradient/estimate) of $$f$$ can be found by the gradient of some point $$c$$ in the same interval $$[a,b]$$.
+
+! Generalisation
+For any $$n$$ distinct pairs in $$X=\{x_1,\ldots,x_n\}$$ in the domain of an $$(n-1)$$ times differeniatable function $$f$$, there exists an interior point 
+$$
+x^* \in (\min X,\max X)
+$$
+where the [[Divided Difference]] of $$f$$
+$$
+f[X] = \frac{f^{n-1}(x^*)}{(n-1)!} 
+$$
+And $$n=2$$ gives the Mean Value Theorem.
+
+This generalisation is also known as Mean value theorem for divided differences.
+
+
+
+! Probabilistic counterpart
+
+Let $$X$$ and $$Y$$ be non-negative r.v. where $$EX \le EY \le \infty$$ and $$X\le_{st}Y$$, i.e. $$P(X > a) \le P(Y>a)$$ for all $$a\in(-\infty,\infty)$$. There exists  a continous non-negative r.v. $$Z$$ where its pdf 
+$$
+f_Z(a) = \frac{P(Y>a)-P(X>a)}{EY-EX}
+$$
+

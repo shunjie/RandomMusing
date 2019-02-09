@@ -1,0 +1,59 @@
+created: 20150620223425294
+modified: 20190106053733929
+tags: GeneralMathematics
+title: Convexity
+
+Let $$X$$ be a convex set in a real vector space, and let $$f:X\to \mathbb R$$ be a  function, then
+
+$$f$$ is convex if $$\forall x,y \in X,\forall t\in[0,1]$$,
+$$
+f(tx + (1-t)y) \le tf(x) + (1-t)f(y)
+$$
+and strictly convex if $$\forall x\neq y \in X,\forall t\in(0,1)$$
+$$
+f(tx + (1-t)y) < tf(x) + (1-t)f(y)
+$$
+
+! Properties
+
+We write $$X^n$$ a convex set of $$n$$-dimensions on $$\mathbb R^n$$ and simply $$X$$ for one dimension case.
+
+----
+A differentiable $$f: X \to \mathbb R$$ is convex on $$X$$ if and only if $$\forall  x,y\in X$$,
+$$
+f'(y) \le \frac{f(x) - f(y)}{x-y} \le f'(x)
+$$
+
+---
+If $$f$$ is convex on $$X$$ where $$0\in X$$ and $$f(0) \le 0$$, then
+$$
+f(tx) 
+\begin{cases}
+\le tf(x) &t\in[0,1]\\
+\ge tf(x) &t\in(1,\infty)
+\end{cases}
+$$ 
+and $$f$$ is superadditive, $$f(x) + f(y) \le f(x+y)$$ for all $$x,y\in X$$.
+
+---
+A twice differentiable $$f$$ is convex on $$X$$, if and only if $$f''(x) \ge 0$$ for all $$x\in X$$. And strictly convex if $$f''(x) > 0$$ for all $$x\in X$$. Note that the converse do not hold as there are strictly convex functions where $$f''(x)=0$$.
+
+---
+A twice continuously differentiable function $$f$$ on  is convex on $$X^n$$ if and only if its Hessian matrix of second partial derivatives is positive semidefinite on the interior of the $$X^n$$.
+
+! Strongly convex function
+We say $$f:\mathbb{R}^n \to \mathbb{R}$$ is $$\alpha$$-strongly convex if it satisfies
+$$
+\begin{aligned} 
+f(x) - f(y) \leq \nabla f(x)^{\top} (x - y) - \frac{\alpha}{2} \|x - y \|^2 . 
+\end{aligned}
+$$
+
+Does not require differentiability of the function f, and one can replace $$\nabla f(x)$$ in the inequality above by $$g \in \partial f(x)$$. 
+
+A function $$f$$ is $$\alpha$$-strongly convex if and only if $$x \mapsto f(x) - \frac{\alpha}{2} \|x\|^2$$ is convex.
+
+It is related to smoothness assumption can be defined by 
+$$
+f(x) - f(y) \leq \nabla f(y)^{\top} (x - y) + \frac{\beta}{2} \|x - y \|^2 
+$$

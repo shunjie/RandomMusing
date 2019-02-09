@@ -1,0 +1,46 @@
+caption: Large Deviations
+created: 20150105162958574
+modified: 20181224195935308
+tags: Probability Large
+title: LargeDeviations
+
+;  Large Deviation Principle (LDP)
+
+Given a polish space $$X$$, rate function $$I:X\to [0,+\infty]$$ and speed $$a_n \in \mathbb{R}_+$$. Sequence of probability measure $$P_n$$ on $$X$$ satisifies LDP iif for every measurable set $$E \subset X$$,
+$$
+-\inf_{x\in E^o} I(x) \le \lim_{n\to \infty} \frac{1}{a_n}\log P_n(E)\le -\inf_{x\in E^-} I(x)
+$$
+where $$E^o$$ and $$E^-$$ is closure and interor of $$E$$
+
+Commonly, for some sequence $$\vec{x}_n=\{X_1,\ldots,X_n\}$$
+$$
+\log P_n(\vec{x}_n) = -nI(\vec{x}_n) + o(n) 
+$$
+or
+$$
+\lim_{n\to \infty} -\frac{1}{n} \log P_n(\vec{x}_n)= I(\vec{x}_n)
+$$
+
+Often, the goal is to prove LDP exists for $$P_n$$ and/or to calculate the rate function $$I$$.
+
+!! Donsker-Varadhan lemma
+
+(Can also be found on Gray's IT book theorem 5.2.1)
+
+<<<
+For any probability measure $${\mu}$$ on some space $${\mathsf{ S}}$$ and any measurable function $$f : \mathsf{S} \rightarrow {\mathbb R}$$ such that $${\mathbb E}_\mu[e^f] < \infty$$,
+
+$$ 		
+\sup_{\nu}\left\{ {\mathbb E}_\nu[f] - D(\nu \| \mu)\right\} = \log {\mathbb E}_\mu[e^f]. 	
+$$
+<<<
+
+!!! Compression Lemma (Banerjee, 2006) - Rediscovered
+
+<<<
+For any function $$\phi:X\to R$$ and any pair of distributions $$P$$ and $$Q$$ over $$X$$ we have,
+$$
+\mathbb{E}_Q \left[\phi(x)\right] - \log {\mathbb E}_P\left[e^{\phi(x)}\right]≤D(Q\mid \mid P)
+$$
+where $$D(Q\mid \mid P)$$ is the Kulback-Leibler divergence from P to Q. Furthermore, the bound is achieved for $$\phi(x)=\log\frac{dQ}{dP}(x)$$.
+<<<

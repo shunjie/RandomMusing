@@ -1,0 +1,53 @@
+created: 20190119174805465
+modified: 20190119235238829
+tags: InformationTheory
+title: Renyi entropy
+
+Renyi entropy is a generalisation of the shannon entropy.
+
+; Definition
+Let discrete r.v. $$X \sim P$$ and $$\alpha\in[0,\infty]$$, the renyi entropy is defined as
+$$
+H_\alpha(X) := \frac{1}{1-\alpha} \log \sum_{x\in X}p(x)^\alpha
+$$
+or equivalently
+$$
+H_\alpha(X) := \frac{\alpha}{1-\alpha}\log\|X\|_\alpha
+$$
+where $$\|X\|_\alpha$$ is the p-norm.
+
+The Rényi entropy for any 
+$$\alpha \geq 0$$ is [[Schur concave]].
+
+! Properties
+
+!! Differences between $$\alpha$$
+By Jensen's inequality, we know $$\|x\|_p\le \|x\|_q$$ for $$p\ge q \ge 0$$. We can show that
+$$
+\log n = H_0\ge H_1 \ge H_2 \ge \cdots \ge H_\infty.
+$$
+We also have the opposite direction when $$\alpha \in  (1,\infty]$$.
+
+; Lemma
+Given $$\alpha,\alpha' \in (1,\infty]$$ such that $$\alpha < \alpha'$$, we have
+$$
+H_{\alpha'}\le H_\alpha \le \frac{\alpha}{\alpha -1} H_{\alpha'}.
+$$
+
+<$button popup="$:/SamplePopupState">Proof</$button>
+
+<$reveal type="popup" state="$:/SamplePopupState">
+<div class="tc-drop-down">
+Let $$a\le b$$ such that $$(a,b)\in (1,\infty]$$. And $$\|X\|_{b} \le \|X\|_{a} < 1 \implies \log\|X\|_{b}\le \log \|X\|_{a} < 0 $$. Therefore
+$$
+\begin{aligned}
+H_a(X) 
+&= \frac{a}{1-a} \log \|X\|_a\ \\
+&\le\frac{a}{1-a}\log\|X\|_b\\
+&\le\frac{a}{a-1}\bigg(\frac{b}{1-b}\log\|X\|_b\bigg) \\
+&= \frac{a}{a-1}H_b(X)
+\end{aligned}
+$$
+where the last inequality is from $$1 \le x/(x-1)$$ for $$x>1$$.
+</div>
+</$reveal>

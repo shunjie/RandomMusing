@@ -1,0 +1,89 @@
+created: 20160102204322547
+modified: 20190111212633654
+tags: Inequalities
+title: Wald Inequalities
+
+!! Sum of Random Variables
+
+Let $$S_N=\sum^N_{i=1}{X_i}$$ where $$X_1,\ldots,X_N$$ are //independent not necessary identical// r.v. independent of r.v. $$N$$. That is, for all $$n \in \mathbb{N}$$,
+$$
+\inf_{i \le N} E(X_i) \le E(X_n \mid n \le N) \le \sup_{j \le N} E(X_j)
+$$
+
+Let $$X$$ without subscript assumes iid. For dependent case, replace $$E(X)$$ appropriately below.
+
+!!! Expectation
+$$ E(S_N) = E(N) E(X)$$
+
+//proof// todo
+
+!!! Variance
+
+$$
+Var(S_N) = E(N) Var(X) + (EX)^2Var(N)
+$$
+
+//proof// todo
+
+//corollary 1// ''Sum of Variance''
+$$
+\begin{aligned}
+E\left(\sum_{i=1}^N (X_i-EX)^2\right) &= \sum_{i=1}^N E(X_i-EX)^2\\
+&= E(N)Var(X)
+\end{aligned}
+$$
+
+//corollary 2// ''Square of sum of $$X$$''
+$$
+\begin{aligned}
+E\left(\sum_{i=1}^N X_i\right)^2 &=E\left(E\left(\sum_{i=1}^N X_i\right)^2 \mid N=n\right)\\
+&= \sum_{n=1}^\infty (nVar(X) + (nEX)^2) \Pr(N=n)\\
+&= E(N)Var(X) +E(N^2)(EX)^2
+\end{aligned}
+$$
+
+//corollary 3// ''Square of sum of $$X_i - EX$$''
+$$
+\begin{aligned}
+E\left(\left(\sum_{i=1}^N (X_i-EX)\right)^2\right) &= E(N)Var(X-EX) +E(N^2)(E(X-EX))^2\\
+&= E(N)Var(X)
+\end{aligned}
+$$
+as $$E(X-EX) = 0$$.
+
+More info [[here|http://www.math.unl.edu/~sdunbar1/ProbabilityTheory/Lessons/Conditionals/RandomSums/randsum.shtml]].
+
+!! When $$X$$ and $$N$$ are //somewhat// dependent
+
+[[source|http://algnotes.info/on/background/stopping-times/walds-dependent/]]
+
+Assumptions
+
+* $$N$$ is finite stopping time for sequence $$X_1,X_2,\ldots,X_N$$
+* $$g : \mathbb{R} \to \mathbb{R}_+$$ monotonic
+
+Let $$z(X_n) = E(X_{n+1} - X_n \mid X_n)$$ be the forward difference for all $$n\le N$$. Then
+if
+
+
+
+* $$z(X_n) \le g(X_n)$$, $$X$$ increasing and $$g$$ increasing, then
+$$
+E(N) \ge E \left[ \int_{X_1}^{X_N} \frac{1}{g(x)} dx\right]
+$$
+
+* $$z(X_n) \ge g(X_n)$$, $$X$$ increasing and $$g$$ decreasing, then
+$$
+E(N) \le E \left[ \int_{X_1}^{X_N} \frac{1}{g(x)} dx\right]
+$$
+
+* $$z(X_n) \le g(X_n)$$, $$X$$ decreasing and $$g$$ increasing, then
+$$
+E(N) \ge E \left[ \int_{X_N}^{X_1} \frac{1}{g(x)} dx\right]
+$$
+
+* $$z(X_n) \ge g(X_n)$$, $$X$$ decreasing and $$g$$ increasing, then
+$$
+E(N) \le E \left[ \int_{X_N}^{X_1} \frac{1}{g(x)} dx\right]
+$$
+

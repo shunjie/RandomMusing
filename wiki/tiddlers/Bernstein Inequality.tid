@@ -1,0 +1,66 @@
+caption: Bernstein inequality
+created: 20150513191703930
+modified: 20181230225357904
+tags: Inequalities Concentration
+title: Bernstein Inequality
+
+For iid $$X_1,\ldots,X_n$$ on $$\mathcal X$$, a bounded function $$f: \mathcal X \to \mathbb R$$ and let
+$$
+c = ||f||_\infty \equiv \sup_{x \in \mathcal X} |f(x)|
+$$
+and
+$$
+v = \sum_{i=1}^{n} E[f^2(X_i)].
+$$
+Let $$Z_n=\sum_{i=1}^{n}f(X_i)$$. The bernstein's inequality says for any $$t> 0$$,
+$$
+P(Z_n - E[Z_n] \ge t) \le \exp\bigg(-\frac{t^2}{2(v+ct/3)}\bigg)
+$$
+With probability at least $$1-\delta$$,
+$$
+\Big|Z_n - E[Z_n]\Big| \le \sqrt{2v\log(2/\delta)} + \frac{2c\log(2/\delta)}{3}
+$$
+
+Proof - Algebra with complete the squares and $$\sqrt{x+y} \le \sqrt{x} + \sqrt{y}$$.
+
+!! Example - knowledge of $$\sigma^2$$
+Let $$\bar{X}_n = \frac{1}{n}\sum_{i=1}^{n} X_i$$ with $$P(|X_i| \le c) = 1$$ and for any $$\epsilon > 0$$, 
+we have
+$$
+P(\bar{X}_n -  EX>\epsilon)\le \exp \left(- \frac{n\epsilon^2}{ 2(\sigma^2 + c\epsilon/3)}\right)
+$$
+where
+$$ \sigma^2= \frac{1}{n} \sum_{i=1}^n E(X_i - EX)^2$$.
+
+Here, we let  $$f(X) = |X- EX|$$ and apply $$nv = \sigma^2$$ and $$t = n\epsilon$$ to the above inequality.
+
+Given $$n$$, with probability at least $$1-\delta$$,
+$$
+\Big|\bar X_n - EX\Big| \le \sqrt{\frac{2\sigma^2}{n}\log(2/\delta)} + \frac{2c}{3n}\log(2/\delta)
+$$
+Given $$\epsilon$$, with probability at least $$1-\delta$$, we have  $$\Big|\bar X_n - EX\Big|\le \epsilon$$ when
+$$
+n \ge \frac{2\sigma^2}{\epsilon^2}\log(2/\delta) + \frac{2c}{3\epsilon}\log(2/\delta)
+$$
+
+<<<
+//Comment//: For small $$\sigma^2$$, bernstein is better than hoeffding due to the extra knowledge of variance. 
+
+When $$\sigma^2 = 0$$, mean gap $$|\bar X_n - EX|=0$$  but bernstein's inequality has the term $$2c/3n \log(2/\delta)>0$$ left.
+<<<
+
+! Empirical Bernstein 
+The bernstein bound require knowledge of variance $$\sigma^2$$. Here, we estimate $$\sigma^2$$ with empirical variance estimator 
+$$
+\bar{\sigma}_n^2 = \frac{1}{n}\sum_{1/n}^{n}(X_i - \bar X_n)^2
+$$
+where $$\bar X_n$$ is the empirical mean.
+
+With probability at least $$1-\delta$$,
+$$
+\Big| \bar{X}_n - EX\Big|\le \sqrt{\frac{2\bar {\sigma}^2}{n}\log(3/\delta)} + \frac{3c}{n}\log(3/\delta)
+$$
+
+! Reference
+# [[Tuning bandit algorithms in stochastic environments|http://certis.enpc.fr/~audibert/ucb_alt.pdf]]
+# [[Empirical Bernstein Stopping|http://icml2008.cs.helsinki.fi/papers/523.pdf]]

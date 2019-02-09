@@ -1,0 +1,27 @@
+caption: Marcinkiewicz–Zygmund inequality
+created: 20170317210006768
+modified: 20180917180017149
+tags: Inequalities
+title: MZInequalities
+
+! Marcinkiewicz–Zygmund inequality
+
+; Theorem
+If $$X_{i=1,\ldots,n}$$ are independent r.v. with $$E[X_i]=0$$ and $$E(|X_i|^p) < \infty$$ and $$p\in [1,\infty)$$, then
+
+$$
+ A_{p}E\left(  \left(  \sum_{i=1}^{n}\left\vert x_{i}\right\vert ^{2}\right)^{p/2}\right)  \leq E\left(  \left\vert \sum_{i=1}^{n}x_{i}\right\vert ^{p}\right)  \leq B_{p}E\left(  \left(  \sum_{i=1}^{n}\left\vert x_{i}\right\vert ^{2}\right)^{p/2}\right) 
+$$
+
+for positive constant $$A_p$$ and $$B_p$$ which only depends on $$p$$.
+
+When $$p=2$$, $$A_p=B_p=1$$, then
+$$
+\begin{aligned}
+Var\left(\sum_{i=1}^n X_i\right) 
+= E\bigg(\left|\sum_{i=1}^n X_i\right|^2\bigg) 
+=\sum_{j=1}^n \sum_{i=1}^n E\big( X_i X_j\big) 
+=\sum_{i=1}^n E\bigg(\left| X_i\right|^2\bigg) 
+= \sum_{i=1}^n Var(X_i)
+\end{aligned}
+$$

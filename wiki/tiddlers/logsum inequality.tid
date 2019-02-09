@@ -1,0 +1,10 @@
+created: 20190120050058827
+modified: 20190120051104115
+tags: Inequalities
+title: logsum inequality
+
+Let $$(a_i)_{i=1}^n$$ and $$(b_i)_{i=1}^n$$ such that $$a_i,b_i \ge 0$$. Then we have
+$$
+\sum_{i=1}^n a_i \log\frac{a_i}{b_i} \ge \bigg(\sum_{i=1}^n a_i \bigg)\log\frac{\sum_{i=1}^n a_i}{\sum_{i=1}^n b_i} 
+$$ 
+It follows from [[Jensen inequality]] with convex function $$f(x) = x\log x.

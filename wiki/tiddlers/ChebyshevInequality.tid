@@ -1,0 +1,15 @@
+caption: Chebyshev inequality
+created: 20150513164808634
+modified: 20190209024312958
+tags: Concentration
+title: ChebyshevInequality
+
+! Chebyshev Inequality
+$$
+\Pr(\left|X-EX\right| > t) \leq \frac{\sigma^2}{t^2}
+$$
+If $$X_1,\ldots,X_n$$ is iid with finite mean and variance, and since $$Var(\hat{X}_n)=\sigma^2/n$$, then
+$$
+\Pr\left(\left|\hat{X}_n-EX\right| > t\right) \leq \frac{\sigma^2}{nt^2}
+$$
+

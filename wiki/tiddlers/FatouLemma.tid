@@ -1,0 +1,15 @@
+caption: Fatou's lemma
+created: 20150602183914656
+modified: 20190209025458792
+tags: GeneralMathematics
+title: FatouLemma
+
+; Theorem
+Let $$f_1,f_2,\ldots$$ be non-negative measurable function on [[measure space|MeasureSpace]] $$(S,\Sigma,\mu)$$. Then
+$$
+\int_S \liminf_{n\to\infty} f_n(s) d\mu \le \liminf_{n\to\infty} \int_S  f_n(s) d\mu
+$$
+and
+$$
+\int_S \limsup_{n\to\infty} f_n(s) d\mu \ge \limsup_{n\to\infty} \int_S  f_n(s) d\mu
+$$

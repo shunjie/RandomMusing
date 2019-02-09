@@ -1,0 +1,18 @@
+created: 20150502195324504
+modified: 20190209024550843
+tags: Concentration
+title: Lipschitz function
+
+! Lipschitz
+
+A function $$f : R^n \to R$$ is a C-Lipschitz function w.r.t to $$L_p$$ metric if $$\forall x,y \in R^n$$,
+$$
+\left|{f(x)−f(y)}\right| \leq C \| x−y \|_p
+$$
+
+for some $$C \in [0, \infty )$$.
+
+!! Examples
+# $$f = \max(\left|x_1\right|,\ldots,\left|x_n \right|)$$ is 1-lipschitz
+# every norm $$ \| \cdot \| $$ is C-lipschitz where $$C=\max(\| x\| : | x | \leq 1)$$
+# $$f = \ln(e^{x_1} + \cdots + e^{x_n}) $$ is 1-lipschitz

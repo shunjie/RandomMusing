@@ -1,0 +1,34 @@
+created: 20181114181945927
+modified: 20181114195740671
+tags: GeneralMathematics
+title: TaylorSeries
+
+The taylor expansion of a real/complex valued function $$f(x)$$ that is infinitely differentiable at a real/complex $$a$$ is 
+$$
+{\displaystyle f(a)+{\frac {f'(a)}{1!}}(x-a)+{\frac {f''(a)}{2!}}(x-a)^{2}+{\frac {f'''(a)}{3!}}(x-a)^{3}+\cdots ,}
+$$
+or in sigma notation
+$$
+\sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!}(x-a)^n.
+$$
+
+!! Estimating function
+Often used as an estimate or inequality for some function $$f$$. It is very common to set $$a=0$$.  For 1st-order estimation, 
+$$
+f(x) = f(a) + xf'(0) + O(x^2) .
+$$
+
+!!! __Example: Finding Roots__
+Let $$f(x) = (1+x)^{1/k}$$ for some $$k >0$$, at $$a=0$$
+$$
+f(x) = 1 + \frac{x}{k} - \frac{x^2(k-1)}{2k^2} + O(x^3)
+$$
+Then we can estimate with the bounds.
+$$
+ 1 + \frac{x}{k} -  \frac{x^2(k-1)}{2k^2} \le f(x) \le 1 + \frac{x}{k}
+$$
+
+This provides an easy way to estimate roots especially when $$x/k$$ is small. For example, if want to compute $$\sqrt[3]{1.4}=1.1186...$$, then we know the error $$(4/30)^2=0.0177...$$ which is in the order of $$10^{-2}$$, meaning we are good for up to 1 decimal point. 
+$$
+\sqrt[3]{1.4} \le 1 + 4/30 = 1.13
+$$
