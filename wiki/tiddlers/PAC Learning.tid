@@ -1,0 +1,69 @@
+created: 20181224195411725
+modified: 20181230164045762
+tags: SequentialLearning
+title: PAC Learning
+
+In (probably approximately correct) PAC learning, we want to say how well algorithm $$A$$ performs. Often its expressed as,
+
+<<<
+Given some $$\delta \in [0,1]$$. With probability of at least $$1-\delta$$, the algorithm $$A$$ returns a hypothesis $$h$$ that the average error $$E[\text{error}(h)] \le \epsilon$$. 
+<<<
+
+We say the problem is ''PAC-learnable'' if an learning algorithm $$A$$ that outputs hypothesis $$h$$ exisits such that $$P(\text{error}(h)\le \epsilon) \ge 1-\delta$$ for all distributions, $$\delta > 0$$ and $$\epsilon >0$$, where samples size $$n =poly(1/\epsilon,1/\delta)$$.
+
+For example, to say how close the empirical $$\bar X_n = n^{-1} \sum_{i=1}^n X_i$$ is to the true mean $$EX$$, we write 
+$$
+\begin{aligned}
+P(|\bar X_n-EX| \le \epsilon) &\ge 1-\delta \quad\iff \quad
+P(|\bar X_n-EX| \ge \epsilon) &\le \delta
+\end{aligned}
+$$
+
+So we want to say with $$1-\delta$$ probability, the empirical mean $$|\bar X_n - EX|\le \epsilon$$ if given some choice of $$n$$ or $$\epsilon$$.
+
+Concentration inequalities are often used for PAC framework.
+
+!! Example -  Hoeffding's inequality
+
+To express with the term at least $$1-\delta$$, the probability of error is at most $$\delta$$.
+
+For simplicity, assume $$X\in [0,1]$$,  $$\delta > 0$$ and given some $$\delta\in (0,1]$$. We want to find some $$\epsilon$$ or $$n$$ given $$\delta$$ with 
+Hoeffding's inequality,
+$$
+P(|\bar X_n-EX| \ge \epsilon) \le 2 \exp(-2n\epsilon^2) \le \delta
+$$for the PAC learning framework.
+
+!!! Confidence (given $$\epsilon$$)
+
+With probability at least $$1-\delta$$, we have $$|EX - \bar X_n|  \le \epsilon$$ with 
+$$
+\begin{aligned}
+n &\ge \frac{1}{2\epsilon^2} \log \frac{2}{\delta}
+\end{aligned}
+$$
+samples.
+
+!!! Accuracy (given $$n$$)
+With probability at least $$1-\delta$$, we have $$|EX - \bar X_n|  \le \epsilon$$ where 
+$$
+\begin{aligned}
+\epsilon &\le \sqrt{ \frac{1}{2n} \log \frac{2}{\delta}}
+\end{aligned}
+$$
+after $$n$$ samples.
+
+<<<
+//Comment//: Why the signs for $$n$$ and $$\epsilon$$ is different ? Given either $$\epsilon$$ or $$n$$, both results in $$P(|\bar X_n-EX| \ge \epsilon)\le \delta$$. However, as we express for $$1-\delta$$, the $$\ge$$ sign inside the probability flipped.
+<<<
+
+<<<
+//Comment//: The above implies that ''confidence is "cheaper" than accuracy'' i.e. to gap $$\epsilon$$ do not grow linearly but on the order of $$n^2$$ sample size.
+<<<
+
+! Criticism/issues
+
+!! Worst case assumption
+PAC framework always make the worst case assumption, thus it is not very practical in practice and more resources are used than needed. 
+
+!! Multiple actions/classifiers
+If we have a large $$K$$ number of classifiers/actions, and want our algorithm to have error rate of at most $$\delta$$. Assume independence (again worst case) between each classifiers's data, due to union bound, the error term for each action have to be $$\delta/K$$. e.g. for error probability of $$\delta = 0.01$$ for algorithm with $$K=100$$ actions/classifers, the error rate of each classifers $$i$$ has to be set to $$\delta_i=0.0001$$. This is obviously a waste of resources for distributions of action with low variance.

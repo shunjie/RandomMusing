@@ -1,0 +1,45 @@
+created: 20160915054845559
+modified: 20190209022809339
+tags: Concentration Inequalities
+title: Hoeffding Inequality
+
+Also known as ''Azuma-Hoeffding inequality''.
+
+<<<
+Given sequence $$\{X_i\}_{i=1,2,n}$$ where $$X_i \in [a_i,b_i]$$. Let $$c_i = b_i - a_i$$. Then
+$$
+\begin{aligned}
+P(S_n - ES_n \ge \epsilon) \le \exp\left(-\frac{2\epsilon^2}{\sum_{i=1}^{n}c_i^2}\right)
+\end{aligned}
+$$
+or commonly with empirical average
+$$
+\begin{aligned}
+P(\bar{X}_n - EX \ge \epsilon) \le \exp\left(-\frac{2n^2\epsilon^2}{\sum_{i=1}^{n}c_i^2}\right)
+\end{aligned}
+$$
+<<<
+So when $$X_i \in [0,1]$$, we have $$\sum_{i=1}^n c_i = n$$ and so
+
+$$
+\begin{aligned}
+P(\bar{X}_n - EX \ge \epsilon) \le \exp\left(-2n\epsilon^2\right)
+\end{aligned}
+$$
+
+!! Pac Learning
+
+Often used in [[PAC Learning]] framework due to its non-parametric nature.
+
+Often 
+
+!! Symmetric Bernoulli
+
+This is a basic form of the general Hoeffding Inequality
+
+Let $$X_i$$ be independent symmetric Bernoulli r.v., $$a_i\in \mathbb{R}$$ and $$\sum_{i=1}^n a_i^2=1$$. Then,
+
+$$
+P\Big(\sum_{i=1}^n a_i X_i \ge t\Big) \le e^{-t^2/2}
+$$
+
