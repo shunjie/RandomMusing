@@ -1,0 +1,321 @@
+created: 20190216023304079
+modified: 20190225054830886
+tags: [[Reinforcement Learning]]
+title: MDP theory
+
+The proofs shown here are from [[banach space|https://sites.ualberta.ca/~szepesva/papers/RLAlgsInMDPs.pdf]] under $$\|.\|_\infty$$ analysis
+
+<<<
+''note'': For convience, we use metric space instead of Banach space. normed space $$\subset$$ metric space
+<<<
+
+; General proof idea
+
+* Show that metric space $$(V,d)$$
+* Prove that Bellman equation is a contraction
+* Prove that the unique point $$v'$$ is the optimal $$v^*$$
+** Prove $$v' \le v^*$$ and $$v' \ge v^*$$, implies $$v'=v^*$$
+!! Some definitions
+
+Let $$V$$ denotes a vector space.
+
+; Metric
+: A function $$d : V \times V \to R$$ is a metric provided the following holds for all $$x,y,z \in V$$
+:* $$d(x,y) \ge 0$$
+:* $$d(x,y) = 0 \iff x=y$$
+:* $$d(x,y) = d(y,x)$$
+:* $$d(x,y) \le d(x,z) + d(z,y)$$
+
+; Norm 
+: Function $$f : V \to \R$$ is a norm provided the following holds
+:* $$f(x) = 0$$ for some $$x$$ in $$V$$ implies $$x=0$$
+:* $$f(\lambda x)=|\lambda|f(x) $$, for any $$\lambda \in \R$$
+:* $$f(x+y) \le f(x) + f(y)$$ for any $$x,y \in V$$.
+
+; Completeness (cauchy space)
+: A space $$V$$ is //complete// if every [[cauchy sequence|https://en.wikipedia.org/wiki/Cauchy_sequence]] in  $$V$$ is convergent to a $$x \in V$$. 
+
+<<<
+''Why completeness matters'': With complete space, we only need need to prove the sequence is Cauchy which implies a limit exists without needing to find the limit itself.
+Without completeness, we have to find the limit and prove it is a limit in general. 
+<<<
+
+Intuitively, completeness means there are no gaps in the space. We can have however small $$\epsilon \in \R$$ as for all infinite indices $$n$$ and $$m$$, the difference $$|a_n - a_m|$$ is infinitesmal.
+
+; Banach Space
+: A complete normed vector space $$(V,\|.\|)$$ is called a //banach space//
+
+; Complete Metric Space
+: A complete metric space $$(V,d)$$ is a metric space in which all [[cauchy sequence|https://en.wikipedia.org/wiki/Cauchy_sequence]]  is convergent.
+
+; Contraction mapping (Lipschitz)
+: A function $$f : V \to V$$ is $$L$$-lipschitz if for any $$x,y \in V$$, there exists a constant $$0 \le L < 1$$ such that
+$$
+d(f(x) - f(y)) \le Ld(x,y).
+$$
+
+: Contraction is a special case of lipschitz-continuity.
+
+; Banach's fixed point theorem
+: Let $$V$$ be a Banach space and $$f : V \to V$$ be a contraction mapping. Then $$f$$ has a unique fixed point $$x^* \in V$$ such that $$f(x^*) = x^*$$.
+
+The statement is proved by showing the sequence $$d(x_n,x_{n+k})$$ is cauchy and proof by contradiction that the fixed point $$x^*$$ is unique. We will skip this part and refer readers to the references.
+
+; Corollary: approximation bound
+For any $$x_0 \in V$$, the sequence $$x_{n+1} = f(x_{n})$$ converges to $$x^*$$ as $$n\to \infty$$ where $$x^*$$ is the unique fixed point of $$f$$. And if $$f$$ is $$\gamma$$-lipschitz, then the convegence is geometric
+$$
+d(x_{n+1},x^*) \le \gamma^{n} d(x_0,x^*)
+$$
+
+
+<$reveal type="nomatch" state="$:/state/SampleReveal" text="show">
+<$button set="$:/state/SampleReveal" setTo="show">proof</$button>
+</$reveal>
+<$reveal type="match" state="$:/state/SampleReveal" text="show">
+
+<$button set="$:/state/SampleReveal" setTo="hide">hide proof</$button>
+The proof is straightforward,
+$$
+\begin{aligned}
+d(x_{n+1}, x^*) 
+&= d(f(x_{n}), f(x^*)) \\
+&\le \gamma d(x_{n-1}, x^*)\\
+& \le \gamma^2 d(x_{n-2}, x^*)\\
+& \cdots \\
+& \le \gamma^{n} d(x_0, x^*).
+\end{aligned}
+$$
+
+</$reveal>
+
+; corollary: iterative bound
+$$
+d(x_{n+1},x_n) \le \gamma^n d(x_1,x_0)
+$$
+
+
+<$reveal type="nomatch" state="$:/state/SampleReveal4" text="show">
+<$button set="$:/state/SampleReveal4" setTo="show">proof</$button>
+</$reveal>
+<$reveal type="match" state="$:/state/SampleReveal4" text="show">
+<$button set="$:/state/SampleReveal4" setTo="hide">hide proof</$button>
+
+Follow similar logic as before
+$$
+\begin{aligned}
+d(x_{n+1}, x_n) 
+&= d(f(x_{n}), f(x_{n-1})) \\
+&\le \gamma d(x_{n}, x_{n-1})\\
+& \cdots \\
+& \le \gamma^{n} d(x_1, x_0).
+\end{aligned}
+$$
+
+</$reveal>
+
+!! Markov Decision Process
+
+Let $$B(\mathcal S)$$ be the space of bounded functions with states domain $$\mathcal S$$:
+$$
+B(\mathcal S) = \{V :\mathcal S \to \R \mid \|V\|_\infty < +\infty\}
+$$
+
+
+
+Define the ''metric on'' $$V$$:
+$$
+d(u,v) := \sup_{s \in \mathcal S} |u(s) - v(s)|.
+$$
+
+Let the action taken on state $$s \in \mathcal S$$ under policy $$\pi$$ is denoted as $$\pi(s)$$.
+
+
+; The metric space $$(V,d)$$ is complete.
+: 
+<$reveal type="nomatch" state="$:/state/SampleReveal1" text="show">
+
+<$button set="$:/state/SampleReveal1" setTo="show">proof</$button>
+
+</$reveal>
+<$reveal type="match" state="$:/state/SampleReveal1" text="show">
+
+<$button set="$:/state/SampleReveal1" setTo="hide">hide proof</$button>
+
+The proof is a standard result for $$\R^n$$ space found in Analysis.
+
+Suppose $$(v^{[n]})_{n\ge 0}$$ is Cauchy in $$(V,d)$$ satisfying
+$$
+\lim_{m,n \to \infty} d(v^{[m]},v^{[n]}) = 0.
+$$ 
+
+Note for each $$n \ge 0$$, $$v^{[n]}=(v_{i}^{[n]})_{i=1,2,\ldots}$$ itself is a sequence.
+
+Then for any $$\epsilon > 0$$, there is a $$N$$ such that $$d(v^{[m]},v^{[n]}) \le \epsilon$$ when $$m,n \ge N$$.
+
+Then we have for some $$j$$
+$$
+0 \le |v_{j}^{[m]}-v_{j}^{[n]}| \le \sup_{i = 1,2,\ldots} |v_{i}^{[m]} - v_{i}^{[n]}| = d(v^{[m]},v^{[n]})
+$$
+by taking limits, we have $$\lim_{m,n \to \infty} |v_{j}^{[m]} - v_{j}^{[n]}| = 0$$.  Thus for each $$j$$, the sequence $$v_{j}^{[n]}$$ is cauchy in $$\R$$. Since $$\R$$ is complete, then there is a limit $$v_{k}$$ where
+$$
+\lim_{n\to \infty} | v^{[n]}_k - v_k | = 0.
+$$
+Let $$v=(v_1,v_2,\ldots)$$ and since $$v^{[n]}$$ is cauchy and thus converge uniformly then 
+$$
+\lim_{n\to \infty} d(v^{[n]}, v) = \lim_{n \to \infty} \sup_{k=1,2,\ldots} |v_k^{[n]}-v_k| =  \sup_{k=1,2,\ldots} \lim_{n \to \infty} |v_k^{[n]}-v_k| =0
+$$
+which implies $$v^{[n]}$$ converges to $$v$$ and thus $$(\R^n,d)$$ is a complete metric space.
+
+<$button popup="$:/SamplePopupState">''//Extra//'': bounded function space is incomplete</$button>
+
+<$reveal type="popup" state="$:/SamplePopupState">
+<div class="tc-drop-down">
+
+Just the space of bounded functions alone is not complete. We need to show completeness with the given metric.
+
+e.g. 
+The space $$P$$ of all polynomials on $$[0,1]$$ with $$\|f\|=\sup_{x\in[0,1]} |f(x)|$$ is not complete as the sequence $$(p_n)^\infty_{n=0}$$ where
+$$
+p_n(x) = \sum_{k=0}^n \frac{x^k}{k!}
+$$
+is cauchy but does not converge in $$P$$.
+
+</div>
+</$reveal>
+
+</$reveal>
+
+; Value function $$V^\pi : \mathcal S \to \R$$ under policy $$\pi$$
+$$
+V^\pi(s) = E\bigg[\sum_{t=0}^n \gamma^t R_{t+1} | S_0 = s\bigg]
+$$
+for $$s\in \mathcal S$$ and $$n \le \infty$$.
+
+; Q-Value function $$Q^\pi : \mathcal S \times \mathcal A \to \R$$ under policy $$\pi$$
+$$
+Q^\pi(s,a) = E\bigg[\sum_{t=0}^n \gamma^t R_{t+1} | S_0 = s, A_0 = a\bigg]
+$$
+for $$s\in \mathcal S$$, $$n \le \infty$$ and $$a \in \mathcal A$$.
+
+; The optimal value $$V$$ and value-action $$Q$$ functions are related:
+
+:* $$V^*(s) = \sup_{a \in \mathcal A} Q^*(s,a)$$
+:* $$Q^*(s,a) = r(s,a) + \gamma \sum_{s' \mathcal S} \Pr(s' | s,a) V^*(s')$$
+:* $$V^*(s) = \sum_{a \in \mathcal A} \pi(a|s) Q^*(s,a)$$
+
+; Bellman operator
+
+The bellman operator under $$\pi$$: $$T^\pi : B(\mathcal S) \to B(\mathcal S)$$ is defined by
+$$
+(T^\pi V)(s) = r(s,\pi(s)) + \gamma \sum_{s' \in \mathcal S} \Pr(s' | s,\pi(s))V(s').
+$$
+
+Also, for any $$n\ge 0$$: 
+$$
+ V_{n+1} = T^\pi V_n
+$$
+
+; Bellman optimality operator
+The bellman optimality operator $$T^* : B(\mathcal S) \to B(\mathcal S)$$ is defined by
+$$
+(T^* V)(s) = \sup_{a\in \mathcal A}\bigg[r(s,a) + \gamma \sum_{s' \in \mathcal S} \Pr(s' | s,a)V(s')\bigg].
+$$
+
+; $$V^\pi(s)$$ is a fixed point (converges) to $$T^\pi$$
+$$
+\begin{aligned}
+V^\pi(s) 
+&= E[R_1 | S_0 = s] + \gamma \sum_{s' \in \mathcal S} \bigg[ \Pr(s' | s,\pi(s)) \sum_{t=0}^\infty \gamma^t E[R_{t+2}|S_1 = s']\bigg] \\
+&= T^\pi V^\pi(s)
+\end{aligned}
+$$
+
+; Bellman operator $$T^\pi$$ is a contraction in metric $$d$$
+
+<$reveal type="nomatch" state="$:/state/SampleReveal5" text="show">
+<$button set="$:/state/SampleReveal5" setTo="show">proof</$button>
+</$reveal>
+<$reveal type="match" state="$:/state/SampleReveal5" text="show">
+
+<$button set="$:/state/SampleReveal5" setTo="hide">hide proof</$button>
+For any $$U,V \in B(\mathcal S)$$, we have
+$$
+\begin{aligned}
+d(T^\pi V, T^\pi U) 
+&= \sup_{s \in \mathcal S} \Big| \gamma \sum_{s' \in \mathcal S} \Pr(s' | s,\pi(s))(V(s') - U(s'))\Big| \\
+&\le \sup_{s \in \mathcal S}  \gamma \sum_{s' \in \mathcal S} \Pr(s' | s,\pi(s))\Big|(V(s') - U(s'))\Big| \\
+&\le \gamma \sup_{s \in \mathcal S}  \Big|(V(s) - U(s))\Big| \\
+&= \gamma d(V,U)\\
+\end{aligned}
+$$
+
+We can show that if policy $$\pi$$ is greedy w.r.t to $$V$$, then $$T^\pi V = T^*V$$. 
+</$reveal>
+
+; Upper bound under $$T^\pi$$ 
+For any $$v$$ and a sequence $$v,v_1,v_2,\ldots,v_n$$ generated under $$T^\pi$$, we have $$d(v_n, v) \le  \frac{1}{1-\gamma}d(T^\pi v,v).$$
+
+<$set name=reveal value=SampleReveal0>
+<$reveal type="nomatch" state="$:/state/<<reveal>>" text="show">
+<$button set="$:/state/<<reveal>>" setTo="show">proof</$button>
+</$reveal>
+<$reveal type="match" state="$:/state/<<reveal>>" text="show">
+
+<$button set="$:/state/<<reveal>>" setTo="hide">Hide</$button>
+
+Recall that $$d(v_{k+1},v_{k}) \le \gamma^{k} d(v_1,v_0)$$.
+$$
+\begin{aligned}
+d(v_n, v) 
+&\le d(v_n,v_{n-1}) + d(v_{n-1},v_{n-2}) + \ldots + d(v_1,v) &&\text{(triangle ineq)}\\
+&\le d(T^\pi v,v) \sum_{k=0}^{n-1} \gamma^{k} &&\text{(contraction)}\\
+&\le \frac{1}{1-\gamma}d(T^\pi v,v). &&(n \to \infty)
+\end{aligned}
+$$
+</$reveal>
+</$set>
+
+; Greedy policy $$\pi$$ w.r.t fixed point $$V$$ of $$T^*$$ is optimal
+
+<$reveal type="nomatch" state="$:/state/SampleReveal3" text="show">
+
+<$button set="$:/state/SampleReveal3" setTo="show">proof</$button>
+
+</$reveal>
+<$reveal type="match" state="$:/state/SampleReveal3" text="show">
+
+<$button set="$:/state/SampleReveal3" setTo="hide">hide</$button>
+
+For any policy $$\pi$$, if $$V(s) \ge U(s)$$ for any $$s \in \mathcal S$$, then
+$$
+T^{\pi}V(s) - T^{\pi}U(s) = \gamma \sum_{s'\in \mathcal S} \Pr(s' | s,\pi(s)) (V(s') - U(s')) \ge 0
+$$
+
+Recall that by the contraction property, $$T^*V$$ converge to
+$$
+\lim_{n \to \infty} (T^*)^n V^\pi = V^*.
+$$
+
+By definition of $$T^*$$, we have $$T^\pi V \le T^*V$$ for any $$V \in B(\mathcal S)$$. Using the monotonicity result above, we get
+$$
+V^\pi = T^\pi V^\pi \le T^* V^\pi \le (T^*)^n V^\pi \le V^*
+$$
+and hence $$V^\pi \le V^*$$ for any policy $$\pi$$. 
+
+Suppose there is a policy $$\pi$$ such that $$V^* \le V^{\pi}$$, it should hold that
+$$
+T^\pi V^* \le T^\pi V^\pi \le T^*V^\pi
+$$
+Taking $$T^*$$ to the limits,
+$$
+V^\pi  =  \lim_{n \to \infty}  (T^\pi)^n V^* \le  \lim_{n \to \infty}  (T^*)^n V^\pi = V^*,
+$$
+and we have have a contradiction. Hence, a greedy policy $$\pi$$ w.r.t $$V^\pi = V^*$$ is the optimal policy.
+
+As a reminder,  this holds when action space $$\mathcal A$$ is finite, and only holds with continuity assumptions when $$\mathcal A$$ is continuous.
+
+</$reveal>
+
+; (Corollary) Policy improvement with greedy operator
+: When $$T^* V^\pi \ge V^\pi$$, then $$\pi$$ is sub-optimal w.r.t the greedy policy and optimal when equal. In other words, given policies $$\pi_1,\pi_2$$, if $$T^* V^{\pi_1} > T^* V^{\pi_2}$$, then $$\pi_1$$ is an improvement to $$\pi_2$$.
+: We omit the proof.
