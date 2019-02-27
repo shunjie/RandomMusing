@@ -1,5 +1,5 @@
 created: 20190216023304079
-modified: 20190225054830886
+modified: 20190227043023462
 tags: [[Reinforcement Learning]]
 title: MDP theory
 
@@ -61,12 +61,15 @@ $$
 
 The statement is proved by showing the sequence $$d(x_n,x_{n+k})$$ is cauchy and proof by contradiction that the fixed point $$x^*$$ is unique. We will skip this part and refer readers to the references.
 
-; Corollary: approximation bound
-For any $$x_0 \in V$$, the sequence $$x_{n+1} = f(x_{n})$$ converges to $$x^*$$ as $$n\to \infty$$ where $$x^*$$ is the unique fixed point of $$f$$. And if $$f$$ is $$\gamma$$-lipschitz, then the convegence is geometric
+; Contraction principles
+For any $$x_0 \in V$$, the sequence $$\{x_i\}_{i=1,2,\ldots,n}$$ generated under $$\gamma$$-lipschitz contraction function $$f$$ where $$\gamma \in [0,1)$$,
 $$
-d(x_{n+1},x^*) \le \gamma^{n} d(x_0,x^*)
+d(x_{n+1},x_n) \le \gamma^{n} d(x_1,x_0).
 $$
-
+Furthermore, let $$x^*$$ be the fixed point of $$f : V \to V$$ where $$V$$ is a complete metric space. The convegence is geometric,
+$$
+d(x_{n},x^*) \le \gamma^{n} d(x_0,x^*).
+$$
 
 <$reveal type="nomatch" state="$:/state/SampleReveal" text="show">
 <$button set="$:/state/SampleReveal" setTo="show">proof</$button>
@@ -74,33 +77,8 @@ $$
 <$reveal type="match" state="$:/state/SampleReveal" text="show">
 
 <$button set="$:/state/SampleReveal" setTo="hide">hide proof</$button>
-The proof is straightforward,
-$$
-\begin{aligned}
-d(x_{n+1}, x^*) 
-&= d(f(x_{n}), f(x^*)) \\
-&\le \gamma d(x_{n-1}, x^*)\\
-& \le \gamma^2 d(x_{n-2}, x^*)\\
-& \cdots \\
-& \le \gamma^{n} d(x_0, x^*).
-\end{aligned}
-$$
+The proof is straightforward using contraction mapping.
 
-</$reveal>
-
-; corollary: iterative bound
-$$
-d(x_{n+1},x_n) \le \gamma^n d(x_1,x_0)
-$$
-
-
-<$reveal type="nomatch" state="$:/state/SampleReveal4" text="show">
-<$button set="$:/state/SampleReveal4" setTo="show">proof</$button>
-</$reveal>
-<$reveal type="match" state="$:/state/SampleReveal4" text="show">
-<$button set="$:/state/SampleReveal4" setTo="hide">hide proof</$button>
-
-Follow similar logic as before
 $$
 \begin{aligned}
 d(x_{n+1}, x_n) 
@@ -110,6 +88,39 @@ d(x_{n+1}, x_n)
 & \le \gamma^{n} d(x_1, x_0).
 \end{aligned}
 $$
+With the same logic and using $$x^* = f(x^*)$$,
+$$
+\begin{aligned}
+d(x_{n}, x^*) 
+&= d(f(x_{n-1}), f(x^*)) \\
+&\le \gamma d(x_{n-2}, x^*)\\
+& \cdots \\
+& \le \gamma^{n} d(x_0, x^*).
+\end{aligned}
+$$
+
+</$reveal>
+
+; corollary: estimation bound
+$$
+d(x_n,x_*) \le \frac{1}{1-\gamma} d(x_{n+1},x_n) \le \frac{\gamma^n}{1-\gamma} d(x_1,x_0).
+$$
+
+<$reveal type="nomatch" state="$:/state/SampleReveal4" text="show">
+<$button set="$:/state/SampleReveal4" setTo="show">proof</$button>
+</$reveal>
+<$reveal type="match" state="$:/state/SampleReveal4" text="show">
+<$button set="$:/state/SampleReveal4" setTo="hide">hide proof</$button>
+For any $$x_0\in V$$,
+$$
+\begin{aligned}
+d(x_n, x_*) 
+&\le \sum_{k=0}^\infty d(x_{n+k+1},x_{n+k}) &&\text{(triangle ineq)}\\
+&\le d(x_{n+1},x_n) \sum_{k=0}^\infty \gamma^{k} &&\text{(contraction)}\\
+&\le \frac{\gamma^n}{1-\gamma} d(x_1,x_0). 
+\end{aligned}
+$$
+
 
 </$reveal>
 
@@ -182,7 +193,6 @@ is cauchy but does not converge in $$P$$.
 
 </div>
 </$reveal>
-
 </$reveal>
 
 ; Value function $$V^\pi : \mathcal S \to \R$$ under policy $$\pi$$
@@ -251,29 +261,6 @@ $$
 
 We can show that if policy $$\pi$$ is greedy w.r.t to $$V$$, then $$T^\pi V = T^*V$$. 
 </$reveal>
-
-; Upper bound under $$T^\pi$$ 
-For any $$v$$ and a sequence $$v,v_1,v_2,\ldots,v_n$$ generated under $$T^\pi$$, we have $$d(v_n, v) \le  \frac{1}{1-\gamma}d(T^\pi v,v).$$
-
-<$set name=reveal value=SampleReveal0>
-<$reveal type="nomatch" state="$:/state/<<reveal>>" text="show">
-<$button set="$:/state/<<reveal>>" setTo="show">proof</$button>
-</$reveal>
-<$reveal type="match" state="$:/state/<<reveal>>" text="show">
-
-<$button set="$:/state/<<reveal>>" setTo="hide">Hide</$button>
-
-Recall that $$d(v_{k+1},v_{k}) \le \gamma^{k} d(v_1,v_0)$$.
-$$
-\begin{aligned}
-d(v_n, v) 
-&\le d(v_n,v_{n-1}) + d(v_{n-1},v_{n-2}) + \ldots + d(v_1,v) &&\text{(triangle ineq)}\\
-&\le d(T^\pi v,v) \sum_{k=0}^{n-1} \gamma^{k} &&\text{(contraction)}\\
-&\le \frac{1}{1-\gamma}d(T^\pi v,v). &&(n \to \infty)
-\end{aligned}
-$$
-</$reveal>
-</$set>
 
 ; Greedy policy $$\pi$$ w.r.t fixed point $$V$$ of $$T^*$$ is optimal
 
