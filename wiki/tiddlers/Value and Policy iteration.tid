@@ -1,0 +1,128 @@
+created: 20190221054152863
+modified: 20190312031344852
+tags: [[Reinforcement Learning]]
+title: Value and Policy iteration
+
+In practise, its common to use a convergence threshold $$\epsilon$$ to stop the algorithm and extract a policy. 
+
+We can either use
+
+# extract policy $$\pi$$ after $$V$$ converges w.r.t to  some fixed policy $$\pi_0$$
+# updates policy $$\pi$$ iteratively till convergence.
+
+For many problems, $$V$$ can only be approximated due to large state (actions) space (e.g. continuous) or a step size is used in the value updates (e.g. TD($$\lambda$$)). That is,  we are only able to approximate $$V$$ with $$\tilde V$$ by supervised learning methods (least squares, neural networks and etc), such that $$d(\tilde v, v)\le \Delta$$.
+
+In such case, we extract the policy with another threshold parameter $$\Delta$$.
+
+[img[VIPI.png]]
+(image shamelessly borrowed from [[B.Scherrer slides|http://www.iecl.univ-lorraine.fr/~Bruno.Scherrer/lectures.pdf]])
+
+
+!!! Reminder
+
+Recall the metric $$d$$ is defined as 
+and the contraction assumption 
+
+* $$d(u,v) := \|u-v\|_\infty  \qquad\quad(\text{max norm})$$
+* $$d(T^\pi u,T^\pi v) \le \gamma d(u,v) \quad\ \text{(contraction)}$$
+
+The $$\|.\|_\infty$$ metric requires a uniformly small approximation error over all the states. This is costly to achieved in practice specially for large state space, e.g. there may exists action state pair that is rarely visited due to the large state space thus requires large number of samples. Other norms such as $$L_2$$ is more commonly used.
+
+!! Value iteration
+
+It is unrealistic to run infinite number of iterations. Instead, we stop the iterations such that $$||Tv_n - v_n||_\infty \le \epsilon$$ before extracting the policy.
+
+```
+Approximated Value iteration algorithm
+
+Given: optimal operator T, intial v, delta, epsilon
+while ||T(v) - v|| > epsilon
+    update v
+return policy pi such that ||T_pi(v) - T(v)|| <= delta
+```
+
+!!! Policy evaluation error bound 
+
+When the value function can be derived without approximators (e.g. table lookup), that is $$T^\pi = T^*$$, the extracted policy is
+$$
+d(v_n,v^*) \le \frac{1}{1-\gamma} d(Tv_n,v_n) \le \frac{\epsilon}{1-\gamma}.
+$$
+with respect to some policy $$\pi$$.
+
+; Approximated value iteration
+
+There are problems where we have to approximate $$V$$. Some examples are stochastic returns, huge or continous state/action space. 
+
+In theory, any supervised learning methods can be used but we should consider the problem, e.g. is the data non-stationary, and choose an appropiate method.
+
+The approximated value update: $$v_{n+1} = \tilde Tv_n$$ where $$\tilde T$$ is the greedy operator $$T$$ with approximated values $$v_n$$. We assume for all  $$d(\tilde Tv,Tv) \le \Delta$$ for all $$v \in \{v_n\}^\infty_{n=0}$$. Hence, the approximation gap between the extracted policy and optimal policy is
+
+$$
+\begin{aligned}
+d(v^\pi,v^*) 
+&\le d(v^\pi,T^\pi v_n) + d(T^\pi v_n, Tv_n) + d(T v_n,v^*) \\
+&\le \frac{\gamma}{1-\gamma}\Big(d(T^\pi v_n, v_n) +  d(T v_n,v_n)\Big) + \Delta \\
+&\le \frac{\gamma}{1-\gamma}\Big(d(T^\pi v_n, Tv_n) + d(T v_n, v_n) +  d(T v_n,v_n)\Big) + \Delta \\
+&\le \frac{2\gamma\epsilon+\Delta}{1-\gamma}
+\end{aligned}
+$$
+
+
+<<<
+''note'': The approximator do not necessarily converge to the real values. Hence, the approximation error $$\Delta$$ maybe larger than we like and not defined by user.
+<<<
+
+
+
+!!! Remark
+
+In general, there are two VI updates method, namely //synchronous// VI and //asynchronous// VI, both converges to the optimal $$v*$$.
+
+Synchronous VI updates $$v_{t+1}(s)$$ with $$v_{t}(s)$$ for all states $$s \in \mathcal S$$ in parallel. 
+
+Asynchronous update introduce some form of delays between the updates for some subset of states. Asynchronous VI generally converge faster in practise because the updates are more reflectively of the latest estimate. It can be seen as performing mini-iterative updates between the delays.
+
+A special case of asynchronous VI given a (generated) states trajectory $$S_t =\{s_1,s_2,\ldots\}$$ updates the trajectory as follows:
+$$
+v_{t+1}(s) = 
+\begin{cases}
+Tv_t(s) & s \in S_t\\ 
+v_t(s) & \text{otherwise}
+\end{cases}
+$$
+
+!! Policy Iteration
+
+In contrast to value-interation,  the policy is evaluted and update iteratively as it explores the value functions of state space. The $$m$$ parameter here is the number of times to apply the operator $$T^\pi$$ which is set to $$m=1$$ usually. It can also relax or remove the accuracy parameter $$\epsilon$$ by applying $$T^\pi$$ for $$m$$ times and carry on.
+
+```
+Given: optimal operator T, intial operator T_pi, intial v, delta, epsilon.
+while sup|T_pi(v) - v| > epsilon:
+  compute v with T_pi such that sup|(T_pi)^m v - v| > epsilon
+  extract a new policy pi' such that sup|T_pi'(v) - T(v)| > delta
+  pi ← pi'
+return policy pi
+```
+
+Policy iteration generally requries less iterations to converge but the extra step to coverge each $$v^{\pi}$$ within the loop require time, hence the overall computation time maybe longer. 
+
+$$
+\begin{aligned}
+d(v^{\pi_k},v^*) 
+&\le d(v^{\pi_{k}},T^{\pi_k} v^{\pi_{k-1}}) 
++ d(T^{\pi_k} v^{\pi_{k-1}},Tv^{\pi_{k-1}}) 
++ d(Tv^{\pi_{k-1}},v^*)\\
+
+&\le \frac{\gamma}{1-\gamma}d(T^{\pi_k}v^{\pi_{k-1}},v^{\pi_{k-1}}) + \Delta + \frac{\gamma}{1-\gamma}d(Tv^{\pi_{k-1}},v^{\pi_{k-1}})
+\\
+&\le \frac{\gamma}{1-\gamma}[2d(T^{\pi_k}v^{\pi_{k-1}},v^{\pi_{k-1}}) +(T^{\pi_k}v^{\pi_{k-1}},Tv^{\pi_{k-1}})] + \Delta 
+\\
+&\le \frac{2\gamma\epsilon+\Delta}{1-\gamma}
+\end{aligned}
+$$
+
+<<<
+''!check!'': same bound ?! PI algorithm or bound is incorrect?
+<<<
+In terms of accuracy, PI and VI has no difference as we got back the exact same bounds.
+

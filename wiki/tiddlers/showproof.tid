@@ -1,0 +1,19 @@
+created: 20190320174859669
+modified: 20190320180934902
+tags: $:/tags/Macro
+title: showproof
+
+\define showproof(proof:"proof here" reveal:"SampleReveal" name:"Show")
+<$set name=reveal value=$name$>
+<$reveal type="nomatch" state="$:/state/$reveal$" text="show">
+<$button set="$:/state/$reveal$" setTo="show">$name$</$button>
+</$reveal>
+<$reveal type="match" state="$:/state/$reveal$" text="show">
+
+<$button set="$:/state/$reveal$" setTo="hide">Hide</$button>
+
+$proof$
+
+</$reveal>
+</$set>
+\end
