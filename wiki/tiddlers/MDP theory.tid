@@ -1,6 +1,6 @@
 created: 20190216023304079
 modified: 20190227043023462
-tags: [[Reinforcement Learning]]
+tags: [[Reinforcement Learning]] SequentialLearning
 title: MDP theory
 
 The proofs shown here are from [[banach space|https://sites.ualberta.ca/~szepesva/papers/RLAlgsInMDPs.pdf]] under $$\|.\|_\infty$$ analysis
