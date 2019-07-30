@@ -1,7 +1,7 @@
 caption: Cramer-Chernoff inequality
 created: 20150513165324044
 modified: 20190209024448371
-tags: Concentration
+tags: Concentration Inequalities
 title: CramerChernoffInequality
 
 From [[Markov|MarkovInequality]] and $$\lambda \geq 0$$, we have 
