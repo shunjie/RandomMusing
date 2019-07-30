@@ -1,6 +1,6 @@
 created: 20190221054152863
 modified: 20190312031344852
-tags: [[Reinforcement Learning]]
+tags: [[Reinforcement Learning]] SequentialLearning
 title: Value and Policy iteration
 
 In practise, its common to use a convergence threshold $$\epsilon$$ to stop the algorithm and extract a policy. 
