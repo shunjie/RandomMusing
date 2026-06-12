@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unstuck - beat procrastination with science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Instrument+Sans:wght@400..700&family=Spline+Sans+Mono:wght@400..600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f5f2ea;
+    --surface: #fdfcf8;
+    --surface2: #efebdf;
+    --ink: #1d2620;
+    --ink-soft: #68736c;
+    --line: #e4ddcc;
+    --line-strong: #d2c9b3;
+    --pine: #1f6a54;
+    --pine-deep: #15503e;
+    --pine-tint: #e4efe8;
+    --pine-line: #cde0d6;
+    --amber: #9a6716;
+    --amber-tint: #f4e7cd;
+    --brick: #a8463d;
+    --brick-tint: #f4e0db;
+    --danger: #a8463d;
+    --radius: 14px;
+    --shadow-card: 0 1px 2px rgba(29, 38, 32, 0.04), 0 10px 28px -16px rgba(29, 38, 32, 0.18);
+    --shadow-pop: 0 24px 60px -24px rgba(29, 38, 32, 0.35);
+    --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+    --font-body: "Instrument Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+    --font-mono: "Spline Sans Mono", Consolas, "Courier New", monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 15.5px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E"),
+      radial-gradient(1100px 480px at 50% -120px, #e7efe8 0%, rgba(231, 239, 232, 0) 65%),
+      var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--pine-tint); color: var(--pine-deep); }
+
+  /* ---------- header / brand ---------- */
+  header {
+    padding: 30px 20px 6px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .brand { display: flex; align-items: baseline; gap: 9px; }
+  .brand-mark {
+    width: 11px; height: 11px; border-radius: 3.5px;
+    background: var(--pine);
+    box-shadow: 0 0 0 4px var(--pine-tint);
+    flex-shrink: 0;
+    transform: translateY(-1px);
+  }
+  header h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 27px;
+    letter-spacing: 0.2px;
+    color: var(--ink);
+  }
+  header .tagline {
+    margin: 6px 0 0;
+    color: var(--ink-soft);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+  }
+
+  /* ---------- nav ---------- */
+  nav {
+    display: flex;
+    gap: 2px;
+    max-width: 720px;
+    margin: 18px auto 0;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(245, 242, 234, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  nav button {
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    padding: 12px 14px 11px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    font-family: inherit;
+    transition: color 0.15s;
+  }
+  nav button:hover { color: var(--ink); }
+  nav button.active { color: var(--pine-deep); border-bottom-color: var(--pine); }
+
+  main { max-width: 720px; margin: 0 auto; padding: 24px 20px 12px; }
+
+  footer {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 10px 20px 44px;
+  }
+  footer p {
+    margin: 0;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-soft);
+    font-size: 12px;
+    text-align: center;
+  }
+
+  /* ---------- cards ---------- */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-card);
+  }
+  .card h2, .modal h2 {
+    margin: 0 0 6px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 21px;
+    line-height: 1.25;
+    letter-spacing: 0.1px;
+  }
+  .modal h2 { font-size: 22px; }
+  .hint { color: var(--ink-soft); font-size: 13.5px; margin: 0 0 12px; }
+  .science {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--pine-deep);
+    border-left: 2px solid var(--pine);
+    padding: 8px 12px;
+    margin: 14px 0 0;
+    background: var(--pine-tint);
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* ---------- forms ---------- */
+  label { display: block; font-size: 13px; font-weight: 500; color: var(--ink-soft); margin: 14px 0 5px; }
+  input[type=text], input[type=date], textarea, select {
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--line-strong);
+    border-radius: 9px;
+    color: var(--ink);
+    padding: 10px 12px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input::placeholder, textarea::placeholder { color: #a9a29e; }
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--pine);
+    box-shadow: 0 0 0 3px rgba(31, 106, 84, 0.14);
+  }
+  input[type=range] { width: 100%; accent-color: var(--pine); }
+  input[type=checkbox] { accent-color: var(--pine); }
+  .row { display: flex; gap: 14px; }
+  .row > * { flex: 1; }
+  .slider-val { float: right; color: var(--ink); font-weight: 600; }
+
+  /* ---------- buttons ---------- */
+  button.primary, button.ghost, button.danger, button.good {
+    border: none;
+    border-radius: 9px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+  }
+  button.primary { background: var(--ink); color: var(--surface); }
+  button.primary:hover { background: #303d35; }
+  button.good {
+    background: var(--pine);
+    color: #f4faf6;
+    box-shadow: 0 8px 18px -10px rgba(21, 80, 62, 0.55);
+  }
+  button.good:hover { background: var(--pine-deep); }
+  button.good:active, button.primary:active { transform: translateY(1px); }
+  button.ghost {
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+  }
+  button.ghost:hover { background: var(--surface2); }
+  button.danger { background: transparent; color: var(--brick); border: 1px solid rgba(168, 70, 61, 0.45); }
+  button.danger:hover { background: var(--brick-tint); }
+  button.big { padding: 15px 22px; font-size: 16px; width: 100%; border-radius: 11px; }
+  button.small { padding: 6px 13px; font-size: 13px; }
+  button.linklike {
+    background: none; border: none; cursor: pointer;
+    color: var(--ink-soft); font-size: 13px; font-family: inherit;
+    text-decoration: underline; text-underline-offset: 3px;
+    text-decoration-color: var(--line-strong);
+    padding: 4px 6px;
+    transition: color 0.15s;
+  }
+  button.linklike:hover { color: var(--ink); text-decoration-color: var(--ink-soft); }
+  .quiet-actions { display: flex; gap: 14px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+
+  /* ---------- hero ---------- */
+  .eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--pine); margin-bottom: 10px;
+  }
+  .hero { padding: 28px 26px; border-color: var(--pine-line); }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: 29px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.1px;
+  }
+  .hero .nextstep { font-size: 15px; padding: 13px 15px; margin: 16px 0; }
+  .hero button.big { margin-top: 2px; }
+
+  /* ---------- tasks ---------- */
+  .task {
+    background: var(--surface2);
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .task .title { font-weight: 600; }
+  .task .meta { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+  .meta { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+  .meta.plan {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 13.5px;
+    color: var(--pine-deep);
+    margin-top: 6px;
+  }
+  .nextstep {
+    margin-top: 10px;
+    padding: 9px 12px;
+    background: var(--pine-tint);
+    border: 1px solid var(--pine-line);
+    border-radius: 9px;
+    font-size: 14px;
+  }
+  .task .actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .task.slim { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+
+  .badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 99px;
+    background: var(--surface2);
+    border: 1px solid var(--line-strong);
+    color: var(--ink-soft);
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .badge.urgent { background: var(--brick-tint); border-color: rgba(168, 70, 61, 0.35); color: var(--brick); }
+  .badge.soon { background: var(--amber-tint); border-color: rgba(154, 103, 22, 0.35); color: var(--amber); }
+
+  details.others, details.more { margin-bottom: 16px; }
+  details.others > summary, details.more > summary {
+    cursor: pointer; color: var(--ink-soft); font-size: 13px; font-weight: 500;
+    padding: 8px 4px; list-style-position: inside;
+  }
+  details.others > summary::marker, details.more > summary::marker { color: var(--pine); }
+  details.others > summary:hover, details.more > summary:hover { color: var(--ink); }
+  details.others[open] > summary { margin-bottom: 8px; }
+
+  .step { display: flex; align-items: center; gap: 9px; padding: 4px 0; font-size: 14px; }
+  .step input[type=checkbox] { width: 16px; height: 16px; flex-shrink: 0; }
+  .step.done span { text-decoration: line-through; color: var(--ink-soft); }
+  .check-item { display: flex; align-items: center; gap: 11px; padding: 9px 0; }
+  .check-item input[type=checkbox] { width: 18px; height: 18px; flex-shrink: 0; }
+  .check-item label { margin: 0; font-size: 14.5px; font-weight: 400; color: var(--ink); cursor: pointer; }
+
+  /* ---------- timer ---------- */
+  .timer-display {
+    font-family: var(--font-mono);
+    font-size: 66px;
+    font-weight: 500;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -1px;
+    margin: 10px 0 4px;
+  }
+  .timer-display.overtime { color: var(--pine); }
+  .timer-task {
+    text-align: center; color: var(--ink-soft); margin: 4px 0 0;
+    font-size: 12px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase;
+  }
+  .timer-controls { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+
+  /* the focus card inverts to a dark "deep work" surface while running */
+  .focus-card {
+    background: linear-gradient(165deg, #173127 0%, #101f19 100%);
+    border-color: #25473a;
+    color: #ecf3ee;
+    box-shadow: var(--shadow-pop);
+  }
+  .focus-card .timer-task { color: #93b0a2; }
+  .focus-card .timer-display { color: #f4f1e4; }
+  .focus-card .timer-display.overtime { color: #8fdcbe; }
+  .focus-card .hint { color: #87a394; }
+  .focus-card .banner {
+    background: rgba(143, 220, 190, 0.09);
+    border-color: rgba(143, 220, 190, 0.28);
+    color: #d8e9df;
+  }
+  .focus-card button.ghost {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.22);
+    color: #ecf3ee;
+  }
+  .focus-card button.ghost:hover { background: rgba(255, 255, 255, 0.14); }
+
+  .banner {
+    background: var(--pine-tint);
+    border: 1px solid var(--pine-line);
+    border-radius: 11px;
+    padding: 11px 15px;
+    font-size: 14px;
+    margin: 12px 0;
+    text-align: center;
+    color: var(--pine-deep);
+  }
+
+  /* ---------- progress ---------- */
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); gap: 10px; }
+  .stat {
+    background: var(--surface2);
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    padding: 16px 8px 13px;
+    text-align: center;
+  }
+  .stat .num {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--pine-deep);
+  }
+  .stat .lbl {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--ink-soft); margin-top: 3px;
+  }
+  .win { font-size: 14px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .win:last-child { border-bottom: none; }
+  .win .when { color: var(--ink-soft); font-size: 12px; }
+
+  /* ---------- modal ---------- */
+  .modal-back {
+    position: fixed; inset: 0;
+    background: rgba(29, 38, 32, 0.45);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px; z-index: 50;
+  }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 26px;
+    max-width: 460px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-pop);
+    animation: pop 0.22s cubic-bezier(0.22, 0.9, 0.3, 1.1) both;
+  }
+
+  .empty { color: var(--ink-soft); text-align: center; padding: 28px 10px; font-size: 14px; }
+  .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); }
+  .toggle-row:last-child { border-bottom: none; }
+
+  /* ---------- motion ---------- */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: scale(0.97) translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+  #view > * { animation: rise 0.35s cubic-bezier(0.22, 0.7, 0.3, 1) both; }
+  #view > *:nth-child(2) { animation-delay: 60ms; }
+  #view > *:nth-child(3) { animation-delay: 120ms; }
+  #view > *:nth-child(4) { animation-delay: 180ms; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 520px) {
+    .row { flex-direction: column; gap: 0; }
+    .timer-display { font-size: 50px; }
+    .hero { padding: 20px 18px; }
+    .hero-title { font-size: 24px; }
+    main { padding: 18px 14px 8px; }
+    header { padding: 22px 14px 4px; }
+    nav { padding: 0 14px; }
+    .card { padding: 18px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><span class="brand-mark"></span><h1>Unstuck</h1></div>
+  <p class="tagline">Start small, start now. Science does the rest.</p>
+</header>
+<nav id="nav"></nav>
+<main id="view"></main>
+<footer>
+  <p>Grounded in peer-reviewed procrastination research. Your data never leaves this browser.</p>
+</footer>
+<div id="modal-root"></div>
+
+<script>
+"use strict";
+
+/* =====================================================================
+   CORE INFRASTRUCTURE
+   - EventBus: Observer pattern. Modules communicate without coupling.
+   - Store: Repository pattern over localStorage. Swap backend freely.
+   - Registry: Plugin/Strategy pattern. Each intervention is a module
+     that registers itself; the shell knows nothing about specifics.
+   ===================================================================== */
+
+const EventBus = (() => {
+  const handlers = {};
+  return {
+    on(evt, fn) { (handlers[evt] = handlers[evt] || []).push(fn); },
+    emit(evt, data) { (handlers[evt] || []).forEach(fn => fn(data)); }
+  };
+})();
+
+const Store = (() => {
+  const KEY = "unstuck-v1";
+  const defaults = {
+    tasks: [],
+    sessions: [],   // { taskId, minutes, at, finished }
+    wins: [],       // { text, at }
+    settings: {
+      impulsiveness: 3,           // self-rated 1-5, used in TMT diagnosis
+      pomodoroMin: 25,
+      starterMin: 5,
+      ritualSeen: false,          // pre-session checklist shown at least once
+      modules: {}                 // moduleId -> enabled bool (default true)
+    }
+  };
+  let state = null;
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      state = raw ? Object.assign({}, defaults, JSON.parse(raw)) : structuredClone(defaults);
+      state.settings = Object.assign({}, defaults.settings, state.settings);
+    } catch (e) {
+      state = structuredClone(defaults);
+    }
+    return state;
+  }
+  function save() {
+    localStorage.setItem(KEY, JSON.stringify(state));
+    EventBus.emit("state:changed", state);
+  }
+  return {
+    get state() { return state || load(); },
+    save,
+    uid: () => Math.random().toString(36).slice(2, 10)
+  };
+})();
+
+const Registry = (() => {
+  const modules = [];
+  return {
+    register(mod) { modules.push(mod); },
+    all() { return modules; },
+    enabled() {
+      const flags = Store.state.settings.modules;
+      return modules.filter(m => flags[m.id] !== false);
+    },
+    get(id) { return modules.find(m => m.id === id); }
+  };
+})();
+
+/* =====================================================================
+   DOMAIN LOGIC
+   ===================================================================== */
+
+// Temporal Motivation Theory diagnosis: which factor is sabotaging you?
+// Used for ADVICE only - it never lowers a task's rank (see scoreTask).
+function tmtDiagnosis(task) {
+  if (task.expectancy <= 2) {
+    return { factor: "expectancy", advice: "You doubt you can do this well. Shrink the next step until it feels trivially easy - tiny concrete actions rebuild confidence fast." };
+  }
+  if (task.value <= 2) {
+    return { factor: "value", advice: "This feels meaningless. Re-read your 'why', or pair it with something pleasant (music, coffee, a favorite spot) - temptation bundling raises task value." };
+  }
+  if (!task.deadline) {
+    return { factor: "delay", advice: "No deadline means infinite delay. Set one yourself - even arbitrary self-imposed deadlines work (Ariely and Wertenbroch, 2002)." };
+  }
+  return null;
+}
+
+function daysUntil(dateStr) {
+  if (!dateStr) return null;
+  const ms = new Date(dateStr + "T23:59:59") - new Date();
+  return Math.max(0, ms / 86400000);
+}
+
+/*
+ * Priority scoring - a Strategy: swap this function to change how the
+ * Today view picks its hero task (e.g. pure deadline order, effort-
+ * weighted, etc). Nothing else needs to change.
+ *
+ *   score = Value / (1 + days_until_deadline)
+ *
+ * High-value work due soon wins. AVOIDANCE BOOST: tasks that have
+ * existed for 3+ days with zero focus sessions in the last 3 days get
+ * a 1.5x multiplier, so the work you're dodging floats up instead of
+ * quietly sinking. Expectancy (confidence) deliberately does NOT
+ * affect rank: low confidence is a reason to shrink the first step
+ * (see tmtDiagnosis), never a reason to bury the task.
+ */
+function scoreTask(task) {
+  const V = task.value || 3;
+  const d = daysUntil(task.deadline);
+  const delay = d === null ? 30 : d; // no deadline behaves like "a month away"
+  let score = V / (1 + delay);
+  const threeDays = 3 * 86400000;
+  const isOld = task.createdAt && (Date.now() - task.createdAt >= threeDays);
+  const workedRecently = Store.state.sessions.some(s =>
+    s.taskId === task.id && (Date.now() - s.at) < threeDays);
+  if (isOld && !workedRecently) score *= 1.5;
+  return score;
+}
+
+function nextStep(task) {
+  return (task.steps || []).find(s => !s.done) || null;
+}
+
+function activeTasks() {
+  return Store.state.tasks.filter(t => t.status === "active");
+}
+
+function fmtDate(d) {
+  return new Date(d).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+}
+
+function deadlineBadge(task) {
+  const d = daysUntil(task.deadline);
+  if (d === null) return '<span class="badge">no deadline</span>';
+  if (d < 1.5) return '<span class="badge urgent">due ' + fmtDate(task.deadline) + '</span>';
+  if (d < 4) return '<span class="badge soon">due ' + fmtDate(task.deadline) + '</span>';
+  return '<span class="badge">due ' + fmtDate(task.deadline) + '</span>';
+}
+
+function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+// Implementation intention rendered as a real if-then plan:
+// "When [cue], I will [first tiny step]".
+function intentionHtml(task) {
+  const cue = task.intention && task.intention.cue;
+  if (!cue) return "";
+  const step = nextStep(task) || (task.steps && task.steps[0]);
+  const action = step ? step.text : "take the first step";
+  return '<div class="meta plan">When ' + esc(cue) + ", I will " + esc(action) + ".</div>";
+}
+
+function nextStepHtml(task) {
+  const step = nextStep(task);
+  if (step) return '<div class="nextstep">Next: ' + esc(step.text) + "</div>";
+  if ((task.steps || []).length) {
+    return '<div class="nextstep">All steps done - mark it complete on the Tasks tab, or add one more step.</div>';
+  }
+  return '<div class="nextstep">No first step yet. The timer still works - but a tiny step makes starting easier.</div>';
+}
+
+/* =====================================================================
+   MODAL HELPERS
+   ===================================================================== */
+
+function openModal(html) {
+  const root = document.getElementById("modal-root");
+  root.innerHTML = '<div class="modal-back" onclick="if(event.target===this)closeModal()"><div class="modal">' + html + "</div></div>";
+}
+function closeModal() {
+  document.getElementById("modal-root").innerHTML = "";
+}
+
+/* =====================================================================
+   SELF-COMPASSION LAPSE RECOVERY
+   Wohl, Pychyl and Bennett (2010): self-forgiveness for procrastinating
+   reduced future procrastination. Guilt and shame fuel avoidance loops.
+   ===================================================================== */
+
+const compassionLines = [
+  "Avoiding this doesn't make you lazy. Procrastination is emotion regulation, not a character flaw.",
+  "Forgiving yourself for putting this off makes you LESS likely to put it off again. Guilt does the opposite.",
+  "Everyone avoids hard things. The skill isn't never avoiding - it's restarting without self-punishment.",
+  "Your past self avoided this because it felt threatening. Your only job now is to make it feel smaller."
+];
+
+function lapseRecovery(taskId) {
+  const task = Store.state.tasks.find(t => t.id === taskId);
+  if (!task) return;
+  const line = compassionLines[Math.floor(Math.random() * compassionLines.length)];
+  openModal(
+    "<h2>That's okay. Restart small.</h2>" +
+    '<p class="science" style="margin-top:0">' + esc(line) + "</p>" +
+    '<label>A 2-minute version of your next step on "' + esc(task.title) + '":</label>' +
+    '<input type="text" id="tiny-step" placeholder="e.g. open the document and write one sentence" onkeydown="if(event.key===\'Enter\')commitTinyStep(\'' + task.id + "')\">" +
+    '<div style="margin-top:16px">' +
+    '<button class="good big" onclick="commitTinyStep(\'' + task.id + '\')">Add it and start 5 minutes</button>' +
+    '<div style="text-align:center;margin-top:8px"><button class="linklike" onclick="closeModal()">Close</button></div>' +
+    "</div>"
+  );
+  setTimeout(() => { const i = document.getElementById("tiny-step"); if (i) i.focus(); }, 50);
+}
+
+function commitTinyStep(taskId) {
+  const txt = document.getElementById("tiny-step").value.trim();
+  const task = Store.state.tasks.find(t => t.id === taskId);
+  if (!task) return;
+  if (txt) {
+    task.steps.unshift({ id: Store.uid(), text: txt, done: false });
+    Store.save();
+  }
+  closeModal();
+  beginSession(taskId, Store.state.settings.starterMin, "starter");
+}
+
+/* =====================================================================
+   FOCUS TIMER (shared service used by modules)
+   "Just start" sessions exploit the Zeigarnik effect: once begun,
+   unfinished tasks nag the mind toward completion.
+
+   Two modes:
+   - "starter": when the countdown hits 0, NO alarm and NO modal -
+     the timer silently flips to count-up ("+MM:SS"). Minute 5 is a
+     springboard, not a wall. Stopping from count-up logs a win.
+   - "pomodoro": classic behavior - alarm + completion dialog at 0.
+
+   Running state ({taskId, startedAt, endAt, mode, totalMin}) is
+   persisted to localStorage so a page reload resumes the session.
+   ===================================================================== */
+
+const FocusTimer = (() => {
+  const TKEY = "unstuck-timer-v1";
+  let timer = null, taskId = null, totalMin = 0, mode = "pomodoro";
+  let endAt = null, startedAt = null, overtime = false;
+
+  function fmt(ms) {
+    const s = Math.max(0, Math.ceil(ms / 1000));
+    return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  }
+  function dispStr() {
+    if (!timer) return "0:00";
+    return overtime ? "+" + fmt(Date.now() - endAt) : fmt(endAt - Date.now());
+  }
+  function persist() {
+    try { localStorage.setItem(TKEY, JSON.stringify({ taskId, startedAt, endAt, mode, totalMin })); } catch (e) {}
+  }
+  function unpersist() {
+    try { localStorage.removeItem(TKEY); } catch (e) {}
+  }
+  function tick() {
+    const now = Date.now();
+    if (!overtime && now >= endAt) {
+      if (mode === "starter") {
+        overtime = true; // silent flip to count-up: no beep, no modal
+        EventBus.emit("timer:overtime", { taskId });
+      } else {
+        finish(true);
+        return;
+      }
+    }
+    EventBus.emit("timer:tick", { taskId, overtime });
+    document.title = dispStr() + " - Unstuck";
+  }
+  function start(tid, minutes, m) {
+    stop();
+    taskId = tid; totalMin = minutes; mode = m || "pomodoro"; overtime = false;
+    startedAt = Date.now();
+    endAt = startedAt + minutes * 60000;
+    persist();
+    timer = setInterval(tick, 250);
+    EventBus.emit("timer:started", { taskId, minutes, mode });
+  }
+  function finish(completed) {
+    if (!timer) return;
+    clearInterval(timer); timer = null;
+    const elapsed = Math.round((Date.now() - startedAt) / 60000);
+    const minutes = completed ? Math.max(totalMin, elapsed) : elapsed;
+    Store.state.sessions.push({ taskId, minutes, at: Date.now(), finished: completed });
+    Store.save();
+    unpersist();
+    const tid = taskId, m = mode;
+    taskId = null; endAt = null; startedAt = null; overtime = false;
+    document.title = "Unstuck";
+    EventBus.emit("timer:finished", { taskId: tid, completed });
+    if (completed) {
+      if (m === "pomodoro") {
+        beep();
+        openWinModal(tid, "Session done. That's a win.");
+      } else {
+        openWinModal(tid, "You started AND kept going.");
+      }
+    }
+  }
+  function stop() {
+    if (timer) { clearInterval(timer); timer = null; }
+    taskId = null; endAt = null; startedAt = null; overtime = false;
+    unpersist();
+    document.title = "Unstuck";
+  }
+  // Resume a persisted session after a page reload.
+  function resume() {
+    let p = null;
+    try { p = JSON.parse(localStorage.getItem(TKEY) || "null"); } catch (e) {}
+    if (!p || !p.taskId || !p.endAt) return;
+    if (!Store.state.tasks.find(t => t.id === p.taskId)) { unpersist(); return; }
+    taskId = p.taskId; totalMin = p.totalMin || 5; mode = p.mode || "pomodoro";
+    endAt = p.endAt; startedAt = p.startedAt || (p.endAt - totalMin * 60000);
+    if (mode !== "starter" && Date.now() >= endAt) {
+      // Pomodoro ran out while the page was closed: count it quietly.
+      Store.state.sessions.push({ taskId, minutes: totalMin, at: endAt, finished: true });
+      Store.save();
+      unpersist();
+      taskId = null; endAt = null; startedAt = null;
+      return;
+    }
+    overtime = (mode === "starter" && Date.now() >= endAt);
+    timer = setInterval(tick, 250);
+  }
+  function beep() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = 880; g.gain.value = 0.08;
+      o.start(); o.stop(ctx.currentTime + 0.4);
+    } catch (e) { /* audio unavailable */ }
+  }
+  return {
+    start, stop, resume,
+    abandon() { finish(false); },
+    finishNow() { finish(true); },
+    get running() { return !!timer; },
+    get taskId() { return taskId; },
+    get mode() { return mode; },
+    get overtime() { return overtime; },
+    get totalMin() { return totalMin; },
+    get display() { return dispStr(); },
+    fmt
+  };
+})();
+
+function openWinModal(taskId, headline) {
+  const t = Store.state.tasks.find(x => x.id === taskId);
+  openModal(
+    "<h2>" + esc(headline) + "</h2>" +
+    "<p>" + (t ? 'What moved on "' + esc(t.title) + '"? One line is plenty.' : "What did you get done? One line is plenty.") + "</p>" +
+    '<input type="text" id="win-text" placeholder="e.g. drafted the intro paragraph" onkeydown="if(event.key===\'Enter\')logWin()">' +
+    '<div class="timer-controls" style="margin-top:16px">' +
+    '<button class="good" onclick="logWin()">Log win</button>' +
+    '<button class="ghost" onclick="closeModal();App.render()">Skip</button>' +
+    "</div>"
+  );
+  setTimeout(() => { const i = document.getElementById("win-text"); if (i) i.focus(); }, 50);
+}
+
+function logWin() {
+  const txt = document.getElementById("win-text").value.trim();
+  if (txt) {
+    Store.state.wins.unshift({ text: txt, at: Date.now() });
+    Store.save();
+  }
+  closeModal();
+  App.render();
+}
+
+/* =====================================================================
+   PRE-SESSION RITUAL
+   A 3-item stimulus-control checklist before any timer starts.
+   Checking items is optional - one click always starts the timer.
+   Stimulus control beats willpower (the easiest distraction to resist
+   is the one that isn't there).
+   ===================================================================== */
+
+let pendingStart = null;
+
+function beginSession(taskId, minutes, mode) {
+  clearRecovery();
+  pendingStart = { taskId, minutes, mode };
+  const s = Store.state.settings;
+  const first = !s.ritualSeen;
+  if (first) { s.ritualSeen = true; Store.save(); }
+  openModal(
+    "<h2>5-second setup</h2>" +
+    (first
+      ? '<p class="science" style="margin-top:0">Stimulus control beats willpower: the easiest distraction to resist is the one that isn\'t there.</p>'
+      : '<p class="hint">Check what applies - or just hit start.</p>') +
+    '<div class="check-item"><input type="checkbox" id="rit-1"><label for="rit-1">Phone out of reach</label></div>' +
+    '<div class="check-item"><input type="checkbox" id="rit-2"><label for="rit-2">Only the tab or app you need is open</label></div>' +
+    '<div class="check-item"><input type="checkbox" id="rit-3"><label for="rit-3">Materials for the first step in front of you</label></div>' +
+    '<div style="margin-top:14px">' +
+    '<button class="good big" onclick="confirmRitualStart()">I\'m set - start ' + minutes + " min</button>" +
+    '<div style="text-align:center;margin-top:8px"><button class="linklike" onclick="cancelRitual()">Cancel</button></div>' +
+    "</div>"
+  );
+}
+
+function confirmRitualStart() {
+  if (!pendingStart) { closeModal(); return; }
+  const p = pendingStart;
+  pendingStart = null;
+  closeModal();
+  FocusTimer.start(p.taskId, p.minutes, p.mode);
+}
+
+function cancelRitual() {
+  pendingStart = null;
+  closeModal();
+}
+
+/* =====================================================================
+   SOFT FAILURE: ending early is still starting
+   ===================================================================== */
+
+let recoveryTaskId = null;
+
+function endEarly() {
+  const tid = FocusTimer.taskId;
+  FocusTimer.abandon();
+  recoveryTaskId = tid;
+  App.show("focus");
+}
+
+function startRecovery() {
+  const tid = recoveryTaskId;
+  recoveryTaskId = null;
+  if (tid) lapseRecovery(tid);
+}
+
+function dismissRecovery() {
+  recoveryTaskId = null;
+  App.render();
+}
+
+function clearRecovery() {
+  recoveryTaskId = null;
+}
+
+/* =====================================================================
+   QUICK CAPTURE (shared by Today's empty state and the Tasks tab)
+   Two visible fields; everything else behind "Add details".
+   Enter submits. Submitting offers an immediate 5-minute start.
+   ===================================================================== */
+
+function captureFormHtml() {
+  return (
+    '<label style="margin-top:4px">What needs doing?</label>' +
+    '<input type="text" id="f-title" placeholder="e.g. Write the project report" onkeydown="if(event.key===\'Enter\')submitCapture()">' +
+    "<label>First tiny step <span style=\"color:#666\">(under 10 minutes, start with a verb)</span></label>" +
+    '<input type="text" id="f-step" placeholder="e.g. Open a doc and paste the assignment brief" onkeydown="if(event.key===\'Enter\')submitCapture()">' +
+    '<details class="more" style="margin-top:12px;margin-bottom:0">' +
+    "<summary>Add details - why, deadline, when/where plan</summary>" +
+    "<label>Why does it matter to you? <span style=\"color:#666\">(raises task value)</span></label>" +
+    '<input type="text" id="f-why" placeholder="e.g. Passing this course unlocks my transfer">' +
+    "<label>Deadline <span style=\"color:#666\">(self-imposed ones work too)</span></label>" +
+    '<input type="date" id="f-deadline">' +
+    '<div class="row">' +
+    '<div><label>Confident you can do it well? <span class="slider-val" id="v-exp">3</span></label>' +
+    '<input type="range" id="f-exp" min="1" max="5" value="3" oninput="document.getElementById(\'v-exp\').textContent=this.value"></div>' +
+    '<div><label>How much do you care? <span class="slider-val" id="v-val">3</span></label>' +
+    '<input type="range" id="f-val" min="1" max="5" value="3" oninput="document.getElementById(\'v-val\').textContent=this.value"></div>' +
+    "</div>" +
+    "<label>When/where exactly will you start? <span style=\"color:#666\">(becomes your if-then plan - doubles follow-through)</span></label>" +
+    '<input type="text" id="f-cue" placeholder="e.g. tomorrow right after breakfast, at my desk">' +
+    "</details>" +
+    '<div style="margin-top:14px"><button class="primary big" onclick="submitCapture()">Add task</button></div>'
+  );
+}
+
+function submitCapture() {
+  const titleEl = document.getElementById("f-title");
+  const title = titleEl.value.trim();
+  if (!title) { titleEl.focus(); return; }
+  const stepTxt = document.getElementById("f-step").value.trim();
+  const task = {
+    id: Store.uid(),
+    title,
+    why: document.getElementById("f-why").value.trim(),
+    deadline: document.getElementById("f-deadline").value || null,
+    expectancy: +document.getElementById("f-exp").value,
+    value: +document.getElementById("f-val").value,
+    steps: stepTxt ? [{ id: Store.uid(), text: stepTxt, done: false }] : [],
+    intention: { cue: document.getElementById("f-cue").value.trim() },
+    status: "active",
+    createdAt: Date.now()
+  };
+  Store.state.tasks.push(task);
+  Store.save();
+  App.render();
+  const sm = Store.state.settings.starterMin;
+  openModal(
+    "<h2>Captured.</h2>" +
+    '<p>Don\'t wait to feel ready - ' + sm + ' minutes of contact with "' + esc(task.title) + '" now makes it feel smaller all day.</p>' +
+    '<button class="good big" onclick="closeModal();beginSession(\'' + task.id + "'," + sm + ",'starter')\">Start " + sm + " minutes on this now</button>" +
+    '<div style="text-align:center;margin-top:8px"><button class="linklike" onclick="closeModal()">Later - just save it</button></div>'
+  );
+}
+
+/* =====================================================================
+   MODULES (each one is a pluggable intervention - Strategy pattern)
+   A module: { id, label, order, render(el) }
+   To add your own intervention, write one of these and call
+   Registry.register(...) - nothing else needs to change.
+   ===================================================================== */
+
+/* ---------- TODAY: one hero task, everything else folded away ---------- */
+Registry.register({
+  id: "today",
+  label: "Today",
+  order: 1,
+  render(el) {
+    const tasks = activeTasks().sort((a, b) => scoreTask(b) - scoreTask(a));
+    const s = Store.state.settings;
+
+    if (!tasks.length) {
+      el.innerHTML =
+        '<div class="card"><h2>What have you been putting off?</h2>' +
+        '<p class="hint">Name it and give it a tiny first step. You\'ll be started in under a minute.</p>' +
+        captureFormHtml() +
+        "</div>";
+      const t = document.getElementById("f-title");
+      if (t) t.focus();
+      return;
+    }
+
+    const hero = tasks[0];
+    const rest = tasks.slice(1);
+    const diag = tmtDiagnosis(hero);
+
+    let html =
+      '<div class="card hero">' +
+      '<div class="eyebrow">Do this first</div>' +
+      '<div class="hero-title">' + esc(hero.title) + deadlineBadge(hero) + "</div>" +
+      (hero.why ? '<div class="meta">Why: ' + esc(hero.why) + "</div>" : "") +
+      intentionHtml(hero) +
+      nextStepHtml(hero) +
+      '<button class="good big" onclick="beginSession(\'' + hero.id + "'," + s.starterMin + ",'starter')\">Just start (" + s.starterMin + " min)</button>" +
+      '<div class="quiet-actions">' +
+      '<button class="linklike" onclick="beginSession(\'' + hero.id + "'," + s.pomodoroMin + ",'pomodoro')\">Full focus (" + s.pomodoroMin + " min)</button>" +
+      '<button class="linklike" onclick="lapseRecovery(\'' + hero.id + "')\">I keep avoiding this</button>" +
+      "</div>" +
+      (diag ? '<div class="science">' + esc(diag.advice) + "</div>" : "") +
+      "</div>";
+
+    if (rest.length) {
+      html += '<details class="others"><summary>Other tasks (' + rest.length + ")</summary>";
+      rest.forEach(t => {
+        const st = nextStep(t);
+        html +=
+          '<div class="task slim"><div style="min-width:0">' +
+          '<div class="title">' + esc(t.title) + deadlineBadge(t) + "</div>" +
+          (st ? '<div class="meta">Next: ' + esc(st.text) + "</div>" : "") +
+          "</div>" +
+          '<button class="ghost small" onclick="beginSession(\'' + t.id + "'," + s.starterMin + ",'starter')\">Start</button>" +
+          "</div>";
+      });
+      html += "</details>";
+    }
+    el.innerHTML = html;
+  }
+});
+
+/* ---------- TASKS: capture + manage ---------- */
+Registry.register({
+  id: "tasks",
+  label: "Tasks",
+  order: 2,
+  render(el) {
+    const s = Store.state.settings;
+    let html =
+      '<div class="card"><h2>Capture a task</h2>' +
+      '<p class="hint">Just a name and a tiny first step. Details are optional.</p>' +
+      captureFormHtml() +
+      "</div>";
+
+    const tasks = activeTasks();
+    html += '<div class="card"><h2>Active (' + tasks.length + ")</h2>";
+    if (!tasks.length) html += '<div class="empty">Capture your first task above - a title and a tiny step is all it takes.</div>';
+    tasks.forEach(t => {
+      html += '<div class="task">' +
+        '<div class="title">' + esc(t.title) + deadlineBadge(t) + "</div>" +
+        (t.why ? '<div class="meta">Why: ' + esc(t.why) + "</div>" : "") +
+        intentionHtml(t) +
+        '<div style="margin-top:8px">' +
+        (t.steps || []).map(st =>
+          '<div class="step ' + (st.done ? "done" : "") + '">' +
+          '<input type="checkbox" ' + (st.done ? "checked" : "") + ' onchange="toggleStep(\'' + t.id + "','" + st.id + "')\">" +
+          "<span>" + esc(st.text) + "</span></div>"
+        ).join("") +
+        "</div>" +
+        '<div class="actions">' +
+        '<button class="good small" onclick="beginSession(\'' + t.id + "'," + s.starterMin + ",'starter')\">Start " + s.starterMin + " min</button>" +
+        '<button class="ghost small" onclick="promptAddStep(\'' + t.id + "')\">Add step</button>" +
+        '<button class="ghost small" onclick="completeTask(\'' + t.id + "')\">Done</button>" +
+        '<button class="linklike" style="color:var(--danger)" onclick="deleteTask(\'' + t.id + "')\">Delete</button>" +
+        "</div></div>";
+    });
+    html += "</div>";
+
+    const done = Store.state.tasks.filter(t => t.status === "done");
+    if (done.length) {
+      html += '<details class="more"><summary>Completed (' + done.length + ")</summary>" +
+        '<div class="card" style="margin-top:8px">' +
+        done.map(t => '<div class="win">' + esc(t.title) +
+          ' <span class="when">' + fmtDate(t.completedAt) + "</span></div>").join("") +
+        "</div></details>";
+    }
+    el.innerHTML = html;
+  }
+});
+
+function toggleStep(taskId, stepId) {
+  const t = Store.state.tasks.find(x => x.id === taskId);
+  const s = t && t.steps.find(x => x.id === stepId);
+  if (s) { s.done = !s.done; Store.save(); App.render(); }
+}
+
+function promptAddStep(taskId) {
+  const t = Store.state.tasks.find(x => x.id === taskId);
+  if (!t) return;
+  openModal(
+    '<h2>Add a step to "' + esc(t.title) + '"</h2>' +
+    '<p class="hint">Under 10 minutes, starting with a verb.</p>' +
+    '<input type="text" id="new-step" onkeydown="if(event.key===\'Enter\')saveStep(\'' + taskId + "')\">" +
+    '<div class="timer-controls" style="margin-top:14px">' +
+    '<button class="primary" onclick="saveStep(\'' + taskId + "')\">Add</button>" +
+    '<button class="ghost" onclick="closeModal()">Cancel</button></div>'
+  );
+  setTimeout(() => { const i = document.getElementById("new-step"); if (i) i.focus(); }, 50);
+}
+
+function saveStep(taskId) {
+  const txt = document.getElementById("new-step").value.trim();
+  const t = Store.state.tasks.find(x => x.id === taskId);
+  if (t && txt) {
+    t.steps.push({ id: Store.uid(), text: txt, done: false });
+    Store.save();
+  }
+  closeModal();
+  App.render();
+}
+
+function completeTask(taskId) {
+  const t = Store.state.tasks.find(x => x.id === taskId);
+  if (!t) return;
+  t.status = "done";
+  t.completedAt = Date.now();
+  Store.state.wins.unshift({ text: "Finished: " + t.title, at: Date.now() });
+  Store.save();
+  App.render();
+}
+
+function deleteTask(taskId) {
+  Store.state.tasks = Store.state.tasks.filter(x => x.id !== taskId);
+  Store.save();
+  App.render();
+}
+
+/* ---------- FOCUS: timer view ---------- */
+Registry.register({
+  id: "focus",
+  label: "Focus",
+  order: 3,
+  render(el) {
+    const t = Store.state.tasks.find(x => x.id === FocusTimer.taskId);
+    const step = t && nextStep(t);
+    const s = Store.state.settings;
+    let html = '<div class="card' + (FocusTimer.running ? " focus-card" : "") + '">';
+
+    if (FocusTimer.running) {
+      const ot = FocusTimer.overtime;
+      html +=
+        '<div class="timer-task">' + (t ? esc(t.title) : "Focus session") +
+        (step ? " - " + esc(step.text) : "") + "</div>" +
+        '<div class="timer-display' + (ot ? " overtime" : "") + '" id="timer-display">' + FocusTimer.display + "</div>";
+      if (ot) {
+        html +=
+          '<div class="banner">' + FocusTimer.totalMin + " minutes done - you're already in. Keep going as long as it carries you.</div>" +
+          '<div class="timer-controls">' +
+          '<button class="ghost" onclick="FocusTimer.finishNow()">Stop and log a win</button>' +
+          "</div>";
+      } else {
+        html +=
+          (FocusTimer.mode === "starter"
+            ? '<p class="hint" style="text-align:center;margin-top:4px">No alarm at zero - the timer just keeps counting. You decide when to stop.</p>'
+            : "") +
+          '<div class="timer-controls">' +
+          '<button class="ghost" onclick="endEarly()">End early</button>' +
+          "</div>";
+      }
+    } else {
+      if (recoveryTaskId) {
+        const rt = Store.state.tasks.find(x => x.id === recoveryTaskId);
+        html +=
+          '<div class="banner">Stopping early still counts as starting.' +
+          (rt ? " Want a 2-minute version instead?" : "") +
+          '<div class="quiet-actions" style="margin-top:6px">' +
+          (rt ? '<button class="linklike" onclick="startRecovery()">Try 2 minutes</button>' : "") +
+          '<button class="linklike" onclick="dismissRecovery()">Dismiss</button>' +
+          "</div></div>";
+      }
+      html += "<h2>Nothing running</h2>";
+      const tasks = activeTasks();
+      if (tasks.length) {
+        html +=
+          '<p class="hint">Grab a task and give it ' + s.starterMin + " honest minutes - sessions started \"just for a bit\" almost always run longer.</p>" +
+          '<label>Pick a task:</label><select id="focus-pick">' +
+          tasks.map(x => '<option value="' + x.id + '">' + esc(x.title) + "</option>").join("") +
+          "</select>" +
+          '<div style="margin-top:14px">' +
+          '<button class="good big" onclick="beginSession(document.getElementById(\'focus-pick\').value, ' + s.starterMin + ", 'starter')\">Just start (" + s.starterMin + " min)</button>" +
+          '<div class="quiet-actions">' +
+          '<button class="linklike" onclick="beginSession(document.getElementById(\'focus-pick\').value, ' + s.pomodoroMin + ", 'pomodoro')\">Full focus (" + s.pomodoroMin + " min)</button>" +
+          "</div></div>";
+      } else {
+        html += '<div class="empty">No tasks yet.<br><button class="linklike" onclick="App.show(\'today\')">Capture what you\'ve been avoiding</button></div>';
+      }
+    }
+    html += "</div>";
+    el.innerHTML = html;
+  }
+});
+
+EventBus.on("timer:tick", () => {
+  const d = document.getElementById("timer-display");
+  if (d) d.textContent = FocusTimer.display;
+});
+EventBus.on("timer:started", () => App.show("focus"));
+EventBus.on("timer:overtime", () => App.render());
+
+/* ---------- PROGRESS: small wins and streaks ---------- */
+
+function calcStreaks() {
+  const daySet = new Set(Store.state.sessions.map(x => new Date(x.at).toDateString()));
+  let current = 0;
+  const cursor = new Date();
+  if (!daySet.has(cursor.toDateString())) cursor.setDate(cursor.getDate() - 1);
+  while (daySet.has(cursor.toDateString())) {
+    current++;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  let best = 0, run = 0, prev = null;
+  [...daySet].map(d => new Date(d)).sort((a, b) => a - b).forEach(d => {
+    if (prev) {
+      const next = new Date(prev);
+      next.setDate(next.getDate() + 1);
+      run = (next.toDateString() === d.toDateString()) ? run + 1 : 1;
+    } else {
+      run = 1;
+    }
+    if (run > best) best = run;
+    prev = d;
+  });
+  if (current > best) best = current;
+  return { current, best };
+}
+
+Registry.register({
+  id: "progress",
+  label: "Progress",
+  order: 4,
+  render(el) {
+    const s = Store.state;
+    const today = new Date().toDateString();
+    const sessionsToday = s.sessions.filter(x => new Date(x.at).toDateString() === today).length;
+    const minutesTotal = s.sessions.reduce((a, x) => a + (x.finished ? x.minutes : 0), 0);
+    const doneCount = s.tasks.filter(t => t.status === "done").length;
+    const { current, best } = calcStreaks();
+
+    let html = '<div class="card"><h2>Progress</h2>' +
+      '<div class="stat-grid" style="margin-top:10px">' +
+      '<div class="stat"><div class="num">' + sessionsToday + '</div><div class="lbl">sessions today</div></div>' +
+      '<div class="stat"><div class="num">' + current + '</div><div class="lbl">day streak</div></div>' +
+      '<div class="stat"><div class="num">' + best + '</div><div class="lbl">best streak</div></div>' +
+      '<div class="stat"><div class="num">' + minutesTotal + '</div><div class="lbl">focused minutes</div></div>' +
+      '<div class="stat"><div class="num">' + doneCount + '</div><div class="lbl">tasks finished</div></div>' +
+      "</div>" +
+      (current === 0 && best > 0
+        ? '<p class="hint" style="margin:12px 0 0">Streaks reset; skills don\'t. Your best run of ' + best + ' is still yours - one session today starts a new one.</p>'
+        : "") +
+      '<div class="science">The progress principle (Amabile and Kramer): visible small wins are the strongest everyday motivator.</div>' +
+      "</div>";
+
+    html += '<div class="card"><h2>Small wins log</h2>';
+    if (!s.wins.length) {
+      html += '<div class="empty">Finish a session and your win lands here.<br><button class="linklike" onclick="App.show(\'today\')">Start one now</button></div>';
+    }
+    html += s.wins.slice(0, 30).map(w =>
+      '<div class="win">' + esc(w.text) + ' <span class="when">' + fmtDate(w.at) + "</span></div>"
+    ).join("");
+    html += "</div>";
+    el.innerHTML = html;
+  }
+});
+
+/* ---------- SETTINGS: personalization + module toggles ---------- */
+Registry.register({
+  id: "settings",
+  label: "Settings",
+  order: 5,
+  render(el) {
+    const s = Store.state.settings;
+    let html = '<div class="card"><h2>Personalize</h2>' +
+      '<label>How impulsive/distractible are you? <span class="slider-val" id="v-imp">' + s.impulsiveness + "</span></label>" +
+      '<input type="range" min="1" max="5" value="' + s.impulsiveness + '" ' +
+      'oninput="document.getElementById(\'v-imp\').textContent=this.value" ' +
+      'onchange="setSetting(\'impulsiveness\', +this.value)">' +
+      '<p class="science">Impulsiveness is the strongest personality predictor of procrastination (Steel, 2007). If yours is high, favor shorter sessions and nearer self-imposed deadlines.</p>' +
+      '<div class="row">' +
+      '<div><label>Focus session length (min)</label>' +
+      '<input type="text" inputmode="numeric" value="' + s.pomodoroMin + '" onchange="setSetting(\'pomodoroMin\', Math.max(5, +this.value || 25))"></div>' +
+      '<div><label>"Just start" length (min)</label>' +
+      '<input type="text" inputmode="numeric" value="' + s.starterMin + '" onchange="setSetting(\'starterMin\', Math.max(1, +this.value || 5))"></div>' +
+      "</div></div>";
+
+    html += '<div class="card"><h2>Modules</h2>' +
+      '<p class="hint">Every tab is a pluggable intervention module. Turn off what you don\'t use; developers can register new ones in the source (see Registry.register).</p>';
+    Registry.all().filter(m => m.id !== "settings").forEach(m => {
+      const on = s.modules[m.id] !== false;
+      html += '<div class="toggle-row"><span>' + esc(m.label) + "</span>" +
+        '<input type="checkbox" ' + (on ? "checked" : "") + ' onchange="toggleModule(\'' + m.id + "')\"></div>";
+    });
+    html += "</div>";
+
+    html += '<div class="card"><h2>Data</h2>' +
+      '<p class="hint">Everything stays in your browser.</p>' +
+      '<div class="actions" style="display:flex;gap:8px;flex-wrap:wrap">' +
+      '<button class="ghost" onclick="exportData()">Export JSON</button>' +
+      '<button class="danger" onclick="if(confirm(\'Erase all tasks, sessions and wins?\')){localStorage.clear();location.reload()}">Reset everything</button>' +
+      "</div></div>";
+    el.innerHTML = html;
+  }
+});
+
+function setSetting(key, val) {
+  Store.state.settings[key] = val;
+  Store.save();
+}
+
+function toggleModule(id) {
+  const flags = Store.state.settings.modules;
+  flags[id] = flags[id] === false;
+  Store.save();
+  App.renderNav();
+  App.render();
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(Store.state, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "unstuck-export.json";
+  a.click();
+}
+
+/* =====================================================================
+   APP SHELL
+   ===================================================================== */
+
+const App = (() => {
+  let current = "today";
+  function renderNav() {
+    const nav = document.getElementById("nav");
+    const mods = Registry.enabled().sort((a, b) => a.order - b.order);
+    if (!mods.find(m => m.id === current)) current = mods[0] ? mods[0].id : "settings";
+    nav.innerHTML = mods.map(m =>
+      '<button class="' + (m.id === current ? "active" : "") + '" onclick="App.show(\'' + m.id + "')\">" + esc(m.label) + "</button>"
+    ).join("");
+  }
+  function render() {
+    renderNav();
+    const mod = Registry.get(current);
+    if (mod) mod.render(document.getElementById("view"));
+  }
+  function show(id) {
+    if (id !== "focus") recoveryTaskId = null;
+    current = id;
+    render();
+  }
+  return { render, renderNav, show };
+})();
+
+FocusTimer.resume();
+App.show(FocusTimer.running ? "focus" : "today");
+</script>
+</body>
+</html>
