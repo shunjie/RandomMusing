@@ -426,10 +426,71 @@
     html { scroll-behavior: auto; }
   }
 
+  /* ---------- progress ring (goal gradient on the timer) ---------- */
+  .ring-wrap { position: relative; width: 230px; margin: 14px auto 6px; }
+  .ring { width: 100%; display: block; transform: rotate(-90deg); }
+  .ring circle { fill: none; stroke-width: 7; }
+  .ring-bg { stroke: rgba(29, 38, 32, 0.08); }
+  .focus-card .ring-bg { stroke: rgba(255, 255, 255, 0.1); }
+  .ring-fg {
+    stroke: var(--pine);
+    stroke-linecap: round;
+    stroke-dasharray: 565.49;
+    transition: stroke-dashoffset 0.25s linear;
+  }
+  .focus-card .ring-fg { stroke: #8fdcbe; }
+  .ring-fg.full { animation: ringpulse 2.6s ease-in-out infinite; }
+  @keyframes ringpulse { 50% { opacity: 0.5; } }
+  .ring-wrap .timer-display {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0; font-size: 46px;
+  }
+
+  /* ---------- daily goal bar ---------- */
+  .goal-row { margin: 0 2px 16px; }
+  .goal-bar {
+    height: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--line);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .goal-fill { height: 100%; background: var(--pine); border-radius: 99px; transition: width 0.4s ease; }
+  .goal-text { font-size: 12px; color: var(--ink-soft); margin-top: 5px; }
+
+  /* ---------- science index modal ---------- */
+  button.sci-link { font-size: 12px; padding: 0; }
+  .sci-item { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .sci-item:last-of-type { border-bottom: none; }
+  .sci-name { font-weight: 600; font-size: 14px; }
+  .sci-how { font-size: 13px; color: var(--ink-soft); margin-top: 3px; }
+  .sci-why {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--pine-deep);
+    margin-top: 3px;
+  }
+
+  /* ---------- confetti ---------- */
+  .confetti {
+    position: fixed; top: -16px;
+    width: 8px; height: 13px;
+    z-index: 60; pointer-events: none;
+    border-radius: 2px;
+    animation: fall 1.5s cubic-bezier(0.3, 0.4, 0.6, 1) forwards;
+  }
+  @keyframes fall {
+    to { transform: translateY(105vh) rotate(560deg); opacity: 0.7; }
+  }
+
   /* ---------- responsive ---------- */
   @media (max-width: 520px) {
     .row { flex-direction: column; gap: 0; }
     .timer-display { font-size: 50px; }
+    .ring-wrap { width: 185px; }
+    .ring-wrap .timer-display { font-size: 37px; }
     .hero { padding: 20px 18px; }
     .hero-title { font-size: 24px; }
     main { padding: 18px 14px 8px; }
@@ -448,7 +509,7 @@
 <nav id="nav"></nav>
 <main id="view"></main>
 <footer>
-  <p>Grounded in peer-reviewed procrastination research. Your data never leaves this browser.</p>
+  <p><button class="linklike sci-link" onclick="showScience()">Grounded in peer-reviewed procrastination research.</button> Your data never leaves this browser.</p>
 </footer>
 <div id="modal-root"></div>
 
@@ -482,6 +543,12 @@ const Store = (() => {
       pomodoroMin: 25,
       starterMin: 5,
       ritualSeen: false,          // pre-session checklist shown at least once
+      sound: true,                // master toggle for all audio cues
+      celebrate: true,            // confetti on wins
+      tick: false,                // soft tick during focus (urgency cue)
+      ambient: "off",             // off | brown | white
+      ambientVol: 0.4,
+      dailyGoal: 3,               // sessions/day for the goal-gradient bar
       modules: {}                 // moduleId -> enabled bool (default true)
     }
   };
@@ -671,6 +738,119 @@ function commitTinyStep(taskId) {
 }
 
 /* =====================================================================
+   SOUND ENGINE (Web Audio, fully synthesized - no audio files)
+   Sound here is wired to behavior, not decoration:
+   - A consistent start cue becomes a conditioned "begin work" signal
+     (habit research: stable cues come to trigger the routine).
+   - The completion chime is immediate reward feedback (operant
+     conditioning - immediacy beats magnitude).
+   - Optional brown/white noise: steady broadband noise can aid focus,
+     with the strongest evidence in easily-distracted listeners
+     (stochastic resonance). Deliberately NOT included: binaural beats
+     (evidence is weak to null) and any alarm at the starter-session
+     boundary (minute 5 stays a silent springboard).
+   All cues respect the master sound toggle in Settings.
+   ===================================================================== */
+
+const Sound = (() => {
+  let ctx = null, ambientSrc = null, ambientGain = null, tickTimer = null;
+
+  function ac() {
+    if (!ctx) {
+      try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; }
+    }
+    if (ctx && ctx.state === "suspended") ctx.resume();
+    return ctx;
+  }
+  function on() { return Store.state.settings.sound !== false; }
+
+  function tone(freq, at, dur, peak, type) {
+    const c = ac(); if (!c) return;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = type || "sine";
+    o.frequency.value = freq;
+    o.connect(g); g.connect(c.destination);
+    const t = c.currentTime + at;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(peak, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.start(t); o.stop(t + dur + 0.05);
+  }
+
+  const cues = {
+    start() { tone(523.25, 0, 0.18, 0.06); tone(783.99, 0.12, 0.25, 0.06); },
+    complete() { tone(523.25, 0, 0.2, 0.07); tone(659.25, 0.13, 0.2, 0.07); tone(783.99, 0.26, 0.2, 0.07); tone(1046.5, 0.39, 0.45, 0.07); },
+    win() { tone(987.77, 0, 0.12, 0.05, "triangle"); tone(1318.5, 0.09, 0.3, 0.05, "triangle"); }
+  };
+
+  function play(name) { if (on() && cues[name]) cues[name](); }
+
+  // Looped 2s generated buffer. Brown noise = random walk over white
+  // noise; the integration rolls off highs, which is why it sounds deep.
+  function startAmbient() {
+    const kind = Store.state.settings.ambient;
+    if (!on() || !kind || kind === "off" || ambientSrc) return;
+    const c = ac(); if (!c) return;
+    const len = 2 * c.sampleRate;
+    const buf = c.createBuffer(1, len, c.sampleRate);
+    const d = buf.getChannelData(0);
+    let last = 0;
+    for (let i = 0; i < len; i++) {
+      const white = Math.random() * 2 - 1;
+      if (kind === "brown") {
+        last = (last + 0.02 * white) / 1.02;
+        d[i] = last * 3.5;
+      } else {
+        d[i] = white * 0.35;
+      }
+    }
+    ambientSrc = c.createBufferSource();
+    ambientSrc.buffer = buf;
+    ambientSrc.loop = true;
+    ambientGain = c.createGain();
+    const vol = Store.state.settings.ambientVol;
+    ambientGain.gain.value = (vol == null ? 0.4 : vol) * 0.3;
+    ambientSrc.connect(ambientGain);
+    ambientGain.connect(c.destination);
+    ambientSrc.start();
+  }
+  function stopAmbient() {
+    if (ambientSrc) { try { ambientSrc.stop(); } catch (e) {} ambientSrc = null; ambientGain = null; }
+  }
+  function startTick() {
+    if (!on() || !Store.state.settings.tick || tickTimer) return;
+    tickTimer = setInterval(() => tone(1800, 0, 0.03, 0.015, "square"), 1000);
+  }
+  function stopTick() {
+    if (tickTimer) { clearInterval(tickTimer); tickTimer = null; }
+  }
+
+  EventBus.on("timer:started", () => { play("start"); startAmbient(); startTick(); });
+  EventBus.on("timer:finished", () => { stopAmbient(); stopTick(); });
+
+  return {
+    play, stopAmbient,
+    refreshAmbient() { stopAmbient(); if (FocusTimer.running) startAmbient(); }
+  };
+})();
+
+// Brief celebration on wins: visible celebration of small accomplishments
+// increases re-engagement (progress principle; gamification meta-analyses).
+function celebrate() {
+  if (Store.state.settings.celebrate === false) return;
+  const colors = ["#1f6a54", "#2dd4a8", "#9a6716", "#a8463d", "#4f8cff"];
+  for (let i = 0; i < 26; i++) {
+    const p = document.createElement("div");
+    p.className = "confetti";
+    p.style.left = (5 + Math.random() * 90) + "vw";
+    p.style.background = colors[i % colors.length];
+    p.style.animationDelay = (Math.random() * 0.25) + "s";
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1900);
+  }
+}
+
+/* =====================================================================
    FOCUS TIMER (shared service used by modules)
    "Just start" sessions exploit the Zeigarnik effect: once begun,
    unfinished tasks nag the mind toward completion.
@@ -741,7 +921,7 @@ const FocusTimer = (() => {
     EventBus.emit("timer:finished", { taskId: tid, completed });
     if (completed) {
       if (m === "pomodoro") {
-        beep();
+        Sound.play("complete");
         openWinModal(tid, "Session done. That's a win.");
       } else {
         openWinModal(tid, "You started AND kept going.");
@@ -773,15 +953,6 @@ const FocusTimer = (() => {
     overtime = (mode === "starter" && Date.now() >= endAt);
     timer = setInterval(tick, 250);
   }
-  function beep() {
-    try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const o = ctx.createOscillator(), g = ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.frequency.value = 880; g.gain.value = 0.08;
-      o.start(); o.stop(ctx.currentTime + 0.4);
-    } catch (e) { /* audio unavailable */ }
-  }
   return {
     start, stop, resume,
     abandon() { finish(false); },
@@ -792,6 +963,12 @@ const FocusTimer = (() => {
     get overtime() { return overtime; },
     get totalMin() { return totalMin; },
     get display() { return dispStr(); },
+    // 0..1 fraction of the planned session elapsed (1 once in overtime)
+    get progress() {
+      if (!timer || !endAt || !startedAt) return 0;
+      if (overtime) return 1;
+      return Math.min(1, (Date.now() - startedAt) / (endAt - startedAt));
+    },
     fmt
   };
 })();
@@ -815,6 +992,8 @@ function logWin() {
   if (txt) {
     Store.state.wins.unshift({ text: txt, at: Date.now() });
     Store.save();
+    Sound.play("win");
+    celebrate();
   }
   closeModal();
   App.render();
@@ -959,6 +1138,29 @@ function submitCapture() {
    Registry.register(...) - nothing else needs to change.
    ===================================================================== */
 
+/* Goal-gradient bar: effort accelerates as visible progress nears the
+   goal (Hull; Kivetz et al. 2006). A small daily session target makes
+   "today" winnable even when the tasks themselves are long. Fresh-start
+   framing on temporal landmarks per Dai, Milkman and Riis (2014). */
+function dailyGoalHtml() {
+  const goal = Store.state.settings.dailyGoal || 3;
+  const today = new Date().toDateString();
+  const n = Store.state.sessions.filter(x => new Date(x.at).toDateString() === today).length;
+  const pct = Math.min(100, Math.round((n / goal) * 100));
+  const left = goal - n;
+  const d = new Date();
+  const fresh = d.getDay() === 1 ? "It's Monday - a fresh week. " :
+    (d.getDate() === 1 ? "First of the month - a clean slate. " : "");
+  let msg;
+  if (n === 0) msg = fresh + "The first session is the hardest - and counts the most.";
+  else if (left === 1) msg = "One more session hits today's goal.";
+  else if (left > 1) msg = left + " more sessions hit today's goal.";
+  else msg = "Goal met - anything more is a bonus.";
+  return '<div class="goal-row">' +
+    '<div class="goal-bar"><div class="goal-fill" style="width:' + pct + '%"></div></div>' +
+    '<div class="goal-text">' + n + "/" + goal + " sessions today - " + esc(msg) + "</div></div>";
+}
+
 /* ---------- TODAY: one hero task, everything else folded away ---------- */
 Registry.register({
   id: "today",
@@ -983,7 +1185,7 @@ Registry.register({
     const rest = tasks.slice(1);
     const diag = tmtDiagnosis(hero);
 
-    let html =
+    let html = dailyGoalHtml() +
       '<div class="card hero">' +
       '<div class="eyebrow">Do this first</div>' +
       '<div class="hero-title">' + esc(hero.title) + deadlineBadge(hero) + "</div>" +
@@ -1103,6 +1305,8 @@ function completeTask(taskId) {
   t.completedAt = Date.now();
   Store.state.wins.unshift({ text: "Finished: " + t.title, at: Date.now() });
   Store.save();
+  Sound.play("win");
+  celebrate();
   App.render();
 }
 
@@ -1128,7 +1332,11 @@ Registry.register({
       html +=
         '<div class="timer-task">' + (t ? esc(t.title) : "Focus session") +
         (step ? " - " + esc(step.text) : "") + "</div>" +
-        '<div class="timer-display' + (ot ? " overtime" : "") + '" id="timer-display">' + FocusTimer.display + "</div>";
+        '<div class="ring-wrap"><svg class="ring" viewBox="0 0 200 200">' +
+        '<circle class="ring-bg" cx="100" cy="100" r="90"></circle>' +
+        '<circle class="ring-fg' + (ot ? " full" : "") + '" id="ring-fg" cx="100" cy="100" r="90" stroke-dashoffset="' + (565.49 * (1 - FocusTimer.progress)).toFixed(1) + '"></circle>' +
+        "</svg>" +
+        '<div class="timer-display' + (ot ? " overtime" : "") + '" id="timer-display">' + FocusTimer.display + "</div></div>";
       if (ot) {
         html +=
           '<div class="banner">' + FocusTimer.totalMin + " minutes done - you're already in. Keep going as long as it carries you.</div>" +
@@ -1180,6 +1388,8 @@ Registry.register({
 EventBus.on("timer:tick", () => {
   const d = document.getElementById("timer-display");
   if (d) d.textContent = FocusTimer.display;
+  const r = document.getElementById("ring-fg");
+  if (r) r.setAttribute("stroke-dashoffset", (565.49 * (1 - FocusTimer.progress)).toFixed(1));
 });
 EventBus.on("timer:started", () => App.show("focus"));
 EventBus.on("timer:overtime", () => App.render());
@@ -1269,6 +1479,28 @@ Registry.register({
       '<input type="text" inputmode="numeric" value="' + s.starterMin + '" onchange="setSetting(\'starterMin\', Math.max(1, +this.value || 5))"></div>' +
       "</div></div>";
 
+    html += '<div class="card"><h2>Sound and celebration</h2>' +
+      '<div class="toggle-row"><span>Sound cues (session start and finish)</span>' +
+      '<input type="checkbox" ' + (s.sound !== false ? "checked" : "") + ' onchange="setSetting(\'sound\', this.checked);if(!this.checked)Sound.stopAmbient()"></div>' +
+      '<div class="toggle-row"><span>Confetti on wins</span>' +
+      '<input type="checkbox" ' + (s.celebrate !== false ? "checked" : "") + ' onchange="setSetting(\'celebrate\', this.checked)"></div>' +
+      '<div class="toggle-row"><span>Soft tick during focus (urgency cue)</span>' +
+      '<input type="checkbox" ' + (s.tick ? "checked" : "") + ' onchange="setSetting(\'tick\', this.checked)"></div>' +
+      "<label>Background noise during sessions</label>" +
+      '<select onchange="setSetting(\'ambient\', this.value);Sound.refreshAmbient()">' +
+      '<option value="off"' + (!s.ambient || s.ambient === "off" ? " selected" : "") + ">Off</option>" +
+      '<option value="brown"' + (s.ambient === "brown" ? " selected" : "") + ">Brown noise (deep, steady)</option>" +
+      '<option value="white"' + (s.ambient === "white" ? " selected" : "") + ">White noise</option>" +
+      "</select>" +
+      "<label>Noise volume</label>" +
+      '<input type="range" min="0" max="1" step="0.05" value="' + (s.ambientVol == null ? 0.4 : s.ambientVol) + '" onchange="setSetting(\'ambientVol\', +this.value);Sound.refreshAmbient()">' +
+      '<div class="row" style="margin-top:6px">' +
+      '<div><label>Daily session goal</label>' +
+      '<input type="text" inputmode="numeric" value="' + (s.dailyGoal || 3) + '" onchange="setSetting(\'dailyGoal\', Math.max(1, +this.value || 3))"></div>' +
+      "</div>" +
+      '<p class="science">Steady broadband noise helps some people focus (strongest evidence in easily-distracted listeners); music with lyrics hurts verbal work. The finish chime is immediate reward feedback - in conditioning, immediacy beats size.</p>' +
+      "</div>";
+
     html += '<div class="card"><h2>Modules</h2>' +
       '<p class="hint">Every tab is a pluggable intervention module. Turn off what you don\'t use; developers can register new ones in the source (see Registry.register).</p>';
     Registry.all().filter(m => m.id !== "settings").forEach(m => {
@@ -1307,6 +1539,103 @@ function exportData() {
   a.href = URL.createObjectURL(blob);
   a.download = "unstuck-export.json";
   a.click();
+}
+
+/* =====================================================================
+   SCIENCE INDEX
+   Every intervention in the app, with its evidence. Opened from the
+   footer link; hidden by default so it never adds noise to the flow.
+   ===================================================================== */
+
+const SCIENCE = [
+  {
+    name: "Just start (behavioral activation + Zeigarnik effect)",
+    how: "The green 'Just start (5 min)' button is the primary action everywhere. You commit to five minutes, never to finishing.",
+    why: "Starting is the bottleneck, not finishing. Begun-but-unfinished tasks keep pulling at the mind (Zeigarnik, 1927), and tasks are reliably less unpleasant than forecast (Pychyl)."
+  },
+  {
+    name: "Silent overtime at minute five",
+    how: "When a starter session hits zero there is no alarm and no popup - the timer quietly counts up instead.",
+    why: "An alarm at minute five would hand you an exit ramp at the exact moment you overcame initiation. Momentum is protected by removing the stop signal."
+  },
+  {
+    name: "Implementation intentions (Gollwitzer and Sheeran meta-analysis)",
+    how: "The 'when/where exactly will you start?' field becomes a plan card: 'When [cue], I will [first tiny step].'",
+    why: "If-then plans roughly double follow-through (effect size d of about .65) by delegating the start decision to an environmental cue instead of willpower."
+  },
+  {
+    name: "Tiny first steps (task aversiveness and expectancy repair)",
+    how: "Every task wants a concrete first step under 10 minutes, and the Today view shows only that one step - never the whole mountain.",
+    why: "Low confidence and task aversiveness are top correlates of procrastination (Steel, 2007). Trivially small concrete actions rebuild the expectancy that motivation needs."
+  },
+  {
+    name: "Self-compassion lapse recovery (Wohl, Pychyl and Bennett, 2010)",
+    how: "The 'I keep avoiding this' button answers avoidance with kindness, then immediately shrinks the next step to 2 minutes and starts a short session.",
+    why: "Students who forgave themselves for procrastinating procrastinated less next time; guilt fuels the avoidance loop. Procrastination is emotion regulation, not laziness (Sirois and Pychyl, 2013)."
+  },
+  {
+    name: "Temporal Motivation Theory diagnosis (Steel and Konig, 2006)",
+    how: "Motivation = (Expectancy x Value) / (Impulsiveness x Delay). The app checks which factor is broken per task and prescribes the matching fix.",
+    why: "The equation that best models procrastination. Low confidence calls for smaller steps, low value calls for a 'why' or pleasure pairing, no deadline calls for a self-imposed one."
+  },
+  {
+    name: "Avoidance-aware ranking",
+    how: "Tasks untouched for 3+ days get boosted to the top of Today instead of quietly sinking. Low confidence never lowers a task's rank.",
+    why: "Ranking by predicted motivation would bury exactly the dreaded tasks this app exists for. Need decides rank; motivation problems get diagnosed, not hidden."
+  },
+  {
+    name: "Self-imposed deadlines (Ariely and Wertenbroch, 2002)",
+    how: "The deadline field treats your own deadlines as real, and missing ones is flagged as a motivation killer.",
+    why: "Even arbitrary self-set deadlines measurably improve performance - a deadline-shaped commitment beats an open horizon."
+  },
+  {
+    name: "Stimulus control ritual (van Eerde and Klingsieck, 2018 meta-analysis)",
+    how: "A 5-second checklist before every session: phone away, one tab, materials out.",
+    why: "Environment design beats in-the-moment willpower. The easiest distraction to resist is the one that isn't there, and a stable pre-action ritual doubles as a habit cue."
+  },
+  {
+    name: "Progress principle (Amabile and Kramer)",
+    how: "Every session ends by logging a one-line win; streaks, minutes, and wins stay visible on the Progress tab.",
+    why: "Visible small wins are the strongest everyday motivator, and seeing momentum rebuilds the expectancy that kills procrastination."
+  },
+  {
+    name: "Goal gradient (Hull, 1932; Kivetz et al., 2006)",
+    how: "A daily session bar on Today and a filling progress ring around the timer.",
+    why: "Effort accelerates as visible progress approaches a goal - coffee-card studies show people speed up near the last stamp. A small daily target makes today winnable."
+  },
+  {
+    name: "Fresh start effect (Dai, Milkman and Riis, 2014)",
+    how: "On Mondays and the first of the month, the goal bar opens with fresh-start framing.",
+    why: "People initiate goal pursuit far more at temporal landmarks; naming the landmark turns it into a starting line."
+  },
+  {
+    name: "Conditioned cues and immediate reward (operant conditioning)",
+    how: "A consistent two-note chime marks every session start; completion brings a rising chime and confetti.",
+    why: "Stable start cues become triggers that make starting feel automatic, and immediate reward feedback stamps in behavior - immediacy beats magnitude. Sounds mark beginnings and rewards here, never threats."
+  },
+  {
+    name: "Broadband noise (stochastic resonance research)",
+    how: "Optional brown or white noise during sessions, off by default.",
+    why: "Steady broadband noise can aid focus, with the strongest evidence in easily-distracted listeners. Offered as a choice because the effect varies by person. No binaural beats - that evidence is weak."
+  },
+  {
+    name: "Streaks with a safety net",
+    how: "Current streak sits next to best streak, and a broken streak gets 'Streaks reset; skills don't.'",
+    why: "Streaks motivate through loss aversion, but a visible reset can trigger the what-the-hell effect - the same guilt spiral self-compassion research warns about. The best-streak anchor keeps a lapse from reading as total loss."
+  }
+];
+
+function showScience() {
+  openModal(
+    "<h2>The science inside Unstuck</h2>" +
+    '<p class="hint">Every feature maps to a published finding. Nothing here is decoration.</p>' +
+    SCIENCE.map(s =>
+      '<div class="sci-item"><div class="sci-name">' + s.name + "</div>" +
+      '<div class="sci-how">In the app: ' + s.how + "</div>" +
+      '<div class="sci-why">Why it works: ' + s.why + "</div></div>"
+    ).join("") +
+    '<div style="text-align:center;margin-top:14px"><button class="ghost" onclick="closeModal()">Close</button></div>'
+  );
 }
 
 /* =====================================================================
