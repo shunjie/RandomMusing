@@ -498,15 +498,749 @@
     nav { padding: 0 14px; }
     .card { padding: 18px 16px; }
   }
+
+  /* ---------- realfood-inspired editorial skin ---------- */
+  :root {
+    --paper: #fff6df;
+    --surface: #fff6df;
+    --surface2: #f2e4c0;
+    --ink: #100807;
+    --ink-soft: #5b4d3e;
+    --line: rgba(16, 8, 7, 0.18);
+    --line-strong: rgba(16, 8, 7, 0.34);
+    --pine: #087443;
+    --pine-deep: #063f28;
+    --pine-tint: #d8f1ca;
+    --pine-line: rgba(8, 116, 67, 0.38);
+    --amber: #ad6b00;
+    --amber-tint: #f8d86f;
+    --brick: #df1f14;
+    --brick-tint: #ffd1c8;
+    --danger: #df1f14;
+    --radius: 22px;
+    --shadow-card: none;
+    --shadow-pop: 0 28px 80px -38px rgba(16, 8, 7, 0.65);
+    --font-display: "Arial Black", "Instrument Sans", Impact, system-ui, sans-serif;
+    --font-body: "Instrument Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+    --font-mono: "Spline Sans Mono", Consolas, "Courier New", monospace;
+  }
+
+  body {
+    min-height: 100vh;
+    background:
+      linear-gradient(112deg, transparent 0 62%, rgba(255, 246, 223, 0.14) 62% 66%, transparent 66%),
+      linear-gradient(104deg, transparent 0 73%, rgba(16, 8, 7, 0.12) 73% 76%, transparent 76%),
+      linear-gradient(180deg, var(--pine) 0 360px, var(--paper) 360px 100%);
+    color: var(--ink);
+    font-size: 16px;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.08;
+    background-image:
+      linear-gradient(90deg, rgba(16, 8, 7, 0.65) 1px, transparent 1px),
+      linear-gradient(rgba(16, 8, 7, 0.65) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mix-blend-mode: multiply;
+  }
+
+  header, nav, main, footer { max-width: 1180px; }
+
+  header {
+    position: relative;
+    min-height: 330px;
+    padding: 28px 24px 22px;
+    color: var(--paper);
+    overflow: hidden;
+  }
+
+  .brand {
+    position: relative;
+    z-index: 2;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-mark {
+    display: none;
+  }
+
+  header h1 {
+    font-family: var(--font-display);
+    font-style: normal;
+    font-weight: 900;
+    font-size: clamp(76px, 13vw, 176px);
+    line-height: 0.78;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    color: var(--paper);
+  }
+
+  header .tagline {
+    position: relative;
+    z-index: 2;
+    max-width: 640px;
+    margin: 18px 0 0 54px;
+    color: var(--paper);
+    font-size: clamp(22px, 4vw, 46px);
+    font-weight: 900;
+    line-height: 0.98;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .header-visual {
+    position: absolute;
+    inset: 18px 18px auto auto;
+    width: min(39vw, 390px);
+    aspect-ratio: 1;
+    z-index: 1;
+  }
+
+  .clock-cutout {
+    position: absolute;
+    right: 2%;
+    top: 5%;
+    width: 46%;
+    height: 78%;
+    border: 6px solid var(--ink);
+    border-radius: 18px;
+    background:
+      linear-gradient(90deg, transparent 0 42%, var(--paper) 43% 57%, transparent 58%),
+      var(--brick);
+    transform: rotate(9deg);
+    filter: drop-shadow(22px 22px 0 rgba(16, 8, 7, 0.22));
+    clip-path: polygon(10% 0, 100% 8%, 88% 100%, 0 92%);
+  }
+
+  .paper-stack {
+    position: absolute;
+    left: 2%;
+    bottom: 2%;
+    width: 58%;
+    height: 42%;
+    background: var(--paper);
+    border: 5px solid var(--ink);
+    border-radius: 14px;
+    transform: rotate(8deg);
+    box-shadow: 18px 16px 0 var(--brick), -14px -12px 0 var(--amber-tint);
+  }
+
+  .paper-stack::before,
+  .paper-stack::after {
+    content: "";
+    position: absolute;
+    left: 18%;
+    right: 12%;
+    height: 6px;
+    border-radius: 99px;
+    background: var(--ink);
+  }
+
+  .paper-stack::before { top: 30%; }
+  .paper-stack::after { top: 52%; width: 45%; }
+
+  nav {
+    gap: 8px;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 13px 24px;
+    border: 0;
+    background: rgba(255, 246, 223, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  nav button {
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    padding: 11px 18px 10px;
+    color: var(--ink);
+    font-weight: 900;
+    letter-spacing: 0;
+    background: var(--paper);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  nav button:hover,
+  nav button.active {
+    color: var(--paper);
+    background: var(--brick);
+    border-bottom-color: var(--ink);
+  }
+
+  main {
+    padding: 30px 24px 16px;
+    display: grid;
+    gap: 20px;
+  }
+
+  footer { padding: 10px 24px 52px; }
+  footer p {
+    border-top: 3px solid var(--ink);
+    color: var(--ink);
+    font-weight: 800;
+  }
+
+  .card {
+    position: relative;
+    background: var(--surface);
+    border: 3px solid var(--ink);
+    border-radius: var(--radius);
+    padding: clamp(22px, 4vw, 44px);
+    margin-bottom: 18px;
+    box-shadow: 8px 8px 0 var(--ink);
+  }
+
+  .card:nth-child(even) { background: #f8d86f; }
+
+  .card h2, .modal h2 {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 4.6vw, 64px);
+    line-height: 0.9;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    font-weight: 900;
+    overflow-wrap: anywhere;
+  }
+
+  .hint {
+    max-width: 720px;
+    color: var(--ink);
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .eyebrow, .timer-task, .stat .lbl {
+    color: var(--brick);
+    font-family: var(--font-mono);
+    font-weight: 900;
+    letter-spacing: 0.8px;
+  }
+
+  .hero {
+    min-height: 430px;
+    display: grid;
+    align-content: end;
+    border-color: var(--ink);
+    background:
+      radial-gradient(circle at 78% 23%, var(--brick) 0 58px, transparent 60px),
+      radial-gradient(circle at 91% 38%, var(--paper) 0 34px, transparent 36px),
+      linear-gradient(160deg, var(--pine) 0 48%, var(--paper) 48% 100%);
+    color: var(--paper);
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: "NOW";
+    position: absolute;
+    right: -20px;
+    bottom: 18px;
+    color: var(--brick);
+    font-family: var(--font-display);
+    font-size: clamp(92px, 18vw, 220px);
+    font-weight: 900;
+    line-height: 0.72;
+    transform: rotate(-8deg);
+    opacity: 0.9;
+    pointer-events: none;
+  }
+
+  .hero > * { position: relative; z-index: 1; max-width: 680px; }
+  .hero .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(54px, 9vw, 112px);
+    line-height: 0.85;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+  .hero .meta, .hero .meta.plan, .hero .nextstep, .hero .science { color: var(--paper); }
+  .hero .nextstep, .hero .science {
+    background: rgba(16, 8, 7, 0.28);
+    border-color: rgba(255, 246, 223, 0.48);
+  }
+
+  input[type=text], input[type=date], textarea, select {
+    border: 3px solid var(--ink);
+    border-radius: 999px;
+    background: #fffdf5;
+    padding: 14px 18px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  textarea { border-radius: 20px; }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--brick);
+    box-shadow: 0 0 0 4px rgba(223, 31, 20, 0.18);
+  }
+  input[type=range], input[type=checkbox] { accent-color: var(--brick); }
+  label { color: var(--ink); font-weight: 900; }
+
+  button.primary, button.ghost, button.danger, button.good {
+    border: 3px solid var(--ink);
+    border-radius: 999px;
+    padding: 12px 22px;
+    font-weight: 900;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  button.primary, button.good {
+    background: var(--brick);
+    color: var(--paper);
+  }
+  button.primary:hover, button.good:hover { background: var(--ink); }
+  button.ghost { background: var(--paper); }
+  button.ghost:hover { background: var(--amber-tint); }
+  button.big { border-radius: 999px; font-size: 18px; padding: 17px 24px; }
+  button.linklike {
+    color: inherit;
+    font-weight: 900;
+    text-decoration-thickness: 2px;
+    text-decoration-color: currentColor;
+  }
+
+  .task, .stat, .nextstep, .science, .banner {
+    border: 3px solid var(--ink);
+    border-radius: 18px;
+    background: #fffdf5;
+  }
+
+  .task { box-shadow: 4px 4px 0 var(--ink); }
+  .title { font-weight: 900; font-size: 18px; }
+  .meta, .meta.plan { color: var(--ink-soft); font-family: var(--font-body); font-style: normal; font-weight: 800; }
+  .badge {
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--ink);
+    font-weight: 900;
+  }
+  .badge.urgent, .badge.soon {
+    background: var(--brick);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  details.others > summary, details.more > summary {
+    color: var(--ink);
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .timer-display, .ring-wrap .timer-display {
+    font-family: var(--font-display);
+    font-weight: 900;
+    letter-spacing: 0;
+  }
+  .focus-card {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+    box-shadow: 8px 8px 0 var(--brick);
+  }
+  .focus-card .hint, .focus-card .timer-task { color: var(--paper); }
+  .focus-card .ring-fg { stroke: var(--brick); }
+  .ring-bg { stroke: rgba(16, 8, 7, 0.18); }
+
+  .stat-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .stat .num {
+    color: var(--brick);
+    font-family: var(--font-display);
+    font-size: clamp(48px, 7vw, 84px);
+    font-weight: 900;
+  }
+
+  .modal-back { background: rgba(16, 8, 7, 0.68); }
+  .modal {
+    border: 3px solid var(--ink);
+    border-radius: 24px;
+    box-shadow: 10px 10px 0 var(--brick);
+  }
+
+  @media (min-width: 860px) {
+    #view {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+      gap: 24px;
+      align-items: start;
+    }
+    #view > .hero, #view > .goal-row, #view > details, #view > .card:only-child, #view > .tips-flow { grid-column: 1 / -1; }
+  }
+
+  .settings-sound h2 { font-size: clamp(34px, 4vw, 58px); }
+
+  .tips-flow {
+    display: grid;
+    gap: 22px;
+  }
+
+  .tips-hero {
+    min-height: 520px;
+    display: grid;
+    align-content: end;
+    overflow: hidden;
+    background:
+      linear-gradient(160deg, var(--ink) 0 54%, var(--brick) 54% 72%, var(--paper) 72%);
+    color: var(--paper);
+  }
+
+  .tips-hero::before {
+    content: "";
+    position: absolute;
+    right: 7%;
+    top: 8%;
+    width: min(34vw, 360px);
+    aspect-ratio: 1.25;
+    border: 6px solid var(--paper);
+    border-radius: 20px;
+    background:
+      linear-gradient(var(--paper) 0 8px, transparent 9px 24px) 24px 52px / 70% 28px no-repeat,
+      linear-gradient(var(--paper) 0 8px, transparent 9px 24px) 24px 94px / 52% 28px no-repeat,
+      rgba(255, 246, 223, 0.12);
+    transform: rotate(-9deg);
+    box-shadow: 22px 22px 0 rgba(255, 246, 223, 0.18);
+  }
+
+  .tips-hero > * { position: relative; z-index: 1; max-width: 780px; }
+  .tips-hero h2 {
+    color: var(--paper);
+    font-size: clamp(56px, 10vw, 132px);
+    overflow-wrap: normal;
+  }
+  .tips-hero .hint {
+    display: inline-block;
+    max-width: 680px;
+    color: var(--ink);
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    border-radius: 18px;
+    padding: 14px 18px;
+    font-size: clamp(19px, 2.4vw, 30px);
+    box-shadow: 6px 6px 0 var(--brick);
+  }
+
+  .tip-stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .tip-stat {
+    min-height: 170px;
+    display: grid;
+    align-content: end;
+    background: var(--brick);
+    border: 3px solid var(--ink);
+    border-radius: 0;
+    color: var(--paper);
+    padding: 22px;
+    box-shadow: 7px 7px 0 var(--ink);
+  }
+
+  .tip-stat b {
+    display: block;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: clamp(42px, 7vw, 94px);
+    line-height: 0.8;
+  }
+
+  .tip-sequence {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+  }
+
+  .tip-panel {
+    min-height: 260px;
+    display: grid;
+    align-content: space-between;
+  }
+
+  .tip-panel:nth-child(3n) {
+    grid-column: 1 / -1;
+    min-height: 320px;
+    background: var(--pine);
+    color: var(--paper);
+  }
+  .tip-panel:nth-child(3n) .hint { color: var(--paper); }
+
+  .tip-num {
+    font-family: var(--font-display);
+    font-size: clamp(54px, 9vw, 120px);
+    line-height: 0.75;
+    color: var(--brick);
+  }
+
+  .tip-panel:nth-child(3n) .tip-num { color: var(--amber-tint); }
+
+  @media (max-width: 720px) {
+    .tips-hero { min-height: 430px; }
+    .tips-hero h2 {
+      font-size: clamp(40px, 11.5vw, 48px);
+      line-height: 0.92;
+    }
+    .tips-hero::before { width: 210px; right: -36px; top: 34px; opacity: 0.55; }
+    .tip-stat-row, .tip-sequence { grid-template-columns: 1fr; }
+    .tip-panel:nth-child(3n) { grid-column: auto; }
+  }
+
+  @media (max-width: 720px) {
+    body { background: linear-gradient(180deg, var(--pine) 0 330px, var(--paper) 330px 100%); }
+    header { min-height: 310px; padding: 22px 14px 18px; }
+    header h1 { font-size: clamp(46px, 14.5vw, 56px); }
+    header .tagline { margin-left: 0; font-size: 28px; }
+    .header-visual { width: 190px; right: 4px; top: 92px; opacity: 0.72; }
+    nav { padding: 10px 14px; }
+    nav button { padding: 9px 14px; }
+    main { padding: 22px 14px 10px; display: block; }
+    .card { box-shadow: 5px 5px 0 var(--ink); }
+    .hero { min-height: 390px; }
+    .hero::after { font-size: 112px; right: -14px; }
+    .task.slim { align-items: flex-start; flex-direction: column; }
+  }
+
+  /* ---------- guide mascot ---------- */
+  .guide-bar {
+    max-width: 1180px;
+    margin: 18px auto 0;
+    padding: 0 24px;
+  }
+
+  .guide-inner {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: var(--amber-tint);
+    border: 3px solid var(--ink);
+    border-radius: 999px;
+    box-shadow: 6px 6px 0 var(--ink);
+    padding: 8px 22px 8px 14px;
+  }
+
+  .cat-mascot {
+    position: relative;
+    width: 126px;
+    height: 90px;
+    flex: 0 0 126px;
+  }
+
+  .cat-body {
+    position: absolute;
+    left: 25px;
+    top: 20px;
+    width: 78px;
+    height: 58px;
+    border: 3px solid var(--ink);
+    border-radius: 48% 52% 44% 44%;
+    background:
+      radial-gradient(circle at 36% 68%, #f4b7bc 0 4px, transparent 5px),
+      radial-gradient(circle at 64% 68%, #f4b7bc 0 4px, transparent 5px),
+      #fff4f0;
+    box-shadow: 5px 5px 0 #2f2630;
+    z-index: 2;
+  }
+
+  .cat-ear {
+    position: absolute;
+    top: 4px;
+    width: 36px;
+    height: 42px;
+    border: 3px solid var(--ink);
+    background:
+      linear-gradient(135deg, #2f2630 0 48%, #fff4f0 49%);
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    transform-origin: bottom center;
+    z-index: 1;
+  }
+  .cat-ear.left { left: 22px; transform: rotate(-18deg); }
+  .cat-ear.right { right: 22px; transform: rotate(18deg) scaleX(-1); }
+
+  .cat-eye {
+    position: absolute;
+    top: 42px;
+    width: 11px;
+    height: 14px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 25%, #fff 0 2px, transparent 3px),
+      linear-gradient(#27202d, #74607f);
+    z-index: 3;
+  }
+  .cat-eye.left { left: 49px; }
+  .cat-eye.right { right: 49px; }
+
+  .cat-cheek {
+    position: absolute;
+    top: 55px;
+    width: 17px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(244, 126, 145, 0.45);
+    z-index: 3;
+  }
+  .cat-cheek.left { left: 34px; }
+  .cat-cheek.right { right: 34px; }
+
+  .cat-nose {
+    position: absolute;
+    left: 60px;
+    top: 54px;
+    width: 6px;
+    height: 5px;
+    border-radius: 50%;
+    background: #f07f9b;
+    z-index: 3;
+  }
+
+  .cat-mouth {
+    position: absolute;
+    left: 56px;
+    top: 59px;
+    width: 14px;
+    height: 8px;
+    border-bottom: 2px solid var(--ink);
+    border-radius: 0 0 12px 12px;
+    z-index: 3;
+  }
+
+  .cat-tail {
+    position: absolute;
+    right: 2px;
+    top: 29px;
+    width: 40px;
+    height: 50px;
+    border: 9px solid #2f2630;
+    border-left: 0;
+    border-bottom: 0;
+    border-radius: 0 34px 0 0;
+    transform: rotate(14deg);
+  }
+
+  .cat-paw {
+    position: absolute;
+    top: 69px;
+    width: 24px;
+    height: 15px;
+    border: 3px solid var(--ink);
+    border-radius: 999px;
+    background: #fff4f0;
+    z-index: 3;
+  }
+  .cat-paw.left { left: 36px; }
+  .cat-paw.right { right: 36px; }
+
+  .cat-whisker {
+    position: absolute;
+    top: 54px;
+    width: 24px;
+    height: 1px;
+    background: #8b6570;
+    z-index: 4;
+  }
+  .cat-whisker.left { left: 8px; transform: rotate(-12deg); }
+  .cat-whisker.right { right: 8px; transform: rotate(12deg); }
+  }
+
+  .guide-copy {
+    margin: 0;
+    color: var(--ink);
+    font-size: clamp(17px, 2vw, 24px);
+    font-weight: 900;
+    line-height: 1.05;
+  }
+
+  .guide-copy span {
+    color: var(--brick);
+    text-transform: uppercase;
+  }
+
+  #view > .mochi-mission { grid-column: 1 / -1; }
+
+  .mochi-mission {
+    background: #ffe0e7;
+    border: 3px solid var(--ink);
+    border-radius: var(--radius);
+    padding: clamp(18px, 3vw, 30px);
+    margin-bottom: 18px;
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  .mochi-mission h2 {
+    font-size: clamp(28px, 4vw, 48px);
+  }
+
+  .mochi-mission .hint {
+    color: var(--ink);
+  }
+
+  .mochi-kicker {
+    color: var(--brick);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: 720px) {
+    .guide-bar { margin-top: 14px; padding: 0 14px; }
+    .guide-inner {
+      align-items: flex-start;
+      border-radius: 24px;
+      padding: 10px 14px 12px 8px;
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+    .cat-mascot {
+      width: 82px;
+      height: 64px;
+      flex-basis: 82px;
+      transform: scale(0.72);
+      transform-origin: left top;
+    }
+    .guide-copy { font-size: 16px; line-height: 1.12; }
+  }
 </style>
 </head>
 <body>
 
 <header>
   <div class="brand"><span class="brand-mark"></span><h1>Unstuck</h1></div>
-  <p class="tagline">Start small, start now. Science does the rest.</p>
+  <p class="tagline">Real work. Less avoidance.</p>
+  <div class="header-visual" aria-hidden="true">
+    <div class="clock-cutout"></div>
+    <div class="paper-stack"></div>
+  </div>
 </header>
 <nav id="nav"></nav>
+<aside class="guide-bar" aria-label="Task guide">
+  <div class="guide-inner">
+    <div class="cat-mascot" aria-hidden="true">
+      <div class="cat-tail"></div>
+      <div class="cat-ear left"></div>
+      <div class="cat-ear right"></div>
+      <div class="cat-body"></div>
+      <div class="cat-eye left"></div>
+      <div class="cat-eye right"></div>
+      <div class="cat-cheek left"></div>
+      <div class="cat-cheek right"></div>
+      <div class="cat-nose"></div>
+      <div class="cat-mouth"></div>
+      <div class="cat-paw left"></div>
+      <div class="cat-paw right"></div>
+      <div class="cat-whisker left"></div>
+      <div class="cat-whisker right"></div>
+    </div>
+    <p class="guide-copy" id="guide-copy"><span>Mochi says:</span> pick one tiny move and start before your brain negotiates.</p>
+  </div>
+</aside>
 <main id="view"></main>
 <footer>
   <p><button class="linklike sci-link" onclick="showScience()">Grounded in peer-reviewed procrastination research.</button> Your data never leaves this browser.</p>
@@ -594,6 +1328,7 @@ const Registry = (() => {
 // Temporal Motivation Theory diagnosis: which factor is sabotaging you?
 // Used for ADVICE only - it never lowers a task's rank (see scoreTask).
 function tmtDiagnosis(task) {
+  const impulsive = Store.state.settings.impulsiveness >= 4;
   if (task.expectancy <= 2) {
     return { factor: "expectancy", advice: "You doubt you can do this well. Shrink the next step until it feels trivially easy - tiny concrete actions rebuild confidence fast." };
   }
@@ -602,6 +1337,9 @@ function tmtDiagnosis(task) {
   }
   if (!task.deadline) {
     return { factor: "delay", advice: "No deadline means infinite delay. Set one yourself - even arbitrary self-imposed deadlines work (Ariely and Wertenbroch, 2002)." };
+  }
+  if (impulsive) {
+    return { factor: "impulsiveness", advice: "You rated distractibility high. Favor shorter starts, put distractions out of reach, and use nearer self-imposed deadlines." };
   }
   return null;
 }
@@ -1161,6 +1899,15 @@ function dailyGoalHtml() {
     '<div class="goal-text">' + n + "/" + goal + " sessions today - " + esc(msg) + "</div></div>";
 }
 
+function mochiMissionHtml(title, body, actionHtml = "") {
+  return '<div class="mochi-mission">' +
+    '<div class="mochi-kicker">Mochi mission</div>' +
+    '<h2>' + esc(title) + '</h2>' +
+    '<p class="hint">' + esc(body) + '</p>' +
+    actionHtml +
+    '</div>';
+}
+
 /* ---------- TODAY: one hero task, everything else folded away ---------- */
 Registry.register({
   id: "today",
@@ -1172,6 +1919,7 @@ Registry.register({
 
     if (!tasks.length) {
       el.innerHTML =
+        mochiMissionHtml("Make it tiny.", "If the task makes your chest tighten, it is still too big. Mochi only wants the first visible action.") +
         '<div class="card"><h2>What have you been putting off?</h2>' +
         '<p class="hint">Name it and give it a tiny first step. You\'ll be started in under a minute.</p>' +
         captureFormHtml() +
@@ -1186,6 +1934,7 @@ Registry.register({
     const diag = tmtDiagnosis(hero);
 
     let html = dailyGoalHtml() +
+      mochiMissionHtml("One task gets the spotlight.", "Mochi picked the highest-friction task. Do the next step, not the whole project.") +
       '<div class="card hero">' +
       '<div class="eyebrow">Do this first</div>' +
       '<div class="hero-title">' + esc(hero.title) + deadlineBadge(hero) + "</div>" +
@@ -1232,6 +1981,7 @@ Registry.register({
       "</div>";
 
     const tasks = activeTasks();
+    html += mochiMissionHtml("Keep the list honest.", "A task without a next step is just a worry wearing a label.");
     html += '<div class="card"><h2>Active (' + tasks.length + ")</h2>";
     if (!tasks.length) html += '<div class="empty">Capture your first task above - a title and a tiny step is all it takes.</div>';
     tasks.forEach(t => {
@@ -1368,6 +2118,7 @@ Registry.register({
       if (tasks.length) {
         html +=
           '<p class="hint">Grab a task and give it ' + s.starterMin + " honest minutes - sessions started \"just for a bit\" almost always run longer.</p>" +
+          mochiMissionHtml("Start before you feel ready.", "Pick the least dramatic task and press the timer. Feeling ready is not a prerequisite.") +
           '<label>Pick a task:</label><select id="focus-pick">' +
           tasks.map(x => '<option value="' + x.id + '">' + esc(x.title) + "</option>").join("") +
           "</select>" +
@@ -1377,7 +2128,8 @@ Registry.register({
           '<button class="linklike" onclick="beginSession(document.getElementById(\'focus-pick\').value, ' + s.pomodoroMin + ", 'pomodoro')\">Full focus (" + s.pomodoroMin + " min)</button>" +
           "</div></div>";
       } else {
-        html += '<div class="empty">No tasks yet.<br><button class="linklike" onclick="App.show(\'today\')">Capture what you\'ve been avoiding</button></div>';
+        html += mochiMissionHtml("Bring Mochi a target.", "The timer needs something concrete. Capture one avoided thing, then come back for five minutes.") +
+          '<div class="empty">No tasks yet.<br><button class="linklike" onclick="App.show(\'today\')">Capture what you\'ve been avoiding</button></div>';
       }
     }
     html += "</div>";
@@ -1447,6 +2199,8 @@ Registry.register({
       '<div class="science">The progress principle (Amabile and Kramer): visible small wins are the strongest everyday motivator.</div>' +
       "</div>";
 
+    html += mochiMissionHtml("Evidence beats mood.", "If you started today, the system is working. If not, the next five minutes can still change the day.");
+
     html += '<div class="card"><h2>Small wins log</h2>';
     if (!s.wins.length) {
       html += '<div class="empty">Finish a session and your win lands here.<br><button class="linklike" onclick="App.show(\'today\')">Start one now</button></div>';
@@ -1459,19 +2213,57 @@ Registry.register({
   }
 });
 
+/* ---------- TIPS: scrollytelling guide, not another settings card ---------- */
+Registry.register({
+  id: "tips",
+  label: "Tips",
+  order: 5,
+  render(el) {
+    el.innerHTML =
+      '<div class="tips-flow">' +
+      '<section class="card tips-hero">' +
+      '<div class="eyebrow">Avoidance playbook</div>' +
+      '<h2>Make starting smaller than escaping.</h2>' +
+      '<p class="hint">Procrastination usually wins before work begins. These moves change the room, the task, and the first minute.</p>' +
+      '</section>' +
+      mochiMissionHtml("Choose one, then leave.", "Tips are useful only when they become behavior. Pick one move below and use it on a real task.") +
+      '<section class="tip-stat-row">' +
+      '<div class="tip-stat"><b>01</b><span>Cut the task until the first step takes less than ten minutes.</span></div>' +
+      '<div class="tip-stat"><b>02</b><span>Put the cue in the world: place the file, tab, book, or tool where your hand lands.</span></div>' +
+      '<div class="tip-stat"><b>03</b><span>Start a timer for contact, not completion. Five honest minutes counts.</span></div>' +
+      '</section>' +
+      '<section class="tip-sequence">' +
+      tipPanel("01", "Lower the activation energy.", "Open the document. Name the file. Write the ugly first sentence. If a step sounds impressive, it is probably too large.") +
+      tipPanel("02", "Remove the nearest escape.", "Close the tab, move the phone, block the feed, or work somewhere boring. The best distraction is the one you never have to resist.") +
+      tipPanel("03", "Use a concrete if-then plan.", "Not \"later today.\" Use \"after breakfast, at the desk, I open the outline.\" Vague plans leak.") +
+      tipPanel("04", "Make the reward immediate.", "After the session, log the win. Motivation learns from fast feedback, not from distant consequences.") +
+      tipPanel("05", "Restart without a trial.", "If you slip, shrink the task and begin again. The useful question is not \"what is wrong with me?\" It is \"what is the next visible action?\"") +
+      '</section>' +
+      '</div>';
+  }
+});
+
+function tipPanel(n, title, body) {
+  return '<article class="card tip-panel">' +
+    '<div class="tip-num">' + n + '</div>' +
+    '<div><h2>' + esc(title) + '</h2><p class="hint">' + esc(body) + '</p></div>' +
+    '</article>';
+}
+
 /* ---------- SETTINGS: personalization + module toggles ---------- */
 Registry.register({
   id: "settings",
   label: "Settings",
-  order: 5,
+  order: 6,
   render(el) {
     const s = Store.state.settings;
-    let html = '<div class="card"><h2>Personalize</h2>' +
+    let html = mochiMissionHtml("Tune less than you work.", "Change settings only when they reduce friction. Then go back to Today.") +
+      '<div class="card"><h2>Personalize</h2>' +
       '<label>How impulsive/distractible are you? <span class="slider-val" id="v-imp">' + s.impulsiveness + "</span></label>" +
       '<input type="range" min="1" max="5" value="' + s.impulsiveness + '" ' +
       'oninput="document.getElementById(\'v-imp\').textContent=this.value" ' +
       'onchange="setSetting(\'impulsiveness\', +this.value)">' +
-      '<p class="science">Impulsiveness is the strongest personality predictor of procrastination (Steel, 2007). If yours is high, favor shorter sessions and nearer self-imposed deadlines.</p>' +
+      '<p class="science">What this does: it personalizes Mochi\'s advice. Higher scores tell the app to recommend shorter starts, stronger distraction control, and nearer self-imposed deadlines. It does not rank you, judge you, or hide tasks.</p>' +
       '<div class="row">' +
       '<div><label>Focus session length (min)</label>' +
       '<input type="text" inputmode="numeric" value="' + s.pomodoroMin + '" onchange="setSetting(\'pomodoroMin\', Math.max(5, +this.value || 25))"></div>' +
@@ -1479,7 +2271,7 @@ Registry.register({
       '<input type="text" inputmode="numeric" value="' + s.starterMin + '" onchange="setSetting(\'starterMin\', Math.max(1, +this.value || 5))"></div>' +
       "</div></div>";
 
-    html += '<div class="card"><h2>Sound and celebration</h2>' +
+    html += '<div class="card settings-sound"><h2>Sound & rewards</h2>' +
       '<div class="toggle-row"><span>Sound cues (session start and finish)</span>' +
       '<input type="checkbox" ' + (s.sound !== false ? "checked" : "") + ' onchange="setSetting(\'sound\', this.checked);if(!this.checked)Sound.stopAmbient()"></div>' +
       '<div class="toggle-row"><span>Confetti on wins</span>' +
@@ -1638,6 +2430,29 @@ function showScience() {
   );
 }
 
+const Guide = (() => {
+  function textFor(tab) {
+    const active = activeTasks();
+    if (FocusTimer.running) return "hold the line. one timer, one task, no renegotiating until the bell.";
+    if (tab === "today" && active.length) return "Mochi put one task in the spotlight. start there and ignore the rest.";
+    if (tab === "today") return "Mochi is looking for the avoided thing. write its name, then shrink it.";
+    if (tab === "tasks") return active.length ? "turn vague tasks into next actions. Mochi does not accept fog." : "capture the thing, then give it paws: one tiny step.";
+    if (tab === "focus") return active.length ? "pick a task and press start. readiness can catch up later." : "no task, no timer. go catch one on Today first.";
+    if (tab === "progress") return "look for proof of starts, not proof of perfection.";
+    if (tab === "tips") return "read one tip, then use it immediately. collecting advice can become another delay.";
+    if (tab === "settings") return "settings are friction tools, not a second project.";
+    if (!active.length) return "name the thing you are dodging. then write the first move small enough to do badly.";
+    return "attack the top task. the next step is the doorway, not the whole building.";
+  }
+
+  function update(tab) {
+    const el = document.getElementById("guide-copy");
+    if (el) el.innerHTML = "<span>Mochi says:</span> " + esc(textFor(tab));
+  }
+
+  return { update };
+})();
+
 /* =====================================================================
    APP SHELL
    ===================================================================== */
@@ -1656,6 +2471,7 @@ const App = (() => {
     renderNav();
     const mod = Registry.get(current);
     if (mod) mod.render(document.getElementById("view"));
+    Guide.update(current);
   }
   function show(id) {
     if (id !== "focus") recoveryTaskId = null;
